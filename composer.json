@@ -1,0 +1,28 @@
+{
+    "name": "nimblepayments/magento-nimble-payments",
+    "type": "magento-module",
+    "license": "OSL-3.0",
+    "homepage": "https://github.com/nimblepayments/woocommerce-nimble-payments",
+    "description": "Magento extension to add Nimble payment services.",
+    "keywords": ["plugin", "nimble", "payments", "magento", "tpv"],
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*",
+        "acasado86/sdk-php": "1.0.1"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/acasado86/sdk-php.git"
+        }
+    ],
+    "scripts": {
+        "post-root-package-install": [
+        ],
+        "post-install-cmd": [
+            "cp -R vendor/acasado86/sdk-php/lib ./"
+        ],
+        "post-update-cmd": [
+            "cp -R vendor/acasado86/sdk-php/lib ./"
+        ]
+    }
+}
