@@ -158,7 +158,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
     
         $url = '';
-        require_once('/home/rafael/Proyectos/magento/app/code/local/Bbva/NimblePayments/Model/lib/Nimble/base/NimbleAPI.php');
+        require_once dirname(__FILE__) .'/lib/Nimble/base/NimbleAPI.php';
         $payment = array(
                 'amount' => $this->getAmount(),
                 'currency' => $this->getCoin(),
