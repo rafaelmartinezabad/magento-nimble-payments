@@ -2,6 +2,7 @@
 
 class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstract
 {
+        
     protected $_code  = 'nimblepayments_checkout';
 
     protected $_isGateway               = false;
@@ -27,7 +28,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         if (!$this->_order) {
             $paymentInfo = $this->getInfoInstance();
             $this->_order = Mage::getModel('sales/order')
-                            ->loadByIncrementId($paymentInfo->getOrder()->getRealOrderId());
+                            ->loadByIncrementId($paymentInfo->getOrder()->getRealOrderId()); 
 
         }
         return $this->_order;
@@ -136,12 +137,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $order_number;
     }
 
-
+    
     public function getCheckoutUrl()
     {
-        
 
-        error_log(" ID");
+        
+       /* error_log(" ID");
         error_log(print_r($this->getProdID(),true));
 
         error_log("MERCHANT ID");
@@ -154,7 +155,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         error_log(print_r($this->getAmount(),true));
         
         error_log("MONEDA");
-        error_log(print_r($this->getCoin(),true));
+        error_log(print_r($this->getCoin(),true));*/
 
     
         $url = '';
@@ -163,7 +164,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'amount' => $this->getAmount(),
                 'currency' => $this->getCoin(),
                 'customerData' => $this->getProdID(),
-                'paymentSuccessUrl' => 'http://local.magento19.com/payments/success',
+                'paymentSuccessUrl' =>'http://local.magento19.com/checkout/onepage/success/?order='.$this->getProdID(), 
                 'paymentErrorUrl' => 'http://local.magento19.com/payments/error'
         );
 
@@ -179,13 +180,16 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $p = new Payments();
         $response = $p->SendPaymentClient($NimbleApi, $payment);
         $url=$response["data"]["paymentUrl"];
+//        if($response["result"]["info"]=='OK')
+//            $this->afterSuccessOrder();
         }  catch (Exception $e){
             error_log($e->getMessage());
         }
+
         return $url;    
     }
     
-    public function getTransactionUrl()
+   /* public function getTransactionUrl()
     { 
         if($this->isTestMode()) {
             $url = 'http://demo.nimblepayments.com/api/transactions/';
@@ -194,7 +198,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $url = 'https://www.nimblepayments.com/api/transactions/';
         }
         return $url;
-    }
+    }*/
     
     public function getFormFields()
     {
@@ -330,9 +334,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $this->_paymentMethod;
     }
     
-    public function afterSuccessOrder($response)
+    public function afterSuccessOrder(/*$response*/)
     {
-        $debugData = array(
+        error_log("afterSuccessOrder*****************************");
+       /* $debugData = array(
             'response' => $response
         );
         $this->_debug($debugData);
@@ -352,7 +357,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 ->setAdditionalInformation(Bbva_NimblePayments_Model_Info::ISSUING_BANK,$infoModel->_getTransactionTypeIdLabel($response->CreditCard->IssuingBank))
                 ->setAdditionalInformation(Bbva_NimblePayments_Model_Info::CREDIT_CARD_HOLDER,$infoModel->_getTransactionTypeIdLabel($response->CreditCard->CardHolderName))
                 ->setAdditionalInformation(Bbva_NimblePayments_Model_Info::CREDIT_CARD_TYPE,$infoModel->_getTransactionTypeIdLabel($response->CreditCard->CardType->Name));
-        
+                error_log("afterSuccessOrder1*****************************");
+
         $order->sendNewOrderEmail();                
         if ($order->canInvoice()) {
             $invoice = $order->prepareInvoice();
@@ -377,9 +383,14 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $transaction->setOrderPaymentObject($order->getPayment())
                     ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE);
         $transaction->save();
+       */
         $order_status = Mage::helper('core')->__('Payment is successful.');
-    
-        $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, $order_status);
-        $order->save();        
+         $paymentInfo = $this->getInfoInstance();
+            $this->_order = Mage::getModel('sales/order')
+                            ->loadByIncrementId($paymentInfo->getOrder()->getRealOrderId())
+                            ->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, $order_status)
+                            ->save(); 
+            
+            
     }
 }

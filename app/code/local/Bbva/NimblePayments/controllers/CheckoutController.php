@@ -6,6 +6,7 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
     
     public function responseAction()
     {
+        error_log("entra en repsonse");
         $responseParams = $this->getRequest()->getParams();         
         if(!empty($responseParams['t'])) {
             $infoModel = Mage::getModel('nimblepayments/info');
@@ -47,4 +48,5 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
             return;
         }
     }
+    
 }

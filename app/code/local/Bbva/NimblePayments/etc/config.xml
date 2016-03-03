@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Bbva_NimblePayments>
-            <version>0.1.1</version>
+            <version>0.2.5</version>
         </Bbva_NimblePayments>
     </modules>
     <global>
@@ -11,6 +11,17 @@
                 <class>Bbva_NimblePayments_Model</class>
             </nimblepayments>
         </models>
+        <events>
+            <checkout_onepage_controller_success_action>
+                <observers>
+                    <bbva_nimblepayments>
+                        <type>singleton</type>
+                        <class>nimblepayments/observer</class>
+                        <method>nimbleCheckout</method>
+                    </bbva_nimblepayments>
+                </observers>
+            </checkout_onepage_controller_success_action>
+        </events>
         <helpers>
             <nimblepayments>
                 <class>Bbva_NimblePayments_Helper</class>
@@ -20,6 +31,7 @@
             <nimblepayments_setup>
                 <setup>
                     <module>Bbva_NimblePayments</module>
+                    <class>Bbva_NimblePayments_Model_Resource_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -38,7 +50,24 @@
         </resources>
         <blocks>
             <nimblepayments><class>Bbva_NimblePayments_Block</class></nimblepayments>
-        </blocks>        
+        </blocks>
+        <sales>
+            <order>
+              <statuses>
+                <pending_nimble translate="label">
+                  <label>Pending Nimble</label>
+                </pending_nimble>
+              </statuses>
+               <states>
+                    <pending_nimble translate="label">
+                      <label>Pending Nimble</label>
+                      <statuses>
+                        <pending_nimble default="1"/>
+                      </statuses>
+                    </pending_nimble>
+               </states>
+            </order>
+        </sales>       
     </global>
     <frontend>
         <secure_url>
@@ -66,11 +95,10 @@
             <nimblepayments_checkout>
                 <merchant_id />                
                 <model>nimblepayments/checkout</model>
-                <title>Nimble Payments</title>
-                <order_status>pending</order_status>
-                <source_code>Default</source_code>
-                <allowspecific>0</allowspecific>
+                <title>Nimble Payments BBVA</title>
+                <!--<order_status>pending_nimble</order_status>-->
             </nimblepayments_checkout>
         </payment>
+        
     </default>
 </config>

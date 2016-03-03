@@ -46,15 +46,8 @@
                                                 <show_in_website>1</show_in_website>
                                                 <show_in_store>0</show_in_store>
                                             </secret_key>
-                                           <!-- <source_code translate="label">
-                                                <label>Website/App Source Code</label>
-                                                <frontend_type>text</frontend_type>
-                                                <sort_order>50</sort_order>
-                                                <show_in_default>1</show_in_default>
-                                                <show_in_website>1</show_in_website>
-                                                <show_in_store>0</show_in_store>
-                                            </source_code>
-                                            <test_mode translate="label">
+                                          
+                                           <!-- <test_mode translate="label">
                                                 <label>Test Mode</label>
                                                 <frontend_type>select</frontend_type>
                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -72,7 +65,7 @@
                                                 <show_in_website>1</show_in_website>
                                                 <show_in_store>0</show_in_store>
                                             </order_status>
-                                            <debug translate="label">
+                                           <debug translate="label">
                                                 <label>Debug</label>
                                                 <frontend_type>select</frontend_type>
                                                 <source_model>adminhtml/system_config_source_yesno</source_model>

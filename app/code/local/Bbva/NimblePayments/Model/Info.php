@@ -184,6 +184,7 @@ class Bbva_NimblePayments_Model_Info
      */
     public static function isPaymentSuccessful(Mage_Payment_Model_Info $payment)
     {
+
         $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
         if (in_array($paymentStatus, array(
             self::PAYMENTSTATUS_COMPLETED, self::PAYMENTSTATUS_INPROGRESS, self::PAYMENTSTATUS_REFUNDED,
