@@ -164,7 +164,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'amount' => $this->getAmount(),
                 'currency' => $this->getCoin(),
                 'customerData' => $this->getProdID(),
-                'paymentSuccessUrl' =>'http://local.magento19.com/checkout/onepage/success/?order='.$this->getProdID(), 
+                'paymentSuccessUrl' => Mage::getSingleton('adminhtml/url')->getUrl('checkout/onepage/success', array('order' => $this->getProdID())),
                 'paymentErrorUrl' => 'http://local.magento19.com/payments/error'
         );
 
