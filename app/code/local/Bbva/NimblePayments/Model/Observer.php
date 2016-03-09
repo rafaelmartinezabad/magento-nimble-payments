@@ -8,14 +8,12 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
      * @return object
      */
 
-    public function nimbleCheckout(Varien_Event_Observer  $observer)
+    public function nimbleCheckout($observer)
     {
-        if(Mage::app()->getRequest()->getParam('order')){
+        $key_param = Mage::app()->getRequest()->getParam('key');
+        
+        if( Mage::app()->getRequest()->getParam('order') && $key_param == Mage::getSingleton('adminhtml/url')->getSecretKey() ){
             $orderID = Mage::app()->getRequest()->getParam('order');
-            $key = Mage::app()->getRequest()->getParam('key');
-            //TODO: Validate key param
-            
-                
             $order = Mage::getModel('sales/order');;
             //$incrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
             $order->loadByIncrementId($orderID);
