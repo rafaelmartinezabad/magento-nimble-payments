@@ -1,21 +1,18 @@
 <?xml version="1.0"?>
 
 <layout version="0.1.0">
-    <nimblepayments_checkout_failure>
-        <reference name="root">
-            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
-        </reference>
+    <nimblepayments_checkout_failure translate="label">
+
         <reference name="content">
-            <block type="nimblepayments/checkout_failure" name="nimblepayments_checkout_failure" template="nimblepayments/checkout/failure.phtml"></block>
         </reference>
-    </nimblepayments_checkout_failure>
+   </nimblepayments_checkout_failure>
     
     <nimblepayments_checkout_response>
         <!--<reference name="root">
             <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
         </reference>-->
         <reference name="content">
-            <block type="nimblepayments/checkout_response" name="nimblepayments_checkout_response" template="nimblepayments/checkout/response.phtml"></block>
+            <block type="nimblepayments/checkout/response" name="nimblepayments.checkout.response" template="nimblepayments/checkout/response.phtml"></block>
         </reference>
     </nimblepayments_checkout_response>
 </layout>

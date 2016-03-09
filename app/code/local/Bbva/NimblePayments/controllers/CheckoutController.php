@@ -3,7 +3,6 @@
 class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Controller_Abstract
 {
     protected $_redirectBlockType = 'nimblepayments/checkout_redirect';
-    
     public function responseAction()
     {
         error_log("entra en repsonse");
@@ -48,5 +47,20 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
             return;
         }
     }
+     public function failureAction()
+    {
+                
+            if(Mage::getSingleton('checkout/session')->getLastRealOrderId()){
+                if ($lastQuoteId = Mage::getSingleton('checkout/session')->getLastQuoteId()){
+                    $quote = Mage::getModel('sales/quote')->load($lastQuoteId);
+                    $quote->setIsActive(true)->save();
+                }
+            Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('Inform the customer for failed transaction'));
+            $this->_redirect('checkout/cart'); //Redirect to cart
+            return;
+            }
+    }  
     
+   
+
 }

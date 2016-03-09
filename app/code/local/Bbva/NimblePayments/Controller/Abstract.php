@@ -79,17 +79,6 @@ abstract class Bbva_NimblePayments_Controller_Abstract extends Mage_Core_Control
      * Display failure page if error
      *
      */
-    public function failureAction()
-    {
-        if (!$this->getCheckout()->getNimbleErrorMessage()) {
-            $this->norouteAction();
-            return;
-        }
-
-        //$this->getCheckout()->clear();
-
-        $this->loadLayout();
-        $this->renderLayout();
-    }    
+   
 
 }

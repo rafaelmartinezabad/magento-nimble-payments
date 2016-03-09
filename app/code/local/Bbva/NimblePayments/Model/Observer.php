@@ -7,7 +7,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
      * @param Varien_Event_Observer $observer
      * @return object
      */
-
+    //*******   pay sucess *****************
     public function nimbleCheckout(Varien_Event_Observer  $observer)
     {
         if(Mage::app()->getRequest()->getParams('order')){
@@ -25,5 +25,10 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
         
         //return $this;
         }
+        /*else {
+            Mage_Core_Controller_Varien_Action::_redirect( 'checkout/onepage/failure' );
+        }*/
     }
+
+    
 }
