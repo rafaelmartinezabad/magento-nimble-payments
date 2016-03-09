@@ -162,14 +162,16 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     
         $url = '';
         require_once dirname(__FILE__) .'/lib/Nimble/base/NimbleAPI.php';
+        $order_id = $this->getProdID();
+        $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
         $payment = array(
                 'amount' => $this->getAmount(),
                 'currency' => $this->getCoin(),
-                'customerData' => $this->getProdID(),
-                'paymentSuccessUrl' => Mage::getSingleton('adminhtml/url')->getUrl('checkout/onepage/success', array('order' => $this->getProdID())),
-                'paymentErrorUrl' =>Mage::getUrl().'nimblepayments/checkout/failure'
+                'customerData' => $order_id,
+                'paymentSuccessUrl' => Mage::getUrl('checkout/onepage/success', array('order' => $order_id, 'key' => $key)),
+                'paymentErrorUrl' =>Mage::getUrl('nimblepayments/checkout/failure')
         );
-
+        
         $params = array(
                 'clientId' => $this->getMerchantId(),
                 'clientSecret' =>$this->getSecretKey(),
