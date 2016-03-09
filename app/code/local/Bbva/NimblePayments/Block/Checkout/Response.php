@@ -24,6 +24,8 @@ class Bbva_NimblePayments_Block_Checkout_Response extends Mage_Core_Block_Templa
      */
     public function getContinueShoppingUrl()
     {
+
         return Mage::getUrl('checkout/cart');
+        
     }
 }

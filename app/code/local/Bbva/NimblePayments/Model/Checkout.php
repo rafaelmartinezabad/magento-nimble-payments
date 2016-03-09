@@ -141,8 +141,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function getCheckoutUrl()
     {
 
+       /* error_log(" URL*******************");
+        error_log(print_r(Mage::getUrl(),true));
         
-       /* error_log(" ID");
+        error_log(" ID");
         error_log(print_r($this->getProdID(),true));
 
         error_log("MERCHANT ID");
@@ -165,7 +167,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'currency' => $this->getCoin(),
                 'customerData' => $this->getProdID(),
                 'paymentSuccessUrl' => Mage::getSingleton('adminhtml/url')->getUrl('checkout/onepage/success', array('order' => $this->getProdID())),
-                'paymentErrorUrl' => 'http://local.magento19.com/payments/error'
+                'paymentErrorUrl' =>Mage::getUrl().'nimblepayments/checkout/failure'
         );
 
         $params = array(
@@ -176,12 +178,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
         /* High Level call */
         try{
-        $NimbleApi = new NimbleAPI($params);
-        $p = new Payments();
-        $response = $p->SendPaymentClient($NimbleApi, $payment);
-        $url=$response["data"]["paymentUrl"];
-//        if($response["result"]["info"]=='OK')
-//            $this->afterSuccessOrder();
+            
+            $NimbleApi = new NimbleAPI($params);
+            $p = new Payments();
+            $response = $p->SendPaymentClient($NimbleApi, $payment);
+            $url=$response["data"]["paymentUrl"];
+        
         }  catch (Exception $e){
             error_log($e->getMessage());
         }

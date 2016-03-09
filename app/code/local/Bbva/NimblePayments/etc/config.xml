@@ -98,7 +98,6 @@
                 <title>Nimble Payments BBVA</title>
                 <!--<order_status>pending_nimble</order_status>-->
             </nimblepayments_checkout>
-        </payment>
-        
+        </payment>       
     </default>
 </config>
