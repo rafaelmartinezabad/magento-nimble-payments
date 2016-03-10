@@ -22,6 +22,17 @@
                 </observers>
             </checkout_onepage_controller_success_action>
         </events>
+        <events>
+            <admin_system_config_changed_section_payment>
+                <observers>
+                    <bbva_nimblepayments>
+                         <type>singleton</type>
+                        <class>nimblepayments/observer</class>
+                        <method>configNimble</method>
+                    </bbva_nimblepayments>
+                </observers>
+            </admin_system_config_changed_section_payment>    
+        </events>
         <helpers>
             <nimblepayments>
                 <class>Bbva_NimblePayments_Helper</class>
