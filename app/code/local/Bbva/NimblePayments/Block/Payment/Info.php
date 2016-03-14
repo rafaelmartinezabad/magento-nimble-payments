@@ -28,10 +28,8 @@ class Bbva_NimblePayments_Block_Payment_Info extends Mage_Payment_Block_Info_Cc
    
         if (!$this->getIsSecureMode()) {
             $info = $vpcInfo->getPaymentInfo($payment, true);
-            // error_log(print_r($vpcInfo, true));
         } else {
             $info = $vpcInfo->getPublicPaymentInfo($payment, true);
-               //   error_log(print_r($vpcInfo, true));
         }
         return $transport->addData($info);
     }

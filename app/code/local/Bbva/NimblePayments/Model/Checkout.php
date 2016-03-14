@@ -180,14 +180,18 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
         /* High Level call */
         try{
-            
+            //throw new Exception('División por cero.');
             $NimbleApi = new NimbleAPI($params);
             $p = new Payments();
             $response = $p->SendPaymentClient($NimbleApi, $payment);
-            $url=$response["data"]["paymentUrl"];
-        
+            if(isset($response["data"]) && isset($response["data"]["paymentUrl"]))    
+                $url=$response["data"]["paymentUrl"];
+            else
+                $url=$payment["paymentErrorUrl"].'?error=false';
+            
         }  catch (Exception $e){
-            error_log($e->getMessage());
+            $url=$payment["paymentErrorUrl"].'?connection=false';
+            
         }
 
         return $url;    

@@ -104,9 +104,10 @@
     <default>
         <payment>            
             <nimblepayments_checkout>
-                <merchant_id />                
+                <merchant_id /> 
+                <active>1</active>               
                 <model>nimblepayments/checkout</model>
-                <title>Nimble Payments BBVA</title>
+                <title>Pago con tarjeta</title>
                 <!--<order_status>pending_nimble</order_status>-->
             </nimblepayments_checkout>
         </payment>       

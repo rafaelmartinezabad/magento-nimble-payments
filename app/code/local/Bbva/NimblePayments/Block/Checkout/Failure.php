@@ -19,17 +19,6 @@ class Bbva_NimblePayments_Block_Checkout_Failure extends Mage_Core_Block_Templat
      */
     public function getContinueShoppingUrl()
     {
-                    error_log("********* incrementID");
-
-
-         /*   $session = Mage::getSingleton('customer/session');
-                if($session->getData('redirect_to_checkout'))
-            {
-                            error_log("********* incrementID2");
-                 $session->unsetData('redirect_to_checkout');
-               return Mage::app()->getResponse()->setRedirect(Mage::getUrl('checkout/onepage'));
-            }*/
-           // return Mage::app()->getResponse()->setRedirect(Mage::getUrl('checkout/onepage')
-        return Mage::getUrl('checkout/onepage');
+        return Mage::getUrl('checkout/cart');
     }
 }
