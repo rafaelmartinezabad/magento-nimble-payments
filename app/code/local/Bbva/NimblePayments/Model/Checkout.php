@@ -184,11 +184,16 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $NimbleApi = new NimbleAPI($params);
             $p = new Payments();
             $response = $p->SendPaymentClient($NimbleApi, $payment);
-            error_log(print_r($response,true));
-            if(isset($response["data"]) && isset($response["data"]["paymentUrl"]))    
-                $url=$response["data"]["paymentUrl"];
-            else
+            if(isset($response["data"]) && isset($response["data"]["paymentUrl"])){
+                $url = $response["data"]["paymentUrl"];
+                $transaction_id = $response["data"]["id"];
+                //Save transaction_id
+                $payment = $this->getOrder()->getPayment();
+                $payment->setAdditionalInformation('np_transaction_id', $transaction_id);
+                $payment->save();
+            }else {
                 $url=$payment["paymentErrorUrl"].'?error=false';
+            }
             
         }  catch (Exception $e){
             $url=$payment["paymentErrorUrl"].'?connection=false';

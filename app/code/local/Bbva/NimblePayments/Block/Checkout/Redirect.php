@@ -14,7 +14,7 @@ class Bbva_NimblePayments_Block_Checkout_Redirect extends Mage_Core_Block_Abstra
             return;
         }
           
-        $form = new Varien_Data_Form();        
+        /*$form = new Varien_Data_Form();        
         $form->setId('nimblepayments_checkout_checkout')
             ->setName('nimblepayments_checkout_checkout')
             ->setMethod('GET')
@@ -25,7 +25,7 @@ class Bbva_NimblePayments_Block_Checkout_Redirect extends Mage_Core_Block_Abstra
         }   
         
         
-        $form->setAction($checkout->getGatewayRedirectUrl());
+        $form->setAction($checkout->getGatewayRedirectUrl());*/
         $html = '<html><body>';
         //$html.= $this->__('You will be redirected to nimble Payments website in a few seconds ...');
         //$html.= $form->toHtml();
