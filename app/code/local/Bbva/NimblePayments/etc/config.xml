@@ -100,12 +100,32 @@
                 </nimblepayments>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Bbva_NimblePayments>
+                    <files>
+                        <default>Bbva_NimblePayments.csv</default>
+                    </files>
+                </Bbva_NimblePayments>
+            </modules>
+        </translate>
     </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Bbva_NimblePayments>
+                    <files>
+                        <default>Bbva_NimblePayments.csv</default>
+                    </files>
+                </Bbva_NimblePayments>
+            </modules>
+        </translate>
+    </adminhtml>
     <default>
         <payment>            
             <nimblepayments_checkout>
                 <merchant_id /> 
-                <active>1</active>               
+                <active>0</active>               
                 <model>nimblepayments/checkout</model>
                 <title>Pago con tarjeta</title>
                 <!--<order_status>pending_nimble</order_status>-->
