@@ -6,13 +6,4 @@
         <reference name="content">
         </reference>
    </nimblepayments_checkout_failure>
-    
-    <nimblepayments_checkout_response>
-        <!--<reference name="root">
-            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
-        </reference>-->
-        <reference name="content">
-            <block type="nimblepayments/checkout/response" name="nimblepayments.checkout.response" template="nimblepayments/checkout/response.phtml"></block>
-        </reference>
-    </nimblepayments_checkout_response>
 </layout>
