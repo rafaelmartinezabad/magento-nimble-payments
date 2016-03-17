@@ -7,3 +7,4 @@
 "An error has occurred. Code ERR_PAG.","Error en el pago. Código ERR_PAG."
 "Data invalid gateway to accept payments.","Datos de pasarela no válidos para aceptar pagos. Asegúrate de que no sean de una pasarela de Test."
 "Pay safely with your credit card through the BBVA.","Paga de manera segura con tarjeta con la garantía de BBVA."
+"Nimble Payments Transaction ID","Nimble Payments Identificador"
