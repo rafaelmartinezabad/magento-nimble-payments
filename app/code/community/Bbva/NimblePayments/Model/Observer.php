@@ -38,13 +38,11 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
              $Switch = new Mage_Core_Model_Config();
         try {
             $nimbleApi = new NimbleAPI($params);
-            //TODO: Verificación credenciales mediante llamada a NimbleApi cuando se actualize el SDK
             $nimbleApi->uri .= 'check';
             $nimbleApi->method = 'GET';
             $response = $nimbleApi->rest_api_call();
             if ( isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code'] ){
-               // $Switch->saveConfig('payment/nimblepayments_checkout/active', 1, 'default', 0);
-
+                //correct
             } else{
                 Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
                 $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
