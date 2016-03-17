@@ -4,22 +4,17 @@
    <sections>
 	<payment>
                 <groups>
-                      <nimblepayments_checkout translate="label" module="payment">
+                      <nimblepayments_checkout translate="label comment" module="payment">
                             <label>Nimble Payments by BBVA</label>
+                            <comment><![CDATA[<div><img style="height:4.9rem;" src="https://www.nimblepayments.com/assets/img/public/14873b95.nimble_logo.svg" alt="Nimble logo"/></div><p>Need an <strong>Nimble Payments</strong> account?.<a class="button button-primary" href="https://www.nimblepayments.com/private/registration?utm_source=Magento_Settings&utm_medium=Referral%20Partners&utm_campaign=Creacion-Cuenta&partner=magento" target="_blank">Signup now</a></p><hr />]]></comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>401</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                      <comment><![CDATA[
-            <div><img style="height:4.9rem;" src="https://www.nimblepayments.com/assets/img/public/14873b95.nimble_logo.svg" alt="Nimble logo"/></div>
-			<p>Si no estas registrado aún en <strong>Nimble Payments</strong>, puedes registrarte sin coste de forma completamente online. 
-                        <a class="button button-primary" href="https://www.nimblepayments.com/private/registration?utm_source=Magento_Settings&utm_medium=Referral%20Partners&utm_campaign=Creacion-Cuenta&partner=magento" target="_blank">Regístrate</a> 
-			<hr />
-                    ]]></comment>
+                            <show_in_store>1</show_in_store>                   
                                   <fields>
                                            <active translate="label">
-                                                <label>Habilitar/Deshabilitar</label>
+                                                <label>Enabled/Disabled</label>
                                                 <frontend_type>select</frontend_type>
                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
                                                 <sort_order>10</sort_order>
@@ -28,7 +23,7 @@
                                                 <show_in_store>0</show_in_store>
                                             </active>
                                             <title translate="label">
-                                                <label>Nombre</label>
+                                                <label>Title</label>
                                                 <frontend_type>text</frontend_type>
                                                 <sort_order>20</sort_order>
                                                 <show_in_default>1</show_in_default>
@@ -51,53 +46,7 @@
                                                 <show_in_default>1</show_in_default>
                                                 <show_in_website>1</show_in_website>
                                                 <show_in_store>0</show_in_store>
-                                            </secret_key>
-                                            
-                                           <!-- <test_mode translate="label">
-                                                <label>Test Mode</label>
-                                                <frontend_type>select</frontend_type>
-                                                <source_model>adminhtml/system_config_source_yesno</source_model>
-                                                <sort_order>70</sort_order>
-                                                <show_in_default>1</show_in_default>
-                                                <show_in_website>1</show_in_website>
-                                                <show_in_store>0</show_in_store>
-                                            </test_mode>
-                                            <order_status translate="label">
-                                                <label>New order status</label>
-                                                <frontend_type>select</frontend_type>
-                                                <source_model>adminhtml/system_config_source_order_status_newprocessing</source_model>
-                                                <sort_order>90</sort_order>
-                                                <show_in_default>1</show_in_default>
-                                                <show_in_website>1</show_in_website>
-                                                <show_in_store>0</show_in_store>
-                                            </order_status>
-                                           <debug translate="label">
-                                                <label>Debug</label>
-                                                <frontend_type>select</frontend_type>
-                                                <source_model>adminhtml/system_config_source_yesno</source_model>
-                                                <sort_order>100</sort_order>
-                                                <show_in_default>1</show_in_default>
-                                                <show_in_website>1</show_in_website>
-                                                <show_in_store>0</show_in_store>
-                                            </debug>
-                                            <allowspecific translate="label">
-                                                <label>Payment from applicable countries</label>
-                                                <frontend_type>allowspecific</frontend_type>
-                                                <sort_order>110</sort_order>
-                                                <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
-                                                <show_in_default>1</show_in_default>
-                                                <show_in_website>1</show_in_website>
-                                                <show_in_store>1</show_in_store>
-                                            </allowspecific>
-                                            <specificcountry translate="label">
-                                                <label>Payment from Specific countries</label>
-                                                <frontend_type>multiselect</frontend_type>
-                                                <sort_order>120</sort_order>
-                                                <source_model>adminhtml/system_config_source_country</source_model>
-                                                <show_in_default>1</show_in_default>
-                                                <show_in_website>1</show_in_website>
-                                                <show_in_store>1</show_in_store>
-                                            </specificcountry>    -->                    
+                                            </secret_key>                  
                                         </fields>
                              </nimblepayments_checkout> 
 			</groups>
