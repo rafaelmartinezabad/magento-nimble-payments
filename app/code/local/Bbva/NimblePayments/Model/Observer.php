@@ -18,11 +18,11 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
             //$incrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
             $order->loadByIncrementId($orderID);
             $invoice = $order->prepareInvoice();
-				$invoice->register()->capture();
-				Mage::getModel('core/resource_transaction')
-				->addObject($invoice)
-				->addObject($invoice->getOrder())
-				->save();
+            $invoice->register()->capture();
+            Mage::getModel('core/resource_transaction')
+                ->addObject($invoice)
+                ->addObject($invoice->getOrder())
+                ->save();
         }
         return $this;
     }
