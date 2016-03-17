@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Bbva_NimblePayments>
-            <version>0.2.5</version>
+            <version>1.0.0</version>
         </Bbva_NimblePayments>
     </modules>
     <global>
