@@ -129,7 +129,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function getCheckoutUrl()
     {
         $url = '';
-        require_once dirname(__FILE__) .'/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         $order_id = $this->getProdID();
         $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
         $payment = array(

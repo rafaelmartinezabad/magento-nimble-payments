@@ -28,7 +28,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
     }
       public function configNimble($observer){
 
-          require_once dirname(__FILE__) .'/lib/Nimble/base/NimbleAPI.php';
+          require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
 
            $params = array(
             'clientId' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'))),

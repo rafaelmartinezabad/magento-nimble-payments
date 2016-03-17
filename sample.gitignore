@@ -1,4 +1,4 @@
-app/code/community/Bbva/NimblePayments/Model/lib
+lib
 .gitignore
 vendor/
 composer.lock

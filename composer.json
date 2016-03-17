@@ -18,10 +18,10 @@
         "post-root-package-install": [
         ],
         "post-install-cmd": [
-            "cp -R vendor/nimblepayments/sdk-php/lib ./app/code/local/Bbva/NimblePayments/Model/"
+            "cp -R vendor/nimblepayments/sdk-php/lib ./"
         ],
         "post-update-cmd": [
-            "cp -R vendor/nimblepayments/sdk-php/lib ./app/code/local/Bbva/NimblePayments/Model/"
+            "cp -R vendor/nimblepayments/sdk-php/lib ./"
         ]
     }
 }
