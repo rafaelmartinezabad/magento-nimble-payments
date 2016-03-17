@@ -81,12 +81,12 @@ class Bbva_NimblePayments_Model_Info
         $result = $this->_getFullInfo(array_values($this->_paymentMap), $payment, $labelValuesOnly);
 
         // add last_trans_id
-        $label = Mage::helper('payment')->__('Last Transaction ID');
-        $value = $payment->getLastTransId();
+        $label = Mage::helper('core')->__('Nimble Payments Transaction ID');
+        $value = $payment->getAdditionalInformation('np_transaction_id');
         if ($labelValuesOnly) {
             $result[$label] = $value;
         } else {
-            $result['last_trans_id'] = array('label' => $label, 'value' => $value);
+            $result['np_transaction_id'] = array('label' => $label, 'value' => $value);
         }
 
         return $result;

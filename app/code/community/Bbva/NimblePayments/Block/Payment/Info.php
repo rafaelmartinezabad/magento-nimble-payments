@@ -1,17 +1,8 @@
 <?php
 
-class Bbva_NimblePayments_Block_Payment_Info extends Mage_Payment_Block_Info_Cc
+class Bbva_NimblePayments_Block_Payment_Info extends Mage_Payment_Block_Info
 {
-    /**
-     * Don't show CC type for non-CC methods
-     *
-     * @return string|null
-     */
-    public function getCcTypeName()
-    {
-        return parent::getCcTypeName();
-    }
-
+    
     /**
      * Prepare Nimble Payments-specific payment information
      *
