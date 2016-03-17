@@ -2,7 +2,8 @@
 
 class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstract
 {
-        
+    const MODE         = 'real';
+    
     protected $_code  = 'nimblepayments_checkout';
 
     protected $_isGateway               = false;
@@ -143,7 +144,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $params = array(
                 'clientId' => $this->getMerchantId(),
                 'clientSecret' =>$this->getSecretKey(),
-                'mode' => 'demo'
+                'mode' => self::MODE
         );
 
         /* High Level call */

@@ -33,7 +33,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
            $params = array(
             'clientId' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'))),
             'clientSecret' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'))),
-            'mode' => 'demo'
+            'mode' => Bbva_NimblePayments_Model_Checkout::MODE
             );
              $Switch = new Mage_Core_Model_Config();
         try {
