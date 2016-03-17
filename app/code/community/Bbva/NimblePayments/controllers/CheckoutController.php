@@ -24,9 +24,9 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
                     $quote->setIsActive(true)->save();
                 }
             if(isset($connection)){    
-                Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('Error al conectar a Nimbe Payments. Código ERR_CONEX.'));
+                Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('Could not connect to the bank. Code ERR_PAG.'));
             }else if(isset($error))
-                Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('Error en el pago. Código ERR_PAG.'));
+                Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('An error has occurred. Code ERR_PAG.'));
             else
                 Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('Card payment was rejected. Please try again.'));
 
