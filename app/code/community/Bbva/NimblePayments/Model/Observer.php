@@ -46,11 +46,11 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                // $Switch->saveConfig('payment/nimblepayments_checkout/active', 1, 'default', 0);
 
             } else{
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Datos de pasarela no válidos para aceptar pagos. Asegúrate de que no sean de una pasarela de Test.'));
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
                 $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
             }
         } catch (Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Datos de pasarela no válidos para aceptar pagos. Asegúrate de que no sean de una pasarela de Test.'));
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
                 $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
         }
         return $this;
