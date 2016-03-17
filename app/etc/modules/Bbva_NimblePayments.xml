@@ -10,7 +10,7 @@
 			<active>true</active>
 
 			<!-- Indica en qué directorio encontrará el módulo: core, community o local -->
-			<codePool>local</codePool>
+			<codePool>community</codePool>
                         <depends>
                             <Mage_Payment/>
                         </depends>
