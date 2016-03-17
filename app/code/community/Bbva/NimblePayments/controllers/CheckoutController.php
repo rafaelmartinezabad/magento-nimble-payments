@@ -7,16 +7,6 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
     {   
             $connection = Mage::app()->getRequest()->getParam('connection');
             $error = Mage::app()->getRequest()->getParam('error');
-        
-            error_log("connection");
-            error_log($connection);
-            error_log(isset($connection));
-            error_log($connection==false);
-            error_log("error");
-            error_log($error);
-            
-            
-            
             
             if(Mage::getSingleton('checkout/session')->getLastRealOrderId()){
                 if ($lastQuoteId = Mage::getSingleton('checkout/session')->getLastQuoteId()){
