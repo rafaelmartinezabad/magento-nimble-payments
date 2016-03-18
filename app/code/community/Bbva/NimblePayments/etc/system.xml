@@ -4,9 +4,9 @@
    <sections>
 	<payment>
                 <groups>
-                      <nimblepayments_checkout translate="label comment" module="payment">
+                      <nimblepayments_checkout translate="label" module="payment">
                             <label>Nimble Payments by BBVA</label>
-                            <comment><![CDATA[<div><img style='height:4.9rem;' src='/skin/frontend/base/default/images/nimblepayments/nimble_bbva.svg' alt='Nimble logo'/></div><p>Need an <strong>Nimble Payments</strong> account?.<a class='button button-primary' href='https://www.nimblepayments.com/private/registration?utm_source=Magento_Settings&utm_medium=Referral%20Partners&utm_campaign=Creacion-Cuenta&partner=magento' target='_blank'>Signup now</a></p><hr />]]></comment>
+                            <frontend_model>nimblepayments/adminhtml_system_config_fieldset_payment</frontend_model>
                             <frontend_type>text</frontend_type>
                             <sort_order>401</sort_order>
                             <show_in_default>1</show_in_default>
