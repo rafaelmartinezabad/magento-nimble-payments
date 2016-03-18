@@ -227,7 +227,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      */
     public function getTitle()
     {
-        return Mage::helper('core')->__('Card Payment');
+        return Mage::helper('core')->__('Card payment');
     }
     
 }
