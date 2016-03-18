@@ -220,4 +220,14 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $this->_paymentMethod;
     }
     
+    /**
+     * Retrieve payment method title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return Mage::helper('core')->__('Card Payment');
+    }
+    
 }
