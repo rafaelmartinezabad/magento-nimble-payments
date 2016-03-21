@@ -1,7 +1,7 @@
 {
-    "name": "nimblepayments/magento-nimble-payments",
+    "name": "nimblepayments/magento",
     "type": "magento-module",
-    "homepage": "https://github.com/nimblepayments/woocommerce-nimble-payments",
+    "homepage": "https://github.com/nimblepayments/magento",
     "description": "Magento extension to add Nimble Payments services.",
     "keywords": ["plugin", "nimble", "payments", "magento", "tpv"],
     "license": "OSL-3.0",
