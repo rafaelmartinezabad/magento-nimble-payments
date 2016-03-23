@@ -2,7 +2,6 @@
 
 class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstract
 {
-    const MODE         = 'real';
     
     protected $_code  = 'nimblepayments_checkout';
 
@@ -131,6 +130,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     {
         $url = '';
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        
         $order_id = $this->getProdID();
         $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
         $payment = array(
@@ -144,14 +145,14 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $params = array(
                 'clientId' => $this->getMerchantId(),
                 'clientSecret' =>$this->getSecretKey(),
-                'mode' => self::MODE
+                'mode' => NimbleAPIConfig::MODE
         );
 
         /* High Level call */
         try{
             //throw new Exception('División por cero.');
             $NimbleApi = new NimbleAPI($params);
-            $p = new Payments();
+            $p = new NimbleAPIPayments();
             $response = $p->SendPaymentClient($NimbleApi, $payment);
             if(isset($response["data"]) && isset($response["data"]["paymentUrl"])){
                 $url = $response["data"]["paymentUrl"];
@@ -170,6 +171,16 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         return $url;    
+    }
+    
+    public function getParams(){
+        
+        $params = array(
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' =>$this->getSecretKey(),
+                'mode' => NimbleAPIConfig::MODE
+        );
+        return $params;
     }
     
     /**

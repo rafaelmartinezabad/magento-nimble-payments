@@ -29,18 +29,18 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
       public function configNimble($observer){
 
           require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+          require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+
 
            $params = array(
             'clientId' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'))),
             'clientSecret' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'))),
-            'mode' => Bbva_NimblePayments_Model_Checkout::MODE
+            'mode' => NimbleAPIConfig::MODE
             );
              $Switch = new Mage_Core_Model_Config();
         try {
             $nimbleApi = new NimbleAPI($params);
-            $nimbleApi->uri .= 'check';
-            $nimbleApi->method = 'GET';
-            $response = $nimbleApi->rest_api_call();
+            $response = $nimbleApi->checkMode();
             if ( isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code'] ){
                 //correct
             } else{

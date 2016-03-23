@@ -80,6 +80,17 @@
             </order>
         </sales>       
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <menu_nimble before="Mage_Adminhtml">Bbva_NimblePayments_Adminhtml</menu_nimble>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <frontend>
         <secure_url>
             <nimblepayments_checkout>/nimblepayments/checkout</nimblepayments_checkout>
