@@ -7,13 +7,14 @@ class Bbva_NimblePayments_Adminhtml_CustomController extends Mage_Adminhtml_Cont
         $this->loadLayout()
             ->_setActiveMenu('nimble')
             ->_title($this->__('Balance'));
-        
+
         $block = $this->getLayout()->createBlock(
             'Mage_Core_Block_Template',
             'MenuNimble',
             array('template' => 'nimblepaymentsadmin/menunimble.phtml')
             )
-            ->setData('url', $this->getOauth3Url());    
+            ->setData('url', $this->getOauth3Url())
+            ->setData('token', $this->getToken());    
 
         $this->getLayout()->getBlock('content')->append($block);
         $this->renderLayout();
@@ -37,7 +38,18 @@ class Bbva_NimblePayments_Adminhtml_CustomController extends Mage_Adminhtml_Cont
 
         return $url;
     }
-     
+    
+    function getToken(){
+        
+        $token=false;
+        
+        if(Mage::getStoreConfig('payment/nimblepayments_checkout/token'))
+            $token=true;
+        
+        return $token;
+    }
+    
+    
     /*public function listAction()
     {
         $this->loadLayout()

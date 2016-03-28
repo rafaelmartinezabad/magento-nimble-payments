@@ -6,11 +6,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_code  = 'nimblepayments_checkout';
 
     protected $_isGateway               = false;
-    protected $_canAuthorize            = false;
+    protected $_canAuthorize            = true;
     protected $_canCapture              = true;
     protected $_canCapturePartial       = false;
-    protected $_canRefund               = false;
-    protected $_canVoid                 = false;
+    protected $_canRefund               = true;
+    protected $_canRefundInvoicePartial = true;
+    protected $_canVoid                 = true;
     protected $_canUseInternal          = false;
     protected $_canUseCheckout          = true;
     protected $_canUseForMultishipping  = false;
@@ -22,7 +23,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_order;
     
     protected $_paymentUrl = null;
-
+    
     public function getOrder()
     {
         if (!$this->_order) {
@@ -174,6 +175,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     }
     
     public function getParams(){
+        
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         
         $params = array(
                 'clientId' => $this->getMerchantId(),
