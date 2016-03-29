@@ -1,0 +1,16 @@
+<?php if($this->token==false){ ?>
+<div class="wrap">
+    <h1><?php echo $this->__('Nimble Payments Advanced Options'); //LANG: TODO ?></h1>
+    <p><?php echo $this->__('Desde Magento podrás gestionar todas tus ventas, ver los movimientos de tu cuenta , hacer devoluciones, etc.'); //LANG: TODO ?></p>
+    <p><?php echo $this->__('Para acceder a toda la potencia de Nimble Payments desde Magento, es necesario que te identifiques y des permiso a Magento a acceder a estos datos.'); //LANG: TODO ?></p>
+    <p class="submit">
+        
+        <a class="button button-primary" href='<?php echo $this->url; ?>'><?php echo $this->__('Authorize Magento'); //LANG: TODO ?></a>
+
+    </p>
+</div>
+<?php } else { ?>
+<div class="wrap">
+    <h1><?php echo $this->__('RESUMEN'); //LANG: TODO ?></h1>
+</div>
+<?php } ?>
