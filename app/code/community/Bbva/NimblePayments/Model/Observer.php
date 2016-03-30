@@ -14,8 +14,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
         $key_param = Mage::app()->getRequest()->getParam('key');
 
         if( $orderID && $key_param == Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $orderID) ){
-            $order = Mage::getModel('sales/order');;
-            //$incrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+            $order = Mage::getModel('sales/order');
             $order->loadByIncrementId($orderID);
             $invoice = $order->prepareInvoice();
             $invoice->register()->capture();
@@ -24,6 +23,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 ->addObject($invoice->getOrder())
                 ->save();
         }
+      
         return $this;
     }
       public function configNimble($observer){

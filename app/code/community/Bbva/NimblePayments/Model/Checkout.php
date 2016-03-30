@@ -5,7 +5,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     
     protected $_code  = 'nimblepayments_checkout';
 
-    protected $_isGateway               = false;
+    protected $_isGateway               = true;
     protected $_canAuthorize            = true;
     protected $_canCapture              = true;
     protected $_canCapturePartial       = false;
@@ -21,8 +21,19 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_infoBlockType = 'nimblepayments/payment_info';
 
     protected $_order;
-    
+   
     protected $_paymentUrl = null;
+
+    
+    public function refund(Varien_Object $payment, $amount)
+    {
+        $transaction_id = $payment->getAdditionalInformation('np_transaction_id');
+        if (!$this->canRefund()) {
+            Mage::throwException(Mage::helper('payment')->__('Refund action is not available.'));
+        }
+        
+        return $this;
+    } 
     
     public function getOrder()
     {
@@ -199,9 +210,13 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
     public function capture(Varien_Object $payment, $amount)
     {
-        $payment->setStatus(self::STATUS_APPROVED)
-            ->setLastTransId($this->getTransactionId());
+        /*$payment->setTransactionId($payment->getAdditionalInformation('np_transaction_id'));
+        $payment->setParentTransactionId($payment->getTransactionId());
+        $transaction = $payment->addTransaction(Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH, null, true, "");
+        $transaction->setIsClosed(true);*/
 
+        $payment->setStatus(self::STATUS_APPROVED)
+            ->setLastTransId($payment->getAdditionalInformation('np_transaction_id'));
         return $this;
     }
 
