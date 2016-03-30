@@ -23,13 +23,54 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_order;
    
     protected $_paymentUrl = null;
-
     
     public function refund(Varien_Object $payment, $amount)
     {
-        $transaction_id = $payment->getAdditionalInformation('np_transaction_id');
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        
         if (!$this->canRefund()) {
             Mage::throwException(Mage::helper('payment')->__('Refund action is not available.'));
+        }
+       
+        if (!$this->getToken()) {//prueba
+            Mage::throwException(Mage::helper('payment')->__('Refund Failed: You must authorize the advanced options Nimble Payments.'));
+        }
+        
+        $transaction_id = $payment->getAdditionalInformation('np_transaction_id');
+        try {
+            $params = array(
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' =>$this->getSecretKey(),
+                'token' =>$this->getToken(),
+                'mode' => NimbleAPIConfig::MODE
+            );
+            
+            $nimble_api = new NimbleAPI($params);
+            $total_refund = $amount;
+            
+            $refund = array(
+                'amount' => $total_refund * 100,
+                'concept' => 'lala',//todo
+                'reason' => 'REQUEST_BY_CUSTOMER'
+            );
+            
+            $response = NimbleAPIPayments::sendPaymentRefund($nimble_api, $transaction_id, $refund);
+        } catch (Exception $e) {
+            $message = Mage::helper('payment')->__('Refund Failed: ');
+            Mage::throwException($message);
+        }
+        
+        if (!isset($response['data']) || !isset($response['data']['idRefund'])){
+            $message = Mage::helper('payment')->__('Refund Failed: ');
+            
+            if ( isset($response['result']) && isset($response['result']['info']) ){
+                $message .= $response['result']['info'];
+            }
+            else if (isset($response['error'])) {
+                $message .= $response['error'];
+            }
+           Mage::throwException($message);
         }
         
         return $this;
@@ -64,6 +105,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     {
         $source_code = Mage::getStoreConfig('payment/' . $this->getCode() . '/source_code');        
         return $source_code;            
+    }
+    
+    public function getToken()
+    {
+        $token = Mage::getStoreConfig('payment/' . $this->getCode() . '/token');        
+        return $token;            
     }
     
     public function getAmount()
