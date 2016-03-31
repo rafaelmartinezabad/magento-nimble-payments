@@ -24,16 +24,44 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
    
     protected $_paymentUrl = null;
     
+    
+    public function OAuthToken(){
+        $oauth = true;
+        
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        
+         try {
+            $params = array(
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' =>$this->getSecretKey(),
+                'token' =>$this->getToken(),
+                'mode' => NimbleAPIConfig::MODE
+            );
+            
+            $nimble_api = new NimbleAPI($params);
+            $response = $nimble_api->checkMode();
+            if(!isset($response['result']) || isset($response['result']['code']) || $response['result']['code']!=200){
+                error_log(print_r($response,true));
+                $oauth = false;
+            }
+        } catch (Exception $e) {
+            $oauth = false;
+        }
+
+        return $oauth;
+    }
+    
     public function refund(Varien_Object $payment, $amount)
     {
+        
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         
         if (!$this->canRefund()) {
             Mage::throwException(Mage::helper('payment')->__('Refund action is not available.'));
         }
-       
-        if (!$this->getToken()) {//prueba
+        if (!$this->getToken() || $this->OAuthToken() == false) {
             Mage::throwException(Mage::helper('payment')->__('Refund Failed: You must authorize the advanced options Nimble Payments.'));
         }
         
@@ -51,7 +79,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             
             $refund = array(
                 'amount' => $total_refund * 100,
-                'concept' => 'lala',//todo
+                'concept' => Mage::getSingleton('adminhtml/session')->getCommentText(),
                 'reason' => 'REQUEST_BY_CUSTOMER'
             );
             
