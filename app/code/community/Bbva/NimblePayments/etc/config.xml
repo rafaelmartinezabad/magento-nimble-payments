@@ -131,6 +131,20 @@
                 </Bbva_NimblePayments>
             </modules>
         </translate>
+        <events>
+           <admin_session_user_login_success>
+                <observers>
+                    <Bbva_NimblePayments>
+                        <!-- The model to be instantiated -->
+                         <class>nimblepayments/observer</class>
+                        <!-- The method of the class to be called -->
+                        <method>saveUserLoginSession</method>
+                        <!-- The type of class to instantiate -->
+                        <type>singleton</type>
+                    </Bbva_NimblePayments>
+                </observers>
+            </admin_session_user_login_success>
+        </events>    
     </adminhtml>
     <default>
         <payment>            

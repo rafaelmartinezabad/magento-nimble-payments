@@ -54,6 +54,32 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
         return $this;
                     
       }
-    
+    public function saveUserLoginSession($observer){
+        
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+     
+        try {
+            $params = array(
+                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
+                'clientSecret' =>Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
+                'token' =>Mage::getStoreConfig('payment/nimblepayments_checkout/token'),
+                'refreshToken' =>Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken'),
+                'mode' => NimbleAPIConfig::MODE
+            );
+
+            $nimble_api = new NimbleAPI($params);
+            $options = array(
+                'token' => $nimble_api->authorization->getAccessToken(),
+                'refreshToken' => $nimble_api->authorization->getRefreshToken()
+            );
+            
+            //guardar el nombre de reflesh token y refles en BD.
+            $Switch = new Mage_Core_Model_Config();
+            $Switch->saveConfig('payment/nimblepayments_checkout/token', $options['token'], 'default', 0)
+               ->saveConfig('payment/nimblepayments_checkout/refreshToken', $options['refreshToken'], 'default', 0);
+        } catch (Exception $e) {
+                //TODO
+        }
+    }
     
 }
