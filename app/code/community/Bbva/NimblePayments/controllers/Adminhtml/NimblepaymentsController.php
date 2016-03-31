@@ -7,17 +7,56 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
         $this->loadLayout()
             ->_setActiveMenu('nimble');
         
-        //TODO GET RESUMEN
+        $invalid_token = $this->getToken() ? false : true;
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIReport.php';
         
-        $block = $this->getLayout()->createBlock(
-            'Mage_Core_Block_Template',
-            'MenuNimble',
-            array('template' => 'nimblepaymentsadmin/authorization.phtml')
-            )
-            ->setData('url', $this->getOauth3Url());
+        try {
+            $params = array(
+                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
+                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
+                'token' => Mage::getStoreConfig('payment/nimblepayments_checkout/token'),
+                'mode' => NimbleAPIConfig::MODE
+            );
+            $nimble_api = new NimbleAPI($params);
+            $commerces = NimbleAPIReport::getCommerces($nimble_api, 'enabled');
+            if (!isset($commerces['error'])){
+                foreach ($commerces as $IdCommerce => $data){
+                    $title = $data['name'];
+                    $summary = NimbleAPIReport::getSummary($nimble_api, $IdCommerce);
+                    
+                    $block = $this->getLayout()->createBlock(
+                        'Mage_Core_Block_Template',
+                        'MenuNimble',
+                        array('template' => 'nimblepaymentsadmin/summary.phtml')
+                        )
+                        ->setData('summary', $summary)
+                            ->setData('title', $title);
 
-        $this->getLayout()->getBlock('content')->append($block);
-        $this->renderLayout();
+                    $this->getLayout()->getBlock('content')->append($block);
+                    $this->renderLayout();
+                    
+                }
+            } else {
+                $invalid_token = true;
+            }
+
+        } catch (Exception $e) {
+            $invalid_token = true;
+        }
+        
+        if ($invalid_token){
+            $block = $this->getLayout()->createBlock(
+                'Mage_Core_Block_Template',
+                'MenuNimble',
+                array('template' => 'nimblepaymentsadmin/authorization.phtml')
+                )
+                ->setData('url', $this->getOauth3Url());
+
+            $this->getLayout()->getBlock('content')->append($block);
+            $this->renderLayout();
+        }
         
     }
     
