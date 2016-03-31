@@ -257,13 +257,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
     public function capture(Varien_Object $payment, $amount)
     {
-        /*$payment->setTransactionId($payment->getAdditionalInformation('np_transaction_id'));
-        $payment->setParentTransactionId($payment->getTransactionId());
-        $transaction = $payment->addTransaction(Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH, null, true, "");
-        $transaction->setIsClosed(true);*/
-
-        $payment->setStatus(self::STATUS_APPROVED)
-            ->setLastTransId($payment->getAdditionalInformation('np_transaction_id'));
+        $payment->setTransactionId($payment->getAdditionalInformation('np_transaction_id'));
+        $payment->setStatus(self::STATUS_APPROVED);
         return $this;
     }
 
