@@ -1,20 +1,20 @@
 <?php
  
-class Bbva_NimblePayments_Adminhtml_CustomController extends Mage_Adminhtml_Controller_Action
+class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminhtml_Controller_Action
 {
     public function indexAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('nimble')
-            ->_title($this->__('Balance'));
-
+            ->_setActiveMenu('nimble');
+        
+        //TODO GET RESUMEN
+        
         $block = $this->getLayout()->createBlock(
             'Mage_Core_Block_Template',
             'MenuNimble',
-            array('template' => 'nimblepaymentsadmin/menunimble.phtml')
+            array('template' => 'nimblepaymentsadmin/authorization.phtml')
             )
-            ->setData('url', $this->getOauth3Url())
-            ->setData('token', $this->getToken());    
+            ->setData('url', $this->getOauth3Url());
 
         $this->getLayout()->getBlock('content')->append($block);
         $this->renderLayout();

@@ -3,12 +3,12 @@
     <menu>
         <nimble module="payment" translate="title">
             <title>Nimble Payments</title>
-            <sort_order>100</sort_order>
+            <sort_order>85</sort_order>
             <children>
                 <index module="payment" translate="title">
-                    <title>Balance</title>
+                    <title>Summary</title>
                     <sort_order>1</sort_order>
-                    <action>adminhtml/custom/index</action>
+                    <action>adminhtml/nimblepayments/index</action>
                    <!-- <action>adminhtml/menuadmin/index</action>-->
                 </index>
                 <!--<list module="payment" translate="title">
@@ -23,7 +23,7 @@
         <resources>
             <admin>
                 <children>
-                    <custom translate="title" module="payment">
+                    <nimblepayments translate="title" module="payment">
                         <title>Nimble Payments</title>
                         <sort_order>-100</sort_order>
                         <children>
@@ -36,7 +36,7 @@
                                 <sort_order>2</sort_order>
                             </list>-->
                         </children>
-                    </custom>
+                    </nimblepayments>
                 </children>
             </admin>
         </resources>
