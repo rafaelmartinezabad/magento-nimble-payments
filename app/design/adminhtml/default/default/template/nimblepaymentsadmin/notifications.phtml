@@ -1,0 +1,6 @@
+<?php if ($message = $this->getMessage()) : ?>
+    <div class="notification-global">
+        <strong class="label"><?php echo $this->__('NimblePayments Message: ') ?></strong><?php echo $message ?>
+        <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") ?>"><?php echo $this->__('aquí') ?></a>
+    </div>    
+<?php endif; ?>
