@@ -33,8 +33,8 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
 
 
            $params = array(
-            'clientId' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'))),
-            'clientSecret' => trim(html_entity_decode(Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'))),
+            'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
+            'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
             'mode' => NimbleAPIConfig::MODE
             );
              $Switch = new Mage_Core_Model_Config();
@@ -51,7 +51,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
             }
         } catch (Exception $e) {
             if (Mage::getStoreConfig('payment/nimblepayments_checkout/active')!= 0){
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
+                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
                 $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
             }
         }
@@ -62,7 +62,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
         
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         
-        if(Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken')){
+      // if(Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken')){
             try {
                 $params = array(
                     'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
@@ -85,7 +85,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
             } catch (Exception $e) {
                     //TODO
             }
-        }
+       // }
     }
     
 }

@@ -1,6 +1,13 @@
 <?php if ($message = $this->getMessage()) : ?>
-    <div class="notification-global">
-        <strong class="label"><?php echo $this->__('NimblePayments Message: ') ?></strong><?php echo $message ?>
-        <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") ?>"><?php echo $this->__('aquí') ?></a>
-    </div>    
+    <?php if (!empty($message)){ ?>
+    <?php  ?>
+        <div class="notification-global">
+            <strong class="label"><?php echo $this->__('NimblePayments Message: ') ?></strong><?php echo $message['message'] ?>
+            <?php if ($message['type']=='plugins'){  ?>
+            <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") ?>"><?php echo $this->__('aquí') ?></a>
+            <?php } else{ ?> 
+            <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Diagrams::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
+            <?php } ?> 
+        </div>   
+    <?php } ?>
 <?php endif; ?>
