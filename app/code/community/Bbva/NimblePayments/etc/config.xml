@@ -60,6 +60,11 @@
             </nimblepayments_read>
         </resources>
         <blocks>
+            <adminhtml>
+                <rewrite>
+                    <dashboard>Bbva_NimblePayments_Block_Dashboard</dashboard>
+                </rewrite>
+            </adminhtml>
             <nimblepayments><class>Bbva_NimblePayments_Block</class></nimblepayments>
         </blocks>
         <sales>
