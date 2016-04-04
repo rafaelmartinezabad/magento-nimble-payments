@@ -6,7 +6,7 @@
             <?php if ($message['type']=='plugins'){  ?>
             <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") ?>"><?php echo $this->__('aquí') ?></a>
             <?php } else{ ?> 
-            <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Diagrams::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
+            <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Summary::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
             <?php } ?> 
         </div>   
     <?php } ?>
