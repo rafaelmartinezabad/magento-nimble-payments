@@ -27,7 +27,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
                     $title = $data['name'];
                     $summary = NimbleAPIReport::getSummary($nimble_api, $IdCommerce);
                     
-                    $this->setTemplate('nimblepaymentsadmin/summary.phtml');
+                    $this->setTemplate('nimblepaymentsadmin/dashboard_widget.phtml');
                     $this->summary = $summary;
                     $this->title = $title;
                 }

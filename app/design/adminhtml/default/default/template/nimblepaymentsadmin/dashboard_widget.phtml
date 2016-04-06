@@ -1,0 +1,50 @@
+<?php
+$totalavailable = $this->summary['totalAvailable']['amount'] / 100;
+$total_str = number_format($totalavailable, 2, ',', '.');
+
+$balance = $this->summary['balance']['amount'] / 100;
+$balance_str = number_format($balance, 2, ',', '.');
+?>
+<style>
+    /*MAGENTO*/
+    .nimble-payments-summary p{
+        font-size: 13px;
+        line-height: 1.5;
+        cursor: default;
+    }
+    /*DASHBOARD*/
+    .nimble-payments-dashboard{
+        text-align: center;
+        margin: 10px;
+    }
+    .nimble-payments-dashboard .col-1 {
+        border-right: solid 1px #eeeeee;
+    }
+    .nimble-payments-dashboard .col {
+        display: inline-block;
+        text-align: center;
+        padding: 0 14px;
+    }
+    .nimble-payments-dashboard .col span{
+        display: block;
+        padding-right: 2px;
+    }
+    .nimble-payments-dashboard .col span.title{
+        color: #64b506;
+        font-size: 1.1em;
+    }
+    .nimble-payments-dashboard .col span.result{
+        margin-top: 10px;
+        font-size: 1.8em;
+    }
+</style>
+<div class="nimble-payments-dashboard">
+    <div class="col-1 col">
+        <span class="title"><?php echo $this->__('Account Balance'); //LANG: BALANCE_DASHBOARD ?></span>
+        <span class="result"><?php echo $balance_str; ?> €</span>
+    </div>
+    <div class="col">
+        <span class="title"><?php echo $this->__('Available Balance'); //LANG: TOTAL_AVAILABLE_DASHBOARD ?></span>
+        <span class="result"><?php echo $total_str; ?> €</span>
+    </div>
+</div>
