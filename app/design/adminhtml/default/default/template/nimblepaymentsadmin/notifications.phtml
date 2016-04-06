@@ -4,9 +4,9 @@
         <div class="notification-global">
             <strong class="label"><?php echo $this->__('NimblePayments Message: ') ?></strong><?php echo $message['message'] ?>
             <?php if ($message['type']=='plugins'){  ?>
-            <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") ?>"><?php echo $this->__('aquí') ?></a>
+                <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") ?>"><?php echo $this->__('Aquí.') ?></a>
             <?php } else{ ?> 
-            <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Summary::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
+                <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Summary::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
             <?php } ?> 
         </div>   
     <?php } ?>

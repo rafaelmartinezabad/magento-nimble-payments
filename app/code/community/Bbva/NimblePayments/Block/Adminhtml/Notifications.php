@@ -23,6 +23,7 @@ class Bbva_NimblePayments_Block_Adminhtml_Notifications extends Mage_Adminhtml_B
     require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
     require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIReport.php';
     
+    
     $token=false;
         
     if(Mage::getStoreConfig('payment/nimblepayments_checkout/token')){
