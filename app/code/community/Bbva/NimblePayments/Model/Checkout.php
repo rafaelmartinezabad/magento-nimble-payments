@@ -133,6 +133,17 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $paymentInfo->setAdditionalInformation('lang',$paymentInfo->getLang());
             //Mage::throwException($paymentInfo->getLang());
         }
+        
+        //StoredCard Fields
+        $storedcard_fields = array(
+            'CardPan',
+            'CardType'
+        );
+        foreach ($storedcard_fields as $field){
+            if ($paymentInfo->getData($field)){
+                $paymentInfo->setAdditionalInformation($field,$paymentInfo->getData($field));
+            }
+        }
 
         return true;
     }
@@ -279,9 +290,18 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
     public function assignData($data)
     {
-        //Mage::throwException(implode(',',$data));
-        $result = parent::assignData($data); 
-        return $result;
+        $info = $this->getInfoInstance();
+        $card_id = Mage::app()->getRequest()->getParam('storedcard');
+        if ($card_id){
+            //TODO Call NimbleAPI storedcard
+            $cards = array(
+                '1' => array( 'CardPan' => '2016', 'CardType' => 'VISA'),
+                '2' => array( 'CardPan' => '8880', 'CardType' => 'MASTERCARD')
+            );
+            $info->addData($cards[$card_id]);
+        }
+
+        return $this;
     }
     
     /**

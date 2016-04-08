@@ -1,2 +1,13 @@
 <?php $_code=$this->getMethodCode() ?>
 <p style="vertical-align: middle;"><img class="credit-card-logo" src="<?php echo $this->getSkinUrl('images/nimblepayments/BBVA.png')?>" alt="<?php echo $this->__('tarjetas de credito') ?>"  style="display: inline-block; margin: 5px; vertical-align: middle;" /><strong style="display: inline-block; vertical-align: middle;"><?php echo $this->__('Pay safely with your credit card through the BBVA.') ?></strong></p>
+<?php if ( $this->customerhascards ): ?>
+<div class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <span><label>Id Cliente:</label><?php echo $this->customerid; ?></span>
+    <br/>
+    <select name="storedcard">
+    <?php foreach ( $this->storedcard as $card_id => $card ): ?>
+        <option value="<?php echo $card_id; ?>"><?php echo $card['CardPan'] . ', ' . $card['CardType']; ?></option>
+    <?php endforeach; ?>
+    </select>
+</div>
+<?php endif; ?>
