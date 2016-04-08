@@ -37,6 +37,7 @@ class Bbva_NimblePayments_Model_Info
         self::CREDIT_CARD_NUMBER => 'CcNumber',
         self::ISSUING_BANK => 'IssuingBank',
         self::CREDIT_CARD_HOLDER => 'CardHolderName',
+        self::CREDIT_CARD_PAN          => 'CardPan',
         self::CREDIT_CARD_TYPE => 'CardType'
     );
     
