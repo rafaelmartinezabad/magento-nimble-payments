@@ -19,7 +19,13 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
                 Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('An error has occurred. Code ERR_PAG.'));
             else
                 Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('Card payment was rejected. Please try again.'));
-
+            
+            //Cancel order
+            $order = Mage::getModel('sales/order');
+            $order->loadByIncrementId(Mage::getSingleton('checkout/session')->getLastRealOrderId());
+            $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment was rejected.'));
+            $order->save();
+            
             $this->_redirect('checkout/cart'); //Redirect to cart
             return;
             }
