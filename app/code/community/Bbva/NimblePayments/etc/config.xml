@@ -160,6 +160,7 @@
             <nimblepayments_checkout>
                 <merchant_id /> 
                 <active>0</active>               
+                <fasterpage_checkout_enabled>1</fasterpage_checkout_enabled>
                 <model>nimblepayments/checkout</model>
                 <title>Pago con tarjeta</title>
                 <!--<order_status>pending_nimble</order_status>-->

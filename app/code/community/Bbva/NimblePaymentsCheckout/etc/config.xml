@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <modules>
+        <Bbva_NimblePaymentsCheckout>
+            <version>1.0.0</version>
+        </Bbva_NimblePaymentsCheckout>
+    </modules>
+    <global>
+        <blocks>
+            <nimblepaymentscheckout>
+                <class>Bbva_NimblePaymentsCheckout_Block</class>
+            </nimblepaymentscheckout>
+        </blocks>
+        <helpers>
+            <nimblepaymentscheckout>
+                <class>Bbva_NimblePaymentsCheckout_Helper</class>
+            </nimblepaymentscheckout>
+        </helpers>
+        <models>
+            <nimblepaymentscheckout>
+                <class>Bbva_NimblePaymentsCheckout_Model</class>
+            </nimblepaymentscheckout>
+        </models>
+    </global>
+    <frontend>
+        <layout>
+            <updates>
+                <nimblepaymentscheckout module="Bbva_NimblePaymentsCheckout">
+                    <file>nimblepaymentscheckout.xml</file>
+                </nimblepaymentscheckout>
+            </updates>
+        </layout>
+        <routers>
+            <checkout>
+                <args>
+                    <modules>
+                        <Bbva_NimblePaymentsCheckout before="Mage_Checkout">Bbva_NimblePaymentsCheckout</Bbva_NimblePaymentsCheckout>
+                    </modules>
+                </args>
+            </checkout>
+        </routers>
+    </frontend>
+</config>

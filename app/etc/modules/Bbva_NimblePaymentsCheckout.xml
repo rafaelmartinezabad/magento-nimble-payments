@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<modules>
+		<Bbva_NimblePaymentsCheckout>
+			<!-- Indica si nuestro modulo está activo: true o false -->
+			<active>true</active>
+			<!-- Indica en qué directorio encontrará el módulo: core, community o local -->
+			<codePool>community</codePool>
+                        <depends>
+                            <Mage_Checkout/>
+                        </depends>
+		</Bbva_NimblePaymentsCheckout>
+	</modules>
+</config>
