@@ -21,7 +21,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);
-            $commerces = NimbleAPIReport::getCommerces($nimble_api, 'enabled');
+            $commerces = NimbleAPIReport::getCommerces($nimble_api);
             if (!isset($commerces['error'])){
                 foreach ($commerces as $IdCommerce => $data){
                     $title = $data['name'];

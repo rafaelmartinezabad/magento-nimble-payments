@@ -20,7 +20,7 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);
-            $commerces = NimbleAPIReport::getCommerces($nimble_api, 'enabled');
+            $commerces = NimbleAPIReport::getCommerces($nimble_api);
             if (!isset($commerces['error'])){
                 foreach ($commerces as $IdCommerce => $data){
                     $title = $data['name'];
