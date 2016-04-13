@@ -27,6 +27,26 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                 $result = parent::saveShipping($shipping, $customerShippingAddressId);
                 //error_log(print_r($result, true));
                 break;
+            case 'shipping_method':
+                $shippingMethod = '';
+                $lastPrice = 0;
+                //Choose cheaper shipping method
+                $rates = $this->getQuote()->getShippingAddress()->getGroupedAllShippingRates();
+                foreach ($rates as $code => $_rates){
+                    foreach ($_rates as $_rate){
+                        if ( $shippingMethod == '' || $lastPrice > $_rate->getPrice()){
+                            $lastPrice = $_rate->getPrice();
+                            $shippingMethod = $_rate->getCode();
+                        }
+                    }
+                }
+                parent::saveShippingMethod($shippingMethod);
+                break;
+            case 'payment':
+                $payment = array('method' => 'nimblepayments_checkout');
+                //TODO: Stored Card Payment
+                //parent::savePayment($payment);
+                break;
             default:
                 return false;
         }
