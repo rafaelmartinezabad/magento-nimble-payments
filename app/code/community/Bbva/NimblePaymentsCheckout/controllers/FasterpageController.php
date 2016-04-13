@@ -4,26 +4,6 @@ require_once 'Mage/Checkout/controllers/OnepageController.php';
 
 class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_OnepageController
 {
-    /**
-     * Check if a guest can proceed to the checkout
-     *
-     * @return boolean
-     */
-    protected function _canShowForUnregisteredUsers()
-    {
-        if (Mage::getSingleton('customer/session')->isLoggedIn()){
-            return true;
-        }
-        Mage::getSingleton('customer/session')->addError(
-            Mage::helper('checkout')->__('Please login or register to continue to the checkout')
-        );
-        $this->_redirect('customer/account/login');
-        $this->setFlag('', self::FLAG_NO_DISPATCH, true);
-        //return true to the caller method _preDispatch so that it doesn't redirect to the 404 page
-        return true;
-    }
-
-
     public function getFasterpage()
     {
         return Mage::getSingleton('nimblepaymentscheckout/type_fasterpage');
@@ -67,9 +47,11 @@ class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_One
         
         //TODO ***********************************************
         error_log("PASO 1");
-        foreach ($this->getFasterpage()->getCheckout()->getSteps() as $step_code => $step){
-            error_log(print_r($step_code, true));
-            $this->getFasterpage()->skipStep($step_code);
+        if (Mage::getSingleton('customer/session')->isLoggedIn()){
+            foreach ($this->getFasterpage()->getCheckout()->getSteps() as $step_code => $step){
+                error_log(print_r($step_code, true));
+                $this->getFasterpage()->skipStep($step_code);
+            }
         }
         
         $this->_initLayoutMessages('customer/session');

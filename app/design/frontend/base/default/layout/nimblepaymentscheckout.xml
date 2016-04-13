@@ -1,11 +1,21 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+    
     <default>
         <reference name="top.links">
             <block type="nimblepaymentscheckout/link" name="fasterpage_checkout_link">
                 <action method="addFasterpageCheckoutLink"></action>
             </block>
         </reference>
+    
+        <reference name="cart_sidebar.extra_actions">
+            <block type="nimblepaymentscheckout/link" name="nimble.fasterpage" template="nimblepayments/checkout/fasterpage.phtml">
+                <block
+                    type="nimblepaymentscheckout/link"
+                    name="checkout.cart.methods.fasterpage"
+                    template="nimblepayments/checkout/link.phtml" />
+            </block>
+        </reference>    
     </default>
 
     <checkout_cart_index>
