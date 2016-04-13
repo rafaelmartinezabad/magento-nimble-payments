@@ -6,9 +6,7 @@ class Bbva_NimblePaymentsCheckout_Block_Link extends Mage_Checkout_Block_Onepage
 
     public function addFasterPageCheckoutLink()
     {
-        error_log($this->helper('nimblepaymentscheckout')->fasterpageCheckoutEnabled());
         if (!$this->helper('nimblepaymentscheckout')->fasterpageCheckoutEnabled()) {
-            error_log("entra aqui en add");
             return $this;
         }
 
