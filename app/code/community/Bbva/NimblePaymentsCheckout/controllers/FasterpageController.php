@@ -66,7 +66,11 @@ class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_One
         $this->loadLayout();
         
         //TODO ***********************************************
-        $this->getFasterpage()->initBilling();
+        error_log("PASO 1");
+        foreach ($this->getFasterpage()->getCheckout()->getSteps() as $step_code => $step){
+            error_log(print_r($step_code, true));
+            $this->getFasterpage()->skipStep($step_code);
+        }
         
         $this->_initLayoutMessages('customer/session');
         $this->getLayout()->getBlock('head')->setTitle($this->__('Checkout'));
