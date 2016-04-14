@@ -45,7 +45,7 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
             case 'payment':
                 $payment = array('method' => 'nimblepayments_checkout');
                 //TODO: Stored Card Payment
-                //parent::savePayment($payment);
+                parent::savePayment($payment);
                 break;
             default:
                 return false;

@@ -9,7 +9,7 @@
         </reference>
     
         <reference name="cart_sidebar.extra_actions">
-            <block type="nimblepaymentscheckout/link" name="nimble.fasterpage" template="nimblepaymentscheckout/fasterpage.phtml">
+            <block type="nimblepaymentscheckout/link" name="nimble.fasterpage" template="nimblepaymentscheckout/minicartlink.phtml">
                 <block
                     type="nimblepaymentscheckout/link"
                     name="checkout.cart.methods.fasterpage"
@@ -53,13 +53,13 @@
                     <block type="checkout/onepage_progress" name="billing.progress" template="checkout/onepage/progress/billing.phtml"></block>
                     <block type="checkout/onepage_progress" name="shipping.progress" template="checkout/onepage/progress/shipping.phtml"></block>
                     <block type="checkout/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
-                    <block type="checkout/onepage_progress" name="payment.progress" template="checkout/onepage/progress/payment.phtml"></block>
+                    <block type="checkout/onepage_progress" name="payment.progress" template="nimblepaymentscheckout/fasterpage/progress/payment.phtml"></block>
                 </block>
             </block>
         </reference>
         <reference name="content">
             <block type="nimblepaymentscheckout/fasterpage"
-                    name="checkout.fasterpage" template="checkout/onepage.phtml">
+                    name="checkout.fasterpage" template="nimblepaymentscheckout/fasterpage.phtml">
                 <block type="checkout/onepage_login" name="checkout.onepage.login" as="login" template="checkout/onepage/login.phtml">
                     <block type="page/html_wrapper" name="checkout.onepage.login.before" as="login_before" translate="label">
                         <label>Login/Registration Before</label>
