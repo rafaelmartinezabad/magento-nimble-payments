@@ -53,7 +53,10 @@
                     <block type="checkout/onepage_progress" name="billing.progress" template="checkout/onepage/progress/billing.phtml"></block>
                     <block type="checkout/onepage_progress" name="shipping.progress" template="checkout/onepage/progress/shipping.phtml"></block>
                     <block type="checkout/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
-                    <block type="checkout/onepage_progress" name="payment.progress" template="nimblepaymentscheckout/fasterpage/progress/payment.phtml"></block>
+                    <block type="checkout/onepage_progress" name="payment.progress" template="checkout/onepage/progress/payment.phtml">
+                        <block type="checkout/onepage_payment_info" name="payment_info" template="checkout/onepage/payment/info.phtml">
+                        </block>
+                    </block>
                 </block>
             </block>
         </reference>

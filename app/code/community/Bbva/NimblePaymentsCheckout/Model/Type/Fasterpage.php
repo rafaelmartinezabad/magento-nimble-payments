@@ -12,7 +12,6 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                 break;
             case 'billing':
                 $billing = array();
-                //TODO ***********************************************
                 $customerBillingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultBillingAddress()->getId();
                 $customerShippingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultShippingAddress()->getId();
                 $billing['use_for_shipping'] = ( $customerBillingAddressId == $customerShippingAddressId ) ? true : false;
@@ -25,7 +24,6 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                 $shipping['same_as_billing'] = false;
                 $customerShippingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultShippingAddress()->getId();
                 $result = parent::saveShipping($shipping, $customerShippingAddressId);
-                //error_log(print_r($result, true));
                 break;
             case 'shipping_method':
                 $shippingMethod = '';
