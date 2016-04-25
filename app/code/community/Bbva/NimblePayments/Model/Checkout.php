@@ -214,9 +214,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'paymentErrorUrl' =>Mage::getUrl('nimblepayments/checkout/failure')
         );
         
-        $customerData = Mage::getSingleton('customer/session')->getCustomer();
-        $customerId = $customerData->getId();
-        if($customerId){
+        if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $customerData = Mage::getSingleton('customer/session')->getCustomer();
+            $customerId = $customerData->getId();
             $payment['userId'] = $customerId; //TO DO cardHolderId 
         }
         
