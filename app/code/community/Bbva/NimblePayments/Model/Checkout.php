@@ -24,6 +24,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
    
     protected $_paymentUrl = null;
     
+    protected $_merchantId = null;
+    protected $_secretKey = null;
+    protected $_token = null;
+    
     
     public function refund(Varien_Object $payment, $amount)
     {
@@ -92,14 +96,18 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     
     public function getMerchantId()
     {
-        $merchant_id = Mage::getStoreConfig('payment/' . $this->getCode() . '/merchant_id'); 
-        return $merchant_id;
+        if ($this->_merchantId === null) {
+            $this->_merchantId = Mage::getStoreConfig('payment/' . $this->getCode() . '/merchant_id');
+        }
+        return $this->_merchantId;
     }
 
     public function getSecretKey()
     {
-        $secret_key = Mage::getStoreConfig('payment/' . $this->getCode() . '/secret_key');        
-        return $secret_key;            
+        if ($this->_secretKey === null) {
+            $this->_secretKey = Mage::getStoreConfig('payment/' . $this->getCode() . '/secret_key');
+        }
+        return $this->_secretKey;
     }
     
     public function getSourceCode()
@@ -110,8 +118,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     
     public function getToken()
     {
-        $token = Mage::getStoreConfig('payment/' . $this->getCode() . '/token');        
-        return $token;            
+        if ($this->_token === null) {
+            $this->_token = Mage::getStoreConfig('payment/' . $this->getCode() . '/token');
+        }
+        return $this->_token;
     }
     
     public function getAmount()
