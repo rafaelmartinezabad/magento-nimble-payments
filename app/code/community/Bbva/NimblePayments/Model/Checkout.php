@@ -146,8 +146,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         
         //StoredCard Fields
         $storedcard_fields = array(
-            'CardPan',
-            'CardType'
+            'maskedPan',
+            'cardBrand'
         );
         foreach ($storedcard_fields as $field){
             if ($paymentInfo->getData($field)){
@@ -264,7 +264,6 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function getParams(){
         
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
-        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         
         $params = array(
                 'clientId' => $this->getMerchantId(),
@@ -272,6 +271,18 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'mode' => NimbleAPIConfig::MODE
         );
         return $params;
+    }
+    
+    public function getNimble(){
+        
+        $params = $this->getParams();
+         
+        try{
+            $NimbleApi = new NimbleAPI($params);    
+         } catch (Exception $e){
+            Mage::throwException($e->getMessage());
+        }
+        return $NimbleApi;
     }
     
     /**
@@ -307,15 +318,35 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
     public function assignData($data)
     {
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIStoredCards.php';
+        $result = array();
+        
         $info = $this->getInfoInstance();
-        $card_id = Mage::app()->getRequest()->getParam('storedcard');
-        if ($card_id){
-            //TODO Call NimbleAPI storedcard
-            $cards = array(
-                '1' => array( 'CardPan' => '2016', 'CardType' => 'VISA'),
-                '2' => array( 'CardPan' => '8880', 'CardType' => 'MASTERCARD')
-            );
-            $info->addData($cards[$card_id]);
+        $card_base64 = Mage::app()->getRequest()->getParam('storedcard');
+        $card = json_decode(base64_decode($card_base64), true);
+        
+        if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $customerData = Mage::getSingleton('customer/session')->getCustomer();
+            $customerId = $customerData->getId();
+            $card['cardHolderId'] = $customerId;
+            
+            try{
+                if($card['default'] == false){
+                    unset($card['default']);
+                    $NimbleApi = Mage::getSingleton('Bbva_NimblePayments_Model_Checkout')->getNimble();
+                    $result = NimbleAPIStoredCards::selectDefault($NimbleApi, $card);
+                    if(isset($result['result']) && isset($result['result']['code']) && ($result['result']['code'] == 200)){
+                       $info->addData($card);
+                    } else {
+                        throw new Exception();
+                    }
+                }else{
+                    unset($card['default']);
+                    $info->addData($card);
+                }                
+            } catch (Exception $e){
+                $this->setData('storedcards', Mage::getSingleton('Bbva_NimblePayments_Model_StoredCard')->getListStoredCards());
+            }
         }
 
         return $this;
