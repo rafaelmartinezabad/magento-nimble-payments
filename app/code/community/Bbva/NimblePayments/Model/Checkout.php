@@ -215,6 +215,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         
         $order_id = $this->getProdID();
         $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
+        
         $payment = array(
                 'amount' => $this->getAmount(),
                 'currency' => $this->getCoin(),
@@ -222,6 +223,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'paymentSuccessUrl' => Mage::getUrl('checkout/onepage/success', array('order' => $order_id, 'key' => $key)),
                 'paymentErrorUrl' =>Mage::getUrl('nimblepayments/checkout/failure')
         );
+        
+        if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $customerData = Mage::getSingleton('customer/session')->getCustomer();
+            $customerId = $customerData->getId();
+            $payment['userId'] = $customerId; //TO DO cardHolderId 
+        }
         
         $params = array(
                 'clientId' => $this->getMerchantId(),
