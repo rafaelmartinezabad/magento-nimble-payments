@@ -17,8 +17,8 @@ class Bbva_NimblePayments_Model_Info
     const CREDIT_CARD_NUMBER = 'CcNumber';
     const ISSUING_BANK = 'IssuingBank';
     const CREDIT_CARD_HOLDER = 'CardHolderName';
-    const CREDIT_CARD_PAN = 'CardPan';
-    const CREDIT_CARD_TYPE = 'CardType';
+    const CREDIT_CARD_PAN = 'maskedPan';
+    const CREDIT_CARD_TYPE = 'cardBrand';
 
     /**
      * All payment information map
@@ -37,8 +37,8 @@ class Bbva_NimblePayments_Model_Info
         self::CREDIT_CARD_NUMBER => 'CcNumber',
         self::ISSUING_BANK => 'IssuingBank',
         self::CREDIT_CARD_HOLDER => 'CardHolderName',
-        self::CREDIT_CARD_PAN          => 'CardPan',
-        self::CREDIT_CARD_TYPE => 'CardType'
+        self::CREDIT_CARD_PAN          => 'maskedPan',
+        self::CREDIT_CARD_TYPE => 'cardBrand'
     );
     
         /**
@@ -47,8 +47,8 @@ class Bbva_NimblePayments_Model_Info
      * @var array
      */
     protected $_paymentMapPublic = array(
-        self::CREDIT_CARD_PAN          => 'CardPan',
-        self::CREDIT_CARD_TYPE => 'CardType'
+        self::CREDIT_CARD_PAN          => 'maskedPan',
+        self::CREDIT_CARD_TYPE => 'cardBrand'
     );
     
     /**
@@ -206,9 +206,9 @@ class Bbva_NimblePayments_Model_Info
                 return Mage::helper('payment')->__('Issuing Bank');
             case 'CardHolderName':
                 return Mage::helper('payment')->__('Card Holder Name');
-            case 'CardPan':
+            case 'maskedPan':
                 return Mage::helper('payment')->__('Card Pan');
-            case 'CardType':
+            case 'cardBrand':
                 return Mage::helper('payment')->__('Card Type');
         }
         return '';
