@@ -205,13 +205,57 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         
         return $order_number;
     }
-
+    
+    public function paymentStoredCard(){
+       
+    $url='';    
+        try{
+            $customerData = Mage::getSingleton('customer/session')->getCustomer();
+            $customerId = $customerData->getId();
+            $NimbleApi = Mage::getSingleton('Bbva_NimblePayments_Model_Checkout')->getNimble();
+            $storedCardPaymentInfo = array(
+                'amount'       => $this->getAmount(),
+                'currency'     => $this->getCoin(),
+                'customerData' => $this->getProdID(),
+                'cardHolderId' => $customerId
+            );
+            $response = NimbleAPIStoredCards::payment($NimbleApi, $storedCardPaymentInfo);
+            if ( isset($response["data"]) && isset($response["data"]["id"])){
+                $transaction_id = $response["data"]["id"];
+                //Save transaction_id
+                $storedCardPaymentInfo = $this->getOrder()->getPayment();
+                $storedCardPaymentInfo->setAdditionalInformation('np_transaction_id', $transaction_id);
+                $storedCardPaymentInfo->save();
+                $order_id = $this->getProdID();
+                $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
+                $url = Mage::getUrl('checkout/onepage/success', array('order' => $order_id, 'key' => $key));
+                
+            }else{
+                $url = Mage::getUrl('nimblepayments/checkout/failure');
+            }
+        } catch (Exception $ex) {
+            $url = Mage::getUrl('nimblepayments/checkout/failure');
+        }
+        
+        return $url;
+    }
     
     public function getCheckoutUrl()
     {
         $url = '';
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIStoredCards.php';
+
+        if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $vpcInfo = Mage::getModel('nimblepayments/info');
+            $payment = $this->getInfoInstance();
+            $info = $vpcInfo->getPublicPaymentInfo($payment, true);
+            
+            if( isset($info['Card Pan']) && !empty($info['Card Pan']) ){
+                return $this->paymentStoredCard();
+            }
+        }
         
         $order_id = $this->getProdID();
         $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
@@ -319,10 +363,17 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function assignData($data)
     {
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIStoredCards.php';
-        $result = array();
-        
         $info = $this->getInfoInstance();
         $card_base64 = Mage::app()->getRequest()->getParam('storedcard');
+        
+        if(empty($card_base64)){
+            $info->unsAdditionalInformation('maskedPan');
+            $info->unsAdditionalInformation('cardBrand');
+            
+            return $this;
+        }
+        
+        $result = array();   
         $card = json_decode(base64_decode($card_base64), true);
         
         if(Mage::getSingleton('customer/session')->isLoggedIn()) {
