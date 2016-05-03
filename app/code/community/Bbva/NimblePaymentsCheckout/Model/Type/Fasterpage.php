@@ -15,7 +15,6 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                 $customerBillingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultBillingAddress()->getId();
                 $customerShippingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultShippingAddress()->getId();
                 $billing['use_for_shipping'] = ( $customerBillingAddressId == $customerShippingAddressId ) ? true : false;
-                $billing['same_as_billing'] = $billing['use_for_shipping'];
                 $result = parent::saveBilling($billing, $customerBillingAddressId);
                 //error_log(print_r($result, true));
                 break;
@@ -28,8 +27,17 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
             case 'shipping_method':
                 $shippingMethod = '';
                 $lastPrice = 0;
+                
+                //Get current Shipping Address
+                $shippingAddress = $this->getQuote()->getShippingAddress();
+                
+                //Calculate availables Shipping Methods for current shipping address and save
+                $shippingAddress->collectShippingRates()->save();
+                
+                //Get the list of shipping methods
+                $rates = $shippingAddress->getGroupedAllShippingRates();
+                
                 //Choose cheaper shipping method
-                $rates = $this->getQuote()->getShippingAddress()->getGroupedAllShippingRates();
                 foreach ($rates as $code => $_rates){
                     foreach ($_rates as $_rate){
                         if ( $shippingMethod == '' || $lastPrice > $_rate->getPrice()){
