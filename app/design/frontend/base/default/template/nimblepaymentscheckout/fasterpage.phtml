@@ -56,7 +56,9 @@
         saveMethod: '<?php echo $this->getUrl('checkout/onepage/saveMethod') ?>',
         failure: '<?php echo $this->getUrl('checkout/cart') ?>'}
     );
-    checkout.gotoSection('<?php echo $this->getActiveStep() ?>');
-    checkout.reloadReviewBlock();
+    checkout.gotoSection('<?php echo $this->getActiveStep() ?>', true);
+    if ('<?php echo $this->getActiveStep() ?>' == 'review'){
+        checkout.reloadReviewBlock();
+    }
 //]]>
 </script>
