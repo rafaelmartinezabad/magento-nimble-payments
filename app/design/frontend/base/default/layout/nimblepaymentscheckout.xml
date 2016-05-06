@@ -8,6 +8,10 @@
             </block>
         </reference>
     
+        <reference name="topCart.extra_actions">
+            <block type="nimblepaymentscheckout/link" name="nimble.fasterpage.top_cart" template="nimblepaymentscheckout/minicartlink.phtml"/>
+        </reference>   
+        
         <reference name="cart_sidebar.extra_actions">
             <block type="nimblepaymentscheckout/link" name="nimble.fasterpage" template="nimblepaymentscheckout/minicartlink.phtml">
                 <block
@@ -19,6 +23,13 @@
     </default>
 
     <checkout_cart_index>
+        <reference name="checkout.cart.top_methods">
+            <block 
+                   type="nimblepaymentscheckout/link" 
+                   name="checkout.cart.methods.fasterpage.top"
+                   template="nimblepaymentscheckout/link.phtml">
+            </block>
+        </reference>
         <reference name="checkout.cart.methods">
             <block
                     type="nimblepaymentscheckout/link"
