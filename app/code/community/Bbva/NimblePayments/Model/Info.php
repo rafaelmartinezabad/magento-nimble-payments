@@ -17,7 +17,8 @@ class Bbva_NimblePayments_Model_Info
     const CREDIT_CARD_NUMBER = 'CcNumber';
     const ISSUING_BANK = 'IssuingBank';
     const CREDIT_CARD_HOLDER = 'CardHolderName';
-    const CREDIT_CARD_TYPE = 'CardType';
+    const CREDIT_CARD_PAN = 'maskedPan';
+    const CREDIT_CARD_TYPE = 'cardBrand';
 
     /**
      * All payment information map
@@ -28,7 +29,7 @@ class Bbva_NimblePayments_Model_Info
         self::MERCHANT_ID          => 'MerchantId',
         self::STATUS_ID            => 'StatusId',
         self::SOURCE_CODE            => 'SourceCode',
-        self::TRANSACTION_ID        => 'TransactionId',
+        self::TRANSACTION_ID        => 'np_transaction_id',
         self::MERCH_TXN_REF         => 'MerchantTrns',
         self::ORDER_CODE              => 'OrderCode',
         self::TRANSACTION_TYPE_ID      => 'TransactionTypeId',
@@ -36,7 +37,18 @@ class Bbva_NimblePayments_Model_Info
         self::CREDIT_CARD_NUMBER => 'CcNumber',
         self::ISSUING_BANK => 'IssuingBank',
         self::CREDIT_CARD_HOLDER => 'CardHolderName',
-        self::CREDIT_CARD_TYPE => 'CardType'
+        self::CREDIT_CARD_PAN          => 'maskedPan',
+        self::CREDIT_CARD_TYPE => 'cardBrand'
+    );
+    
+        /**
+     * All payment information map
+     *
+     * @var array
+     */
+    protected $_paymentMapPublic = array(
+        self::CREDIT_CARD_PAN          => 'maskedPan',
+        self::CREDIT_CARD_TYPE => 'cardBrand'
     );
     
     /**
@@ -80,15 +92,6 @@ class Bbva_NimblePayments_Model_Info
         // collect Nimble-specific info
         $result = $this->_getFullInfo(array_values($this->_paymentMap), $payment, $labelValuesOnly);
 
-        // add last_trans_id
-        $label = Mage::helper('core')->__('Nimble Payments Transaction ID');
-        $value = $payment->getAdditionalInformation('np_transaction_id');
-        if ($labelValuesOnly) {
-            $result[$label] = $value;
-        } else {
-            $result['np_transaction_id'] = array('label' => $label, 'value' => $value);
-        }
-
         return $result;
     }
 
@@ -101,7 +104,8 @@ class Bbva_NimblePayments_Model_Info
      */
     public function getPublicPaymentInfo(Mage_Payment_Model_Info $payment, $labelValuesOnly = false)
     {
-        return $this->_getFullInfo($this->_paymentPublicMap, $payment, $labelValuesOnly);
+        $result = $this->_getFullInfo(array_values($this->_paymentMapPublic), $payment, $labelValuesOnly);
+        return $result;
     }
 
     /**
@@ -136,171 +140,6 @@ class Bbva_NimblePayments_Model_Info
         return $to;
     }
 
-    /**
-     * Check whether the payment is in review state
-     *
-     * @param Mage_Payment_Model_Info $payment
-     * @return bool
-     */
-    public static function isPaymentReviewRequired(Mage_Payment_Model_Info $payment)
-    {
-        $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
-        if (self::PAYMENTSTATUS_PENDING === $paymentStatus) {
-            $pendingReason = $payment->getAdditionalInformation(self::PENDING_REASON_GLOBAL);
-            return !in_array($pendingReason, array('authorization', 'order'));
-        }
-        return false;
-    }
-
-    /**
-     * Check whether fraud order review detected and can be reviewed
-     *
-     * @param Mage_Payment_Model_Info $payment
-     * @return bool
-     */
-    public static function isFraudReviewAllowed(Mage_Payment_Model_Info $payment)
-    {
-        return self::isPaymentReviewRequired($payment)
-            && 1 == $payment->getAdditionalInformation(self::IS_FRAUD_GLOBAL);
-    }
-
-    /**
-     * Check whether the payment is completed
-     *
-     * @param Mage_Payment_Model_Info $payment
-     * @return bool
-     */
-    public static function isPaymentCompleted(Mage_Payment_Model_Info $payment)
-    {
-        $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
-        return self::PAYMENTSTATUS_COMPLETED === $paymentStatus;
-    }
-
-    /**
-     * Check whether the payment was processed successfully
-     *
-     * @param Mage_Payment_Model_Info $payment
-     * @return bool
-     */
-    public static function isPaymentSuccessful(Mage_Payment_Model_Info $payment)
-    {
-
-        $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
-        if (in_array($paymentStatus, array(
-            self::PAYMENTSTATUS_COMPLETED, self::PAYMENTSTATUS_INPROGRESS, self::PAYMENTSTATUS_REFUNDED,
-            self::PAYMENTSTATUS_REFUNDEDPART, self::PAYMENTSTATUS_UNREVERSED, self::PAYMENTSTATUS_PROCESSED,
-        ))) {
-            return true;
-        }
-        $pendingReason = $payment->getAdditionalInformation(self::PENDING_REASON_GLOBAL);
-        return self::PAYMENTSTATUS_PENDING === $paymentStatus
-            && in_array($pendingReason, array('authorization', 'order'));
-    }
-
-    /**
-     * Check whether the payment was processed unsuccessfully or failed
-     *
-     * @param Mage_Payment_Model_Info $payment
-     * @return bool
-     */
-    public static function isPaymentFailed(Mage_Payment_Model_Info $payment)
-    {
-        $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
-        return in_array($paymentStatus, array(
-            self::PAYMENTSTATUS_REJECTED
-        ));
-    }
-
-    /**
-     * Explain pending payment reason code
-     *
-     * @param string $code
-     * @return string
-     */
-    public static function explainPendingReason($code)
-    {
-        switch ($code) {
-            case 'address':
-                return Mage::helper('payment')->__('Customer did not include a confirmed address.');
-            case 'authorization':
-            case 'order':
-                return Mage::helper('payment')->__('The payment is authorized but not settled.');
-            case 'echeck':
-                return Mage::helper('payment')->__('The payment eCheck is not yet cleared.');
-            case 'intl':
-                return Mage::helper('payment')->__('Merchant holds a non-U.S. account and does not have a withdrawal mechanism.');
-            case 'multi-currency': // break is intentionally omitted
-            case 'multi_currency': // break is intentionally omitted
-            case 'multicurrency':
-                return Mage::helper('payment')->__('The payment curency does not match any of the merchant\'s balances currency.');
-            case 'paymentreview':
-                return Mage::helper('payment')->__('The payment is pending while it is being reviewed by Nimble for risk.');
-            case 'unilateral':
-                return Mage::helper('payment')->__('The payment is pending because it was made to an email address that is not yet registered or confirmed.');
-            case 'verify':
-                return Mage::helper('payment')->__('The merchant account is not yet verified.');
-            case 'upgrade':
-                return Mage::helper('payment')->__('The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.');
-            case 'none': // break is intentionally omitted
-            case 'other': // break is intentionally omitted
-            default:
-                return Mage::helper('payment')->__('Unknown reason. Please contact Nimble customer service.');
-        }
-    }
-
-    /**
-     * Explain the refund or chargeback reason code
-     *
-     * @param $code
-     * @return string
-     */
-    public static function explainReasonCode($code)
-    {
-        switch ($code) {
-            case 'chargeback':
-                return Mage::helper('payment')->__('Chargeback by customer.');
-            case 'guarantee':
-                return Mage::helper('payment')->__('Customer triggered a money-back guarantee.');
-            case 'buyer-complaint':
-                return Mage::helper('payment')->__('Customer complaint.');
-            case 'refund':
-                return Mage::helper('payment')->__('Refund issued by merchant.');
-            case 'adjustment_reversal':
-                return Mage::helper('payment')->__('Reversal of an adjustment.');
-            case 'chargeback_reimbursement':
-                return Mage::helper('payment')->__('Reimbursement for a chargeback.');
-            case 'chargeback_settlement':
-                return Mage::helper('payment')->__('Settlement of a chargeback.');
-            case 'none': // break is intentionally omitted
-            case 'other':
-            default:
-                return Mage::helper('payment')->__('Unknown reason. Please contact Nimble customer service.');
-        }
-    }
-
-    /**
-     * Whether a reversal/refund can be disputed with Nimble
-     *
-     * @param string $code
-     * @return bool;
-     */
-    public static function isReversalDisputable($code)
-    {
-        switch ($code) {
-            case 'none':
-            case 'other':
-            case 'chargeback':
-            case 'buyer-complaint':
-            case 'adjustment_reversal':
-                return true;
-            case 'guarantee':
-            case 'refund':
-            case 'chargeback_reimbursement':
-            case 'chargeback_settlement':
-            default:
-                return false;
-        }
-    }
 
     /**
      * Render info item
@@ -324,7 +163,6 @@ class Bbva_NimblePayments_Model_Info
                     $value = $payment->getAdditionalInformation($key);
                     $this->_paymentMapFull[$key]['label'] = $this->_getLabel($key);
                     $this->_paymentMapFull[$key]['value'] = $value;
-                    //$this->_paymentMapFull[$key]['value'] = $this->_getValue($value, $key);
                 }
             }
             if (!empty($this->_paymentMapFull[$key]['value'])) {
@@ -352,8 +190,8 @@ class Bbva_NimblePayments_Model_Info
                 return Mage::helper('payment')->__('Status Id');
             case 'SourceCode':
                 return Mage::helper('payment')->__('Source Code');
-            case 'TransactionId':
-                return Mage::helper('payment')->__('Transaction Id');
+            case 'np_transaction_id':
+                return Mage::helper('payment')->__('Nimble Payments Transaction ID');
             case 'MerchantTrns':
                 return Mage::helper('payment')->__('Merchant Transaction Reference');
             case 'OrderCode':
@@ -368,110 +206,12 @@ class Bbva_NimblePayments_Model_Info
                 return Mage::helper('payment')->__('Issuing Bank');
             case 'CardHolderName':
                 return Mage::helper('payment')->__('Card Holder Name');
-            case 'CardType':
+            case 'maskedPan':
+                return Mage::helper('payment')->__('Card Pan');
+            case 'cardBrand':
                 return Mage::helper('payment')->__('Card Type');
         }
         return '';
     }
 
-    /**
-     * Apply a filter upon value getting
-     *
-     * @param string $value
-     * @param string $key
-     * @return string
-     */
-    public function _getValue($value, $key)
-    {
-        $label = '';
-        switch ($key) {
-            case 'vpc_avs_code':
-                $label = $this->_getAvsLabel($value);
-                break;
-            case 'vpc_cvv2_match':
-                $label = $this->_getCvv2Label($value);
-                break;
-            default:
-                return $value;
-        }
-        return sprintf('#%s%s', $value, $value == $label ? '' : ': ' . $label);
-    }
-
-    /**
-     * Attempt to convert StatusId check result code into label
-     *     
-     * @param string $value
-     * @return string
-     */
-    public function _getStatusIdLabel($value)
-    {
-        switch ($value) {
-            case 'E':
-                return Mage::helper('payment')->__('The transaction was not completed because of an error');
-            case 'A': // international "A"
-                return Mage::helper('payment')->__('The transaction is in progress');
-            case 'M':
-                return Mage::helper('payment')->__('The cardholder has disputed the transaction with the issuing Bank');
-            case 'MA': // international "N"
-                return Mage::helper('payment')->__('Dispute Awaiting Response');
-            case 'MI':
-                return Mage::helper('payment')->__('Dispute in Progress');
-            case 'ML': // international "X"
-                return Mage::helper('payment')->__('A disputed transaction has been refunded (Dispute Lost)');
-            case 'MW': // UK-specific "X"
-                return Mage::helper('payment')->__('Dispute Won');
-            case 'MS':
-                return Mage::helper('payment')->__('Suspected Dispute');
-            case 'X':
-                return Mage::helper('payment')->__('The transaction was cancelled by the merchant');
-            case 'R':
-                return Mage::helper('payment')->__('The transaction has been fully or partially refunded');
-            case 'F':
-                return Mage::helper('payment')->__('The transaction has been completed successfully');
-            default:
-                return $value;
-        }
-    }
-
-    /**
-     * Attempt to convert TransactionTypeId check result code into label
-     *     
-     * @param string $value
-     * @return string
-     */
-    public function _getTransactionTypeIdLabel($value)
-    {
-        switch ($value) {
-            case '0':
-                return Mage::helper('payment')->__('Capture - A Capture event of a preAuthorized transaction');
-            case '1':
-                return Mage::helper('payment')->__('PreAuth - Authorization hold');
-            case '3':
-                return Mage::helper('payment')->__('UpdateTaxCard - Tax Card receipt transaction');
-            case '4':
-                return Mage::helper('payment')->__('RefundCard - Refund transaction');
-            case '5':
-                return Mage::helper('payment')->__('ChargeCard - Card payment transaction');
-            case '6':
-                return Mage::helper('payment')->__('Installments - A card payment that will be done with installments');
-            case '7':
-                return Mage::helper('payment')->__('Void - A cancelled transaction');
-            case '13':
-                return Mage::helper('payment')->__('Claim Refund - Refund transaction for a claimed transaction');
-            case '15':
-                return Mage::helper('payment')->__('Dias - Payment made through the DIAS system');
-            case '16':
-                return Mage::helper('payment')->__('PaymentFromReseller - Cash Payments, through the Nimble Payments Authorised Resellers Network');
-            case '18':
-                return Mage::helper('payment')->__('RefundInstallments - A Refunded installment');
-            case '19':
-                return Mage::helper('payment')->__('Clearance - Clearance of a transactions batch');
-            case '22':
-                return Mage::helper('payment')->__('ReverseTaxCard - Refund previous tax card transaction');
-            case '24':
-                return Mage::helper('payment')->__('BankTranfer - Bank Transfer command from the merchant\'s wallet to their IBAN');
-            default:
-                return $value;
-        }
-    }
 }
