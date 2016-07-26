@@ -6,7 +6,7 @@
     "keywords": ["plugin", "nimble", "payments", "magento", "tpv"],
     "license": "OSL-3.0",
     "require": {
-        "nimblepayments/sdk-php": "1.0.0.1"
+        "nimblepayments/sdk-php": "2.0.2"
     },
     "repositories": [
         {

@@ -24,7 +24,6 @@ class Bbva_NimblePayments_Block_Adminhtml_System_Config_Fieldset_Payment
         
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
-        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIReport.php';        
         
         $platform = 'WooCommerce'; //TODO write real name
         $storeName = Mage::app()->getWebsite(true)->getDefaultStore()->getFrontendName();

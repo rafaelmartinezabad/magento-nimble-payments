@@ -30,6 +30,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
 
           require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
           require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+          require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPICredentials.php';
 
 
            $params = array(
@@ -40,7 +41,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
              $Switch = new Mage_Core_Model_Config();
         try {
             $nimbleApi = new NimbleAPI($params);
-            $response = $nimbleApi->checkMode();
+            $response = NimbleAPICredentials::check($nimbleApi);
             if ( isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code'] ){
                 //correct
             } else{

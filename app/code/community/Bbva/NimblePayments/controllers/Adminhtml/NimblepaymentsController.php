@@ -10,7 +10,7 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
         $invalid_token = $this->getToken() ? false : true;
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
-        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIReport.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
         
         try {
             $params = array(
@@ -20,26 +20,22 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);
-            $commerces = NimbleAPIReport::getCommerces($nimble_api);
-            if (!isset($commerces['error'])){
-                foreach ($commerces as $IdCommerce => $data){
-                    $title = $data['name'];
-                    $summary = NimbleAPIReport::getSummary($nimble_api, $IdCommerce);
-                    
-                    $block = $this->getLayout()->createBlock(
-                        'Mage_Core_Block_Template',
-                        'MenuNimble',
-                        array('template' => 'nimblepaymentsadmin/summary.phtml')
-                        )
-                        ->setData('summary', $summary)
-                            ->setData('title', $title);
-
-                    $this->getLayout()->getBlock('content')->append($block);
-                    $this->renderLayout();
-                    
-                }
-            } else {
+            $summary = $summary = NimbleAPIAccount::balanceSummary($nimble_api);
+            $title = Mage::app()->getWebsite(true)->getDefaultStore()->getFrontendName();
+            
+            if ( !isset($summary['result']) || ! isset($summary['result']['code']) || 200 != $summary['result']['code'] || !isset($summary['data'])){
                 $invalid_token = true;
+            } else {
+                $block = $this->getLayout()->createBlock(
+                    'Mage_Core_Block_Template',
+                    'MenuNimble',
+                    array('template' => 'nimblepaymentsadmin/summary.phtml')
+                    )
+                    ->setData('summary', $summary)
+                        ->setData('title', $title);
+
+                $this->getLayout()->getBlock('content')->append($block);
+                $this->renderLayout();
             }
 
         } catch (Exception $e) {

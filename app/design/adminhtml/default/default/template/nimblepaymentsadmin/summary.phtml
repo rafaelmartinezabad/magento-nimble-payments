@@ -2,13 +2,13 @@
     <h1><?php echo $this->__('Nimble Payments Summary'); //LANG: TODO ?></h1>
 </div>
 <?php
-$totalavailable = $this->summary['totalAvailable']['amount'] / 100;
+$totalavailable = $this->summary['data']['available'] / 100;
 $total_str = number_format($totalavailable, 2, ',', '.');
 
-$balance = $this->summary['balance']['amount'] / 100;
+$balance = $this->summary['data']['accountBalance'] / 100;
 $balance_str = number_format($balance, 2, ',', '.');
 
-$holdback = $this->summary['holdBack']['amount'] / 100;
+$holdback = $this->summary['data']['hold'] / 100;
 $holdback_str = number_format($holdback, 2, ',', '.');
 ?>
 <style>
