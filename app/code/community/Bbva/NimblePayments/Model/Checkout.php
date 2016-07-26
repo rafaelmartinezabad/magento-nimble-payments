@@ -216,7 +216,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $storedCardPaymentInfo = array(
                 'amount'       => $this->getAmount(),
                 'currency'     => $this->getCoin(),
-                'customerData' => $this->getProdID(),
+                'merchantOrderId' => $this->getProdID(),
                 'cardHolderId' => $customerId
             );
             $response = NimbleAPIStoredCards::payment($NimbleApi, $storedCardPaymentInfo);
@@ -263,7 +263,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $payment = array(
                 'amount' => $this->getAmount(),
                 'currency' => $this->getCoin(),
-                'customerData' => $order_id,
+                'merchantOrderId' => $order_id,
                 'paymentSuccessUrl' => Mage::getUrl('checkout/onepage/success', array('order' => $order_id, 'key' => $key)),
                 'paymentErrorUrl' =>Mage::getUrl('nimblepayments/checkout/failure')
         );
@@ -271,7 +271,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         if(Mage::getSingleton('customer/session')->isLoggedIn()) {
             $customerData = Mage::getSingleton('customer/session')->getCustomer();
             $customerId = $customerData->getId();
-            $payment['userId'] = $customerId; //TO DO cardHolderId 
+            $payment['cardHolderId'] = $customerId;
         }
         
         $params = array(
