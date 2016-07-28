@@ -5,7 +5,7 @@ class Bbva_NimblePayments_Block_Dashboard extends Mage_Adminhtml_Block_Dashboard
     public function __construct()
     {
         parent::__construct();
-        $this->setTemplate('nimblepaymentsadmin/dashboard/index.phtml');
+        $this->setTemplate('nimblepayments/dashboard/index.phtml');
 
     }
     

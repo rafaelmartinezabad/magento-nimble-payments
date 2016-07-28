@@ -29,7 +29,7 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
                 $block = $this->getLayout()->createBlock(
                     'Mage_Core_Block_Template',
                     'MenuNimble',
-                    array('template' => 'nimblepaymentsadmin/summary.phtml')
+                    array('template' => 'nimblepayments/summary.phtml')
                     )
                     ->setData('summary', $summary)
                         ->setData('title', $title);
@@ -46,7 +46,7 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
             $block = $this->getLayout()->createBlock(
                 'Mage_Core_Block_Template',
                 'MenuNimble',
-                array('template' => 'nimblepaymentsadmin/authorization.phtml')
+                array('template' => 'nimblepayments/authorization.phtml')
                 )
                 ->setData('url', $this->getOauth3Url());
 

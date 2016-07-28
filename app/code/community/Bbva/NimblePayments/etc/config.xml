@@ -129,9 +129,9 @@
     <adminhtml>
         <layout>
             <updates>
-                <nimblepaymentsadmin>
+                <nimblepayments>
                     <file>nimblepayments.xml</file>
-                </nimblepaymentsadmin>
+                </nimblepayments>
             </updates>
         </layout>
         <translate>

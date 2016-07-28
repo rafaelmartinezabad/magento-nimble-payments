@@ -5,7 +5,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     
     protected $_code  = 'nimblepayments_checkout';
 
-    protected $_isGateway               = false;
+    protected $_isGateway               = true;
     protected $_canAuthorize            = true;
     protected $_canCapture              = true;
     protected $_canCapturePartial       = false;

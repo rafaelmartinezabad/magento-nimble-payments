@@ -26,7 +26,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
             if ( !isset($summary['result']) || ! isset($summary['result']['code']) || 200 != $summary['result']['code'] || !isset($summary['data'])){
                 $invalid_token = true;
             } else {
-                $this->setTemplate('nimblepaymentsadmin/dashboard_widget.phtml');
+                $this->setTemplate('nimblepayments/dashboard_widget.phtml');
                 $this->summary = $summary;
             }
 
@@ -35,7 +35,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
         }
         
         if ($invalid_token){
-            $this->setTemplate('nimblepaymentsadmin/authorization.phtml');
+            $this->setTemplate('nimblepayments/authorization.phtml');
             $this->url = $this->getOauth3Url();
         }
     }

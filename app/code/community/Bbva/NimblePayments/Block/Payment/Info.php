@@ -3,6 +3,12 @@
 class Bbva_NimblePayments_Block_Payment_Info extends Mage_Payment_Block_Info
 {
     
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setTemplate('nimblepayments/info/default.phtml');
+    }
+    
     /**
      * Prepare Nimble Payments-specific payment information
      *
