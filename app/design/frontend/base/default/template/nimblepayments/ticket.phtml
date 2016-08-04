@@ -1,0 +1,26 @@
+<?php
+?>
+<?php if ($this->error): ?>
+    <?php echo Mage::helper('core')->__('Invalid ticket'); ?>
+<?php else: ?>
+    <?php echo Mage::helper('core')->__('Redirecting. Please wait...'); ?>
+    <form id="nimblepayments-ticket" action="<?php echo $this->url?>">
+        <input type="hidden" name="ticket" value="<?php echo $this->ticket?>"/>
+        <input type="hidden" name="result" value="<?php echo $this->result?>"/>
+        <input type="hidden" name="form_key" value="<?php echo $this->form_key?>"/>
+        <?php foreach ($this->creditmemo as $_label => $_value):?>
+            <?php if (is_array($_value)):?>
+                <?php foreach ($_value as $_label2 => $_value2):?>
+                    <?php foreach ($_value2 as $_label3 => $_value3):?>
+                        <input type="hidden" name="creditmemo[<?php echo $_label?>][<?php echo $_label2?>][<?php echo $_label3?>]" value="<?php echo $_value3?>"/>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <input type="hidden" name="creditmemo[<?php echo $_label?>]" value="<?php echo $_value?>"/>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </form>
+    <script type="text/javascript">
+        document.getElementById("nimblepayments-ticket").submit();
+    </script>
+<?php endif;

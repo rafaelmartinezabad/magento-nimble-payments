@@ -9,8 +9,15 @@ class Bbva_NimblePayments_Oauth3Controller extends Mage_Core_Controller_Front_Ac
 {
     public function indexAction()
     {
+        if (Mage::app()->getRequest()->has('code')){
+            $this->authorize();
+        } else if (Mage::app()->getRequest()->has('ticket')){
+            $this->refund();
+        }
+    }
+    
+    public function authorize(){
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
-        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         
         $params   =   array();
         $code     =   Mage::app()->getRequest()->getParam('code');
@@ -46,5 +53,41 @@ class Bbva_NimblePayments_Oauth3Controller extends Mage_Core_Controller_Front_Ac
 
         $this->loadLayout(array('default'));
         $this->renderLayout();
+    }
+    
+    public function refund(){
+        $serialized_ticket = Mage::getStoreConfig('payment/nimblepayments_checkout/ticket');
+        $otp_info = unserialize($serialized_ticket);
+        $ticket = Mage::app()->getRequest()->getParam('ticket');
+        $result = Mage::app()->getRequest()->getParam('result');
+        
+        if ($ticket == $otp_info['ticket']) {
+            $block = $this->getLayout()->createBlock(
+                'Mage_Core_Block_Template',
+                'Oauth3',
+                array('template' => 'nimblepayments/ticket.phtml')
+                )
+                ->setData('url', $otp_info['REQUEST_URI'])
+                    ->setData('ticket', $otp_info['ticket'])
+                    ->setData('result', $result)
+                    ->setData('form_key', $otp_info['form_key'])
+                    ->setData('creditmemo', $otp_info['creditmemo']);
+
+            $this->loadLayout(array('default'));
+            $this->getLayout()->getBlock('content')->append($block);
+            $this->renderLayout();
+        } else {
+            $block = $this->getLayout()->createBlock(
+                'Mage_Core_Block_Template',
+                'Oauth3',
+                array('template' => 'nimblepayments/ticket.phtml')
+                )
+                ->setData('error', 'invalid_token');
+
+            $this->loadLayout(array('default'));
+            $this->getLayout()->getBlock('content')->append($block);
+            $this->renderLayout();
+        }
+        
     }
 }

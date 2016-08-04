@@ -27,11 +27,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_merchantId = null;
     protected $_secretKey = null;
     protected $_token = null;
-    
-    
+      
     public function refund(Varien_Object $payment, $amount)
     {
-        
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         
@@ -43,11 +41,13 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         $transaction_id = $payment->getAdditionalInformation('np_transaction_id');
+        
+        $otp_token = $this->getOTPToken();
         try {
             $params = array(
                 'clientId' => $this->getMerchantId(),
-                'clientSecret' =>$this->getSecretKey(),
-                'token' =>$this->getToken(),
+                'clientSecret' => $this->getSecretKey(),
+                'token' => $otp_token,
                 'mode' => NimbleAPIConfig::MODE
             );
             
@@ -61,12 +61,37 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             );
             
             $response = NimbleAPIPayments::sendPaymentRefund($nimble_api, $transaction_id, $refund);
+            error_log(print_r($response, true));
         } catch (Exception $e) {
             $message = Mage::helper('payment')->__('Refund Failed: ');
             Mage::throwException($message);
         }
         
-        if (!isset($response['data']) || !isset($response['data']['idRefund'])){
+        //OPEN OPT
+        if (isset($response['result']) && isset($response['result']['code']) && 428 == $response['result']['code']
+                && isset($response['data']) && isset($response['data']['ticket']) && isset($response['data']['token']) ){
+            $ticket = $response['data']['ticket'];
+            $credit_memo = Mage::app()->getRequest()->getParam('creditmemo');
+            $form_key = Mage::app()->getRequest()->getParam('form_key');
+            $otp_info = array(
+                'action'    =>  'refund',
+                'ticket'    =>  $ticket,
+                'token'     =>  $response['data']['token'],
+                'creditmemo' => $credit_memo,
+                'form_key'   => $form_key,
+                'REQUEST_URI' => $_SERVER['REQUEST_URI'],
+            );
+            //update_user_meta($user_id, 'nimblepayments_ticket', $otp_info);
+            //guardar los tokens (OAUTH3)
+            $serialized_ticket = serialize($otp_info);
+            $Switch = new Mage_Core_Model_Config();
+            $Switch->saveConfig('payment/nimblepayments_checkout/ticket', $serialized_ticket, 'default', 0);
+            
+            $back_url = Mage::app()->getWebsite(true)->getDefaultStore()->getUrl('', array('_direct'=>'nimblepayments/oauth3'));
+            $url_otp = NimbleAPI::getOTPUrl($ticket, $back_url);
+            header('Location: ' . $url_otp);
+            die();
+        } else if (!isset($response['data']) || !isset($response['data']['refundId'])){
             $message = Mage::helper('payment')->__('Refund Failed: ');
             
             if ( isset($response['result']) && isset($response['result']['info']) ){
@@ -79,7 +104,24 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         return $this;
-    } 
+    }
+    
+    public function getOTPToken()
+    {
+        if (Mage::app()->getRequest()->has('ticket')){
+            $serialized_ticket = Mage::getStoreConfig('payment/nimblepayments_checkout/ticket');
+            $otp_info = unserialize($serialized_ticket);
+            $ticket = Mage::app()->getRequest()->getParam('ticket');
+            $result = Mage::app()->getRequest()->getParam('result');
+            if ($ticket == $otp_info['ticket'] && 'OK' == $result ){
+                return $otp_info['token'];
+            } else {
+                $message = Mage::helper('payment')->__('Refund Failed');
+                Mage::throwException($message);
+            }
+        }
+        return $this->getToken();
+    }
     
     public function getOrder()
     {
@@ -219,7 +261,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'merchantOrderId' => $this->getProdID(),
                 'cardHolderId' => $customerId
             );
-            $response = NimbleAPIStoredCards::payment($NimbleApi, $storedCardPaymentInfo);
+            $response = NimbleAPIStoredCards::payment($NimbleApi, $storedCardPaymentInfo);//TODO
             if ( isset($response["data"]) && isset($response["data"]["id"])){
                 $transaction_id = $response["data"]["id"];
                 //Save transaction_id
