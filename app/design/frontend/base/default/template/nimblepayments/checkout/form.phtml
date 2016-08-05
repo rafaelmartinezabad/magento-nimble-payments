@@ -3,8 +3,6 @@
 <?php $storedCards = $this->storedcards; ?>
 <?php if ( ! empty($storedCards) ):  ?>
 <div class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
-    <span><label>Id Cliente:</label><?php echo $this->customerid; ?></span>
-    <br/>
     <select name="storedcard">
     <?php foreach ( $storedCards as $card_id => $card ): ?>
         <option <?php if ($card['default']) echo 'selected="selected"';  ?>value="<?php echo base64_encode(json_encode($storedCards[$card_id])); ?>"><?php echo $card['maskedPan'] . ', ' . $card['cardBrand']; ?></option>

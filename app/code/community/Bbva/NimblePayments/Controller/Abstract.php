@@ -37,8 +37,10 @@ abstract class Bbva_NimblePayments_Controller_Abstract extends Mage_Core_Control
 
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($session->getLastRealOrderId());
-        $order->addStatusToHistory($status_new, Mage::helper('core')->__('Customer was redirected to Nimble Payments.'));
-        $order->save();
+        if ($order->getStatus() == 'pending'){
+            $order->addStatusToHistory($status_new, Mage::helper('core')->__('Customer was redirected to Nimble Payments.'));
+            $order->save();
+        }
 
         $this->getResponse()->setBody(
             $this->getLayout()
