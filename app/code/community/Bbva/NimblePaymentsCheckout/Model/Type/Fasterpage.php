@@ -50,7 +50,15 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                 break;
             case 'payment':
                 $payment = array('method' => 'nimblepayments_checkout');
-                //TODO: Stored Card Payment
+                
+                //Stored Card Payment
+                $storedCards = Mage::getSingleton('Bbva_NimblePayments_Model_StoredCard')->getListStoredCards();
+                foreach ( $storedCards as $card_id => $card ){
+                    if ($card['default']){
+                        $payment['storedcard'] = base64_encode(json_encode($storedCards[$card_id]));
+                        break;
+                    }
+                }
                 parent::savePayment($payment);
                 break;
             default:

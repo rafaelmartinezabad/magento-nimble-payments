@@ -410,7 +410,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     {
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIStoredCards.php';
         $info = $this->getInfoInstance();
-        $card_base64 = Mage::app()->getRequest()->getParam('storedcard');
+        $card_base64 = isset($data['storedcard']) ? $data['storedcard'] : "";
         
         if(empty($card_base64)){
             $info->unsAdditionalInformation('maskedPan');
