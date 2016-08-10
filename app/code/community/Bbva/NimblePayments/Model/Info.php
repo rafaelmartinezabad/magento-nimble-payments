@@ -6,17 +6,7 @@ class Bbva_NimblePayments_Model_Info
      *
      * @var string
      */
-    const MERCHANT_ID          = 'MerchantId';
-    const STATUS_ID            = 'StatusId';    
-    const SOURCE_CODE            = 'SourceCode';
     const TRANSACTION_ID        = 'TransactionId';
-    const MERCH_TXN_REF         = 'MerchantTrns';
-    const ORDER_CODE              = 'OrderCode';
-    const TRANSACTION_TYPE_ID      = 'TransactionTypeId';
-    const TRANSACTION_TYPE_MESSAGE = 'TransactionTypeMessage';
-    const CREDIT_CARD_NUMBER = 'CcNumber';
-    const ISSUING_BANK = 'IssuingBank';
-    const CREDIT_CARD_HOLDER = 'CardHolderName';
     const CREDIT_CARD_PAN = 'maskedPan';
     const CREDIT_CARD_TYPE = 'cardBrand';
 
@@ -26,52 +16,21 @@ class Bbva_NimblePayments_Model_Info
      * @var array
      */
     protected $_paymentMap = array(
-        self::MERCHANT_ID          => 'MerchantId',
-        self::STATUS_ID            => 'StatusId',
-        self::SOURCE_CODE            => 'SourceCode',
         self::TRANSACTION_ID        => 'np_transaction_id',
-        self::MERCH_TXN_REF         => 'MerchantTrns',
-        self::ORDER_CODE              => 'OrderCode',
-        self::TRANSACTION_TYPE_ID      => 'TransactionTypeId',
-        self::TRANSACTION_TYPE_MESSAGE      => 'TransactionTypeMessage',
-        self::CREDIT_CARD_NUMBER => 'CcNumber',
-        self::ISSUING_BANK => 'IssuingBank',
-        self::CREDIT_CARD_HOLDER => 'CardHolderName',
         self::CREDIT_CARD_PAN          => 'maskedPan',
         self::CREDIT_CARD_TYPE => 'cardBrand'
     );
     
-        /**
-     * All payment information map
-     *
-     * @var array
-     */
-    protected $_paymentMapPublic = array(
-        self::CREDIT_CARD_PAN          => 'maskedPan',
-        self::CREDIT_CARD_TYPE => 'cardBrand'
-    );
-    
-    /**
-     * Nimble payment status possible values
-     *
-     * @var string
-     */
-    const PAYMENTSTATUS_NONE         = 'none';
-    const PAYMENTSTATUS_PENDING      = 'pending';
-    const PAYMENTSTATUS_ACCEPTED     = 'accepted';
-    const PAYMENTSTATUS_REJECTED     = 'rejected';
-    const PAYMENTSTATUS_REVIEWED     = 'reviewed';
-    const PAYMENTSTATUS_NOTCHECKED   = 'not_checked';
-    const PAYMENTSTATUS_SYSREJECT    = 'system_rejected';
-
     /**
      * Map of payment information available to customer
      *
      * @var array
      */
     protected $_paymentPublicMap = array(
-        //'',
+        self::CREDIT_CARD_PAN          => 'maskedPan',
+        self::CREDIT_CARD_TYPE => 'cardBrand'
     );
+    
 
     /**
      * Rendered payment map cache
@@ -104,7 +63,7 @@ class Bbva_NimblePayments_Model_Info
      */
     public function getPublicPaymentInfo(Mage_Payment_Model_Info $payment, $labelValuesOnly = false)
     {
-        $result = $this->_getFullInfo(array_values($this->_paymentMapPublic), $payment, $labelValuesOnly);
+        $result = $this->_getFullInfo(array_values($this->_paymentPublicMap), $payment, $labelValuesOnly);
         return $result;
     }
 
@@ -184,28 +143,8 @@ class Bbva_NimblePayments_Model_Info
     public function _getLabel($key)
     {
         switch ($key) {
-            case 'MerchantId':
-                return Mage::helper('payment')->__('Merchant Id');
-            case 'StatusId':
-                return Mage::helper('payment')->__('Status Id');
-            case 'SourceCode':
-                return Mage::helper('payment')->__('Source Code');
             case 'np_transaction_id':
                 return Mage::helper('payment')->__('Nimble Payments Transaction ID');
-            case 'MerchantTrns':
-                return Mage::helper('payment')->__('Merchant Transaction Reference');
-            case 'OrderCode':
-                return Mage::helper('payment')->__('Order Code');
-            case 'TransactionTypeId':
-                return Mage::helper('payment')->__('Transaction Type Id');
-            case 'TransactionTypeMessage':
-                return Mage::helper('payment')->__('Transaction Type Message');
-            case 'CcNumber':
-                return Mage::helper('payment')->__('Credit Card Number');
-            case 'IssuingBank':
-                return Mage::helper('payment')->__('Issuing Bank');
-            case 'CardHolderName':
-                return Mage::helper('payment')->__('Card Holder Name');
             case 'maskedPan':
                 return Mage::helper('payment')->__('Card Pan');
             case 'cardBrand':
