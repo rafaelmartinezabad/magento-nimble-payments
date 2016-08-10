@@ -296,9 +296,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         if(Mage::getSingleton('customer/session')->isLoggedIn()) {
             $vpcInfo = Mage::getModel('nimblepayments/info');
             $payment = $this->getInfoInstance();
-            $info = $vpcInfo->getPublicPaymentInfo($payment, true);
+            $info = $vpcInfo->getPublicPaymentInfo($payment, false);
             
-            if( isset($info['Card Pan']) && !empty($info['Card Pan']) ){
+            if( isset($info['maskedPan']) && !empty($info['maskedPan']) ){
                 return $this->paymentStoredCard();
             }
         }
