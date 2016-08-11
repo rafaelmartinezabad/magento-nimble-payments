@@ -58,6 +58,7 @@
     );
     checkout.gotoSection('<?php echo $this->getActiveStep() ?>', true);
     if ('<?php echo $this->getActiveStep() ?>' == 'review'){
+        checkout.reloadProgressBlock('payment');
         checkout.reloadReviewBlock();
     }
 //]]>
