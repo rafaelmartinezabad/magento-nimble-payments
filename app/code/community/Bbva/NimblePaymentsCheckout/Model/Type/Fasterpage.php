@@ -13,15 +13,14 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
             case 'billing':
                 $billing = array();
                 $customerBillingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultBillingAddress()->getId();
-                $customerShippingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultShippingAddress()->getId();
-                $billing['use_for_shipping'] = ( $customerBillingAddressId == $customerShippingAddressId ) ? true : false;
+                $billing['use_for_shipping'] = false;
                 $result = parent::saveBilling($billing, $customerBillingAddressId);
-                //error_log(print_r($result, true));
                 break;
             case 'shipping':
                 $shipping = array();
-                $shipping['same_as_billing'] = false;
+                $customerBillingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultBillingAddress()->getId();
                 $customerShippingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultShippingAddress()->getId();
+                $shipping['same_as_billing'] = ( $customerBillingAddressId == $customerShippingAddressId ) ? true : false;
                 $result = parent::saveShipping($shipping, $customerShippingAddressId);
                 break;
             case 'shipping_method':
@@ -43,10 +42,12 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                         if ( $shippingMethod == '' || $lastPrice > $_rate->getPrice()){
                             $lastPrice = $_rate->getPrice();
                             $shippingMethod = $_rate->getCode();
+                            $shippingDescription = $_rate->getCarrierTitle() . ' - ' . $_rate->getMethodTitle();
                         }
                     }
                 }
                 parent::saveShippingMethod($shippingMethod);
+                $shippingAddress->setShippingDescription($shippingDescription);
                 break;
             case 'payment':
                 $payment = array('method' => 'nimblepayments_checkout');
