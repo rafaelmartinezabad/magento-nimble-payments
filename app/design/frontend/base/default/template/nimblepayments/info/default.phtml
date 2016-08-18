@@ -31,19 +31,20 @@
 ?>
 <p><strong><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></strong></p>
 
-<?php if ($_specificInfo = $this->getSpecificInformation()):?>
-<table>
+<?php
+    $card = $this->getSpecificInformation()['maskedPan']['value'];
+    if ($card == "") { $card = Mage::helper('core')->__('New Card'); }
+    $brand = strtolower($this->getSpecificInformation()['cardBrand']['value']);
+?>
+
+<table id="payment_method_info">
     <tbody>
-    <?php foreach ($_specificInfo as $_label => $_value):?>
         <tr>
-            <th><strong><?php echo $this->escapeHtml($_label)?>:</strong></th>
+            <td>
+                <label class="stored_card <?php echo $brand ?>"><?php echo $card ?></label>
+            </td>
         </tr>
-        <tr>
-            <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?></td>
-        </tr>
-    <?php endforeach; ?>
     </tbody>
 </table>
-<?php endif;?>
 
 <?php echo $this->getChildHtml()?>

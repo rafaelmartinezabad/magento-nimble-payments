@@ -1,0 +1,21 @@
+#payment_form_nimblepayments_checkout ul li, #payment_method_info ul li {
+    list-style: outside none none;
+    padding-right: 42px;
+}
+#payment_form_nimblepayments_checkout label.stored_card, #payment_method_info label.stored_card {
+    background: url("/skin/frontend/base/default/images/nimblepayments/credit-card.png") no-repeat scroll center right #fff;
+    background-color: transparent;
+    display: inline-block;
+    min-width: 135px;
+	margin-left: 8px;
+}
+#payment_method_info label.stored_card {
+	min-width: 130px;
+	margin-left: 29px;
+}
+#payment_form_nimblepayments_checkout label.stored_card.visa, #payment_method_info label.stored_card.visa {
+    background-image: url("/skin/frontend/base/default/images/nimblepayments/visa-logo.png");
+}
+#payment_form_nimblepayments_checkout label.stored_card.mastercard, #payment_method_info label.stored_card.mastercard {
+    background-image: url("/skin/frontend/base/default/images/nimblepayments/mastercard-logo.png");
+}

@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 
 <layout version="1.0.0">
+    <checkout_fasterpage_index translate="label">
+        <label>One Page Checkout</label>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/nimblepayments/nimblepayments-gateway.css</name>
+                <params/>
+            </action>
+        </reference>
+    </checkout_fasterpage_index>
     <nimblepayments_checkout_failure translate="label">
         <reference name="content">
         </reference>

@@ -5,11 +5,11 @@
 <?php /* asanchez: Si el metodo de pago esta seleccionado mostrar select de tarjetas */ ?>
 <?php $display = ""; if ($this->getSelectedMethodCode()==$_code): $display = "display:none;"; endif; ?>
 <div class="form-list" id="payment_form_<?php echo $_code ?>" style="<?php echo $display ?>">
-    <select name="payment[storedcard]">
-    <?php foreach ( $storedCards as $card_id => $card ): ?>
-        <option <?php if ($card['default']) echo 'selected="selected"';  ?>value="<?php echo base64_encode(json_encode($storedCards[$card_id])); ?>"><?php echo $card['maskedPan'] . ', ' . $card['cardBrand']; ?></option>
-    <?php endforeach; ?>
-        <option value=""><?php echo Mage::helper('core')->__('New Card'); ?></option>
-    </select>
+    <ul>
+        <?php foreach ( $storedCards as $numberCard => $card ): ?>
+		<li><input id="card-<?php echo $numberCard ?>" type="radio" name="payment[storedcard]" value="<?php echo base64_encode(json_encode($card)); ?>" <?php if ($card['default']) echo 'checked="checked"';  ?>/><label for="card-<?php echo $numberCard ?>" class="stored_card <?php echo strtolower($card['cardBrand']) ?>"><?php echo $card['maskedPan'] ?></label></li>
+        <?php endforeach; ?>
+        <li><input id="new-card" type="radio" name="payment[storedcard]" value=""/><label for="new-card" class="stored_card"><?php echo Mage::helper('core')->__('New Card'); ?></label></li>
+	</ul>
 </div>
 <?php endif; ?>
