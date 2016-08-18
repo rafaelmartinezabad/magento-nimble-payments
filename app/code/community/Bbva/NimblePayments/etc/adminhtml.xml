@@ -5,12 +5,17 @@
             <title>Nimble Payments</title>
             <sort_order>85</sort_order>
             <children>
-                <index module="payment" translate="title">
+                <!-- <index module="payment" translate="title">
                     <title>Summary</title>
                     <sort_order>1</sort_order>
-                    <action>adminhtml/nimblepayments/index</action>
-                   <!-- <action>adminhtml/menuadmin/index</action>-->
-                </index>
+                    <action>adminhtml/nimblepayments/index</action> -->
+                    <!-- <action>adminhtml/menuadmin/index</action> -->
+                <!-- </index> -->
+                <anchorGetaway module="payment" translate="title">
+                    <title>Configuration</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/nimblepayments/anchorGetaway</action>
+                </anchorGetaway>
                 <!--<list module="payment" translate="title">
                     <title>List Action</title>
                     <sort_order>2</sort_order>
