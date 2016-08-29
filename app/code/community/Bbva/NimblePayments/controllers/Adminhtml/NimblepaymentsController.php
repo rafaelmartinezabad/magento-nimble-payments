@@ -58,6 +58,7 @@ class Bbva_NimblePayments_Adminhtml_NimblepaymentsController extends Mage_Adminh
 
     public function anchorGetawayAction(){
         $this->_redirectUrl(Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") . "#payment_nimblepayments_checkout-head");
+        return;
     }
     
     function getOauth3Url(){
