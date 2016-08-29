@@ -197,10 +197,19 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             }
         }
 
+        $additionalFields = array(
+            'changeAddress'
+        );
+        foreach ($additionalFields as $field){
+            if ($paymentInfo->getData($field)){
+                $paymentInfo->setAdditionalInformation($field,$paymentInfo->getData($field));
+            }
+        }
+
         return true;
     }
     
-        public function getCoin()
+    public function getCoin()
     {           
           
         $paymentInfo = $this->getInfoInstance();
@@ -229,8 +238,6 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     
     public function getGatewayRedirectUrl()
     {
-       
-
         if(!is_null($this->_paymentUrl)) {          
             $url = $this->_paymentUrl;
         }
@@ -249,8 +256,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     }
     
     public function paymentStoredCard(){
-       
-    $url='';    
+        $url='';
         try{
             $customerData = Mage::getSingleton('customer/session')->getCustomer();
             $customerId = $customerData->getId();
@@ -273,7 +279,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 $order_id = $this->getProdID();
                 $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
                 $url = Mage::getUrl('checkout/onepage/success', array('order' => $order_id, 'key' => $key, 'storedcard' => 'true'));
-                
+
                 $response = NimbleAPIStoredCards::confirmPayment($NimbleApi, $preorder["data"]);
                 //TIMEOUT CONTROL ON checkout/onepage/success PAGE
             }else{
@@ -296,6 +302,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         if(Mage::getSingleton('customer/session')->isLoggedIn()) {
             $vpcInfo = Mage::getModel('nimblepayments/info');
             $payment = $this->getInfoInstance();
+            $additionalFields = $vpcInfo->getAdditionalFields($payment, false);
+            $isChangeShippingAddress = $additionalFields['changeAddress'];
             $info = $vpcInfo->getPublicPaymentInfo($payment, false);
             
             if( isset($info['maskedPan']) && !empty($info['maskedPan']) ){
@@ -339,6 +347,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 $payment = $this->getOrder()->getPayment();
                 $payment->setAdditionalInformation('np_transaction_id', $transaction_id);
                 $payment->save();
+                //Delete cards if change the shipping address
+                if (isset($isChangeShippingAddress) && $isChangeShippingAddress['value']) {
+                    Mage::getSingleton('Bbva_NimblePayments_Model_StoredCard')->deleteStoredCards();
+                }
             }else {
                 $url=$payment["paymentErrorUrl"].'?error=false';
             }
@@ -349,6 +361,49 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         return $url;    
+    }
+
+    /*
+     * Get if change the shipping address
+     */
+    public function isChangeShippingAddress() {
+        $currentAddress = Mage::getSingleton('checkout/session')->getQuote()->getShippingAddress();
+        $hashCurrentAddress = $this->toHash($currentAddress);
+        $lastAddress = $this->getLastOrder()->getShippingAddress();
+        $hashLastAddress = $this->toHash($lastAddress);
+        if (is_null($hashLastAddress)) { return false; }
+        return ($hashCurrentAddress != $hashLastAddress);
+    }
+
+    /*
+     * Get last order of the current customer
+     */
+    private function getLastOrder() {
+        $lastOrder = null;
+        try{
+            $_customer = Mage::getSingleton('customer/session')->getCustomer();
+            $lastOrder = Mage::getModel('sales/order')->getCollection()->join(
+                    array('payment' => 'sales/order_payment'),
+                    'main_table.entity_id=payment.parent_id',
+                    array('payment_method' => 'payment.method'))
+                ->addFieldToFilter('payment.method', 'nimblepayments_checkout')
+                ->addFieldToFilter('customer_id', $_customer->getId())
+                ->addAttributeToSort('created_at', 'DESC')
+                ->setPageSize(1)
+                ->getFirstItem();
+         } catch (Exception $e){
+            Mage::throwException($e->getMessage());
+        }
+        return $lastOrder;
+    }
+
+    /*
+     * Get hash location customer
+     */
+    private function toHash($address = null) {
+        if (is_null($address) || empty($address->getFirstname())) { return null; }
+        $location = $address->getFirstname()." ".$address->getLastname().", ".$address->getStreet(-1).", ".$address->getCity().", ".$address->getRegion()." ".$address->getPostcode().", ".$address->getCountryModel()->getIso3Code();
+        return substr( md5( $location ), 0, 12 );
     }
     
     public function getParams(){
@@ -411,7 +466,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIStoredCards.php';
         $info = $this->getInfoInstance();
         $card_base64 = isset($data['storedcard']) ? $data['storedcard'] : "";
-        
+
+        $info->addData(array("changeAddress" => $this->isChangeShippingAddress()));
+
         if(empty($card_base64)){
             $info->unsAdditionalInformation('maskedPan');
             $info->unsAdditionalInformation('cardBrand');
@@ -440,7 +497,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 }else{
                     unset($card['default']);
                     $info->addData($card);
-                }                
+                }
             } catch (Exception $e){
                 $this->setData('storedcards', Mage::getSingleton('Bbva_NimblePayments_Model_StoredCard')->getListStoredCards());
             }

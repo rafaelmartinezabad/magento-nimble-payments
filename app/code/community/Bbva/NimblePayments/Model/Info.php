@@ -9,6 +9,7 @@ class Bbva_NimblePayments_Model_Info
     const TRANSACTION_ID        = 'TransactionId';
     const CREDIT_CARD_PAN = 'maskedPan';
     const CREDIT_CARD_TYPE = 'cardBrand';
+    const CHANGE_ADDRESS = 'changeAddress';
 
     /**
      * All payment information map
@@ -30,7 +31,15 @@ class Bbva_NimblePayments_Model_Info
         self::CREDIT_CARD_PAN          => 'maskedPan',
         self::CREDIT_CARD_TYPE => 'cardBrand'
     );
-    
+
+    /**
+     * Map of additional data payment information available
+     *
+     * @var array
+     */
+    protected $_paymentAditionalFields = array(
+        self::CHANGE_ADDRESS => 'changeAddress'
+    );
 
     /**
      * Rendered payment map cache
@@ -51,6 +60,19 @@ class Bbva_NimblePayments_Model_Info
         // collect Nimble-specific info
         $result = $this->_getFullInfo(array_values($this->_paymentMap), $payment, $labelValuesOnly);
 
+        return $result;
+    }
+
+    /**
+     * Public additional data payment info getter
+     *
+     * @param Mage_Payment_Model_Info $payment
+     * @param bool $labelValuesOnly
+     * @return array
+     */
+    public function getAdditionalFields(Mage_Payment_Model_Info $payment, $labelValuesOnly = false)
+    {
+        $result = $this->_getFullInfo(array_values($this->_paymentAditionalFields), $payment, $labelValuesOnly);
         return $result;
     }
 
@@ -149,6 +171,8 @@ class Bbva_NimblePayments_Model_Info
                 return Mage::helper('payment')->__('Card Pan');
             case 'cardBrand':
                 return Mage::helper('payment')->__('Card Type');
+            case 'changeAddress':
+                return Mage::helper('payment')->__('isChangeShippingAddress');
         }
         return '';
     }
