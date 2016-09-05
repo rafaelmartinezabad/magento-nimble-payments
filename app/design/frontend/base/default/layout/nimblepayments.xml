@@ -11,6 +11,20 @@
             </action>
         </reference>
     </checkout_fasterpage_index>
+    <nimblepayments_checkout_storedcards translate="label">
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/nimblepayments/nimblepayments-storedcards.css</name>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="nimblepayments/checkout_storedcards" name="storedcards" template="nimblepayments/checkout/storedcards.phtml"/>
+        </reference>
+    </nimblepayments_checkout_storedcards>
     <nimblepayments_checkout_failure translate="label">
         <reference name="content">
         </reference>

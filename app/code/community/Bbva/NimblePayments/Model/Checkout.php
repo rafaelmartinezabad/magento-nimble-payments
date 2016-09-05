@@ -278,7 +278,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 $storedCardPaymentInfo->save();
                 $order_id = $this->getProdID();
                 $key = Mage::getSingleton('adminhtml/url')->getSecretKey('nimblepayments', $order_id);
-                $url = Mage::getUrl('checkout/onepage/success', array('order' => $order_id, 'key' => $key, 'storedcard' => 'true'));
+                $url = Mage::getUrl('nimblepayments/checkout/storedcards', array('order' => $order_id, 'key' => $key, 'storedcard' => 'true'));
 
                 $response = NimbleAPIStoredCards::confirmPayment($NimbleApi, $preorder["data"]);
                 //TIMEOUT CONTROL ON checkout/onepage/success PAGE

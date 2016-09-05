@@ -31,6 +31,45 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
             }
     }  
     
-   
+    /**
+     * Order success action
+     */
+    public function storedcardsAction() {
+        $_max_attemps_to_request_status = 5;
+        Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
+        $url_params = $this->getRequest()->getParams();
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        $lastOrderStatusNimble = "PENDING";
+        try{
+            $NimbleApi = new NimbleAPI(array(
+                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
+                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key')
+            ));
+            $i = 0; $finish = false;
+            do {
+                $response = NimbleAPIPayments::getPaymentStatus($NimbleApi, null, $url_params['order']);
+                $lastOrderStatusNimble = $response['data']['details'][0]['state'];
+                if ($lastOrderStatusNimble != "PENDING") { sleep(1); }
+                $i++;
+            } while ($lastOrderStatusNimble == "PENDING" && $i < $_max_attemps_to_request_status);
+        }  catch (Exception $e){
+            Mage::throwException($e->getMessage());
+        }
+        switch ($lastOrderStatusNimble) {
+            case 'PENDING':
+                $this->loadLayout();
+                $this->renderLayout();
+                break;
+            case 'SETTLED':
+            case 'ON_HOLD':
+                $this->_redirect('checkout/onepage/success', $url_params);
+                break;
+            default: // error
+                $this->_redirect('nimblepayments/checkout/failure');
+                break;
+        }
+        return;
+    }
 
 }

@@ -1,0 +1,13 @@
+.nimblepayments-checkout-storedcards .col-main {
+    padding: 0;
+    text-align: center;
+}
+
+.nimblepayments-checkout-storedcards .buttons-set {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.nimblepayments-checkout-storedcards .buttons-set button.button {
+    float: none;
+}
