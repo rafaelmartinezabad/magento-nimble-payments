@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 
 <layout version="1.0.0">
-    <checkout_fasterpage_index translate="label">
-        <label>One Page Checkout</label>
+    <default>
         <reference name="head">
             <action method="addItem">
                 <type>skin_css</type>
@@ -10,6 +9,9 @@
                 <params/>
             </action>
         </reference>
+    </default>
+    <checkout_fasterpage_index translate="label">
+        <label>One Page Checkout</label>
     </checkout_fasterpage_index>
     <nimblepayments_checkout_storedcards translate="label">
         <reference name="head">

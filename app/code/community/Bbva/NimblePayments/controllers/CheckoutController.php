@@ -3,7 +3,7 @@
 class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Controller_Abstract
 {
     protected $_redirectBlockType = 'nimblepayments/checkout_redirect';
-     public function failureAction()
+    public function failureAction()
     {   
             $connection = Mage::app()->getRequest()->getParam('connection');
             $error = Mage::app()->getRequest()->getParam('error');
@@ -29,44 +29,28 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
             $this->_redirect('checkout/cart'); //Redirect to cart
             return;
             }
-    }  
-    
+    }
+
     /**
-     * Order success action
+     * Order storedcards action
      */
     public function storedcardsAction() {
-        $_max_attemps_to_request_status = 5;
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
         $url_params = $this->getRequest()->getParams();
-        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
-        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
-        $lastOrderStatusNimble = "PENDING";
-        try{
-            $NimbleApi = new NimbleAPI(array(
-                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key')
-            ));
-            $i = 0; $finish = false;
-            do {
-                $response = NimbleAPIPayments::getPaymentStatus($NimbleApi, null, $url_params['order']);
-                $lastOrderStatusNimble = $response['data']['details'][0]['state'];
-                if ($lastOrderStatusNimble != "PENDING") { sleep(1); }
-                $i++;
-            } while ($lastOrderStatusNimble == "PENDING" && $i < $_max_attemps_to_request_status);
-        }  catch (Exception $e){
-            Mage::throwException($e->getMessage());
-        }
-        switch ($lastOrderStatusNimble) {
-            case 'PENDING':
-                $this->loadLayout();
-                $this->renderLayout();
-                break;
-            case 'SETTLED':
-            case 'ON_HOLD':
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        $statusNimble = $checkout->getNimbleStatus($url_params['order'], 1);
+        switch ($checkout->doActionBeforeStatus($url_params['order'], $statusNimble)) {
+        //switch ("--") {
+            case "OK":
+                // Test if send confirmation email
                 $this->_redirect('checkout/onepage/success', $url_params);
                 break;
-            default: // error
+            case "KO":
                 $this->_redirect('nimblepayments/checkout/failure');
+                break;
+            default: // pending or other
+                $this->loadLayout();
+                $this->renderLayout();
                 break;
         }
         return;

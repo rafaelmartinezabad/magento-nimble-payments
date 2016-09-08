@@ -1,20 +1,25 @@
 <div class="page-title">
-    <h1><?php echo $this->__('Your order has been accepted.') ?></h1>
+	<h1><?php echo $this->__("We're sorry.") ?></h1>
 </div>
-
+<p><?php echo $this->__('An unexpected error has ocurred.') ?></p>
+<?php $contactus_link = 'contact us'; ?>
+<?php if (Mage::getStoreConfig('contacts/contacts/enabled')):?>
+	<?php $contactus_link = '<a href="'.Mage::getUrl('contacts').'" onclick="this.target=\'_blank\'">'.$contactus_link.'</a>'; ?>
+<?php endif;?>
+<p><?php echo $this->__('For more information, please '.$contactus_link.'.', Mage::getUrl('contacts')); ?></p>
 <?php if ($this->getOrderId()):?>
-<?php if ($this->getCanViewOrder()) :?>
-    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
-<?php  else :?>
-    <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
-<?php endif;?>
-    <p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
-<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
-    <p>
-        <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
-        <?php echo $this->getChildHtml() ?>
-    </p>
-<?php endif;?>
+	</br>
+	<?php if ($this->getCanViewOrder()) :?>
+	    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+	<?php else :?>
+	    <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
+	<?php endif;?>
+	<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+	    <p>
+	        <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+	        <?php echo $this->getChildHtml() ?>
+	    </p>
+	<?php endif;?>
 <?php endif;?>
 
 <div class="buttons-set">

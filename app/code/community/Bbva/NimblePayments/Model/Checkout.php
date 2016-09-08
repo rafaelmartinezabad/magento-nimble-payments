@@ -405,6 +405,88 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $location = $address->getFirstname()." ".$address->getLastname().", ".$address->getStreet(-1).", ".$address->getCity().", ".$address->getRegion()." ".$address->getPostcode().", ".$address->getCountryModel()->getIso3Code();
         return substr( md5( $location ), 0, 12 );
     }
+
+    /**
+     * Ask nimble of status transaction
+     * @param order_id, _max_attemps_to_request_status = 5
+     */
+    public function getNimbleStatus($merchantOrderId, $_max_attemps_to_request_status = 5) {
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        $lastOrderStatusNimble = "PENDING";
+        try{
+            $NimbleApi = new NimbleAPI(array(
+                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
+                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key')
+            ));
+            $i = 0; $finish = false;
+            do {
+                $response = NimbleAPIPayments::getPaymentStatus($NimbleApi, null, $merchantOrderId);
+                if ( isset($response['data']) && isset($response['data']['details']) && count($response['data']['details']) ){
+                    $lastOrderStatusNimble = $response['data']['details'][0]['state'];
+                } elseif ( isset($response['result']) && isset($response['result']['code']) && 404 == $response['result']['code'] ) {
+                    $lastOrderStatusNimble = 'NOT_FOUND';
+                }
+                $i++;
+            } while ($lastOrderStatusNimble == "PENDING" && $i < $_max_attemps_to_request_status);
+        }  catch (Exception $e){
+            Mage::throwException($e->getMessage());
+        }
+        return $lastOrderStatusNimble;
+    }
+
+    /**
+     * Action to do before get status order
+     *
+     * Status in Magento:
+     *      Mage_Sales_Model_Order::STATE_NEW
+     *      Mage_Sales_Model_Order::STATE_PENDING_PAYMENT
+     *      Mage_Sales_Model_Order::STATE_PROCESSING
+     *      Mage_Sales_Model_Order::STATE_COMPLETE
+     *      Mage_Sales_Model_Order::STATE_CLOSED
+     *      Mage_Sales_Model_Order::STATE_CANCELED
+     *      Mage_Sales_Model_Order::STATE_HOLDED
+     *
+     * Necessary status:
+     *      DENIED OR ABANDONED
+     *      ERROR
+     *
+     * @param order_id, orderStatus, $isFront
+     */
+    public function doActionBeforeStatus($order_id, $orderStatus, $isFront = true) {
+        $pageToLoad = "";
+        $order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
+        switch ($orderStatus){
+            case 'SETTLED': // funds have been settled in the banking account
+            case 'ON_HOLD': // Transaction has been processed and settlement is pending
+                if ($isFront) { $pageToLoad = "OK"; } else {
+                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Card payment has been processed.'));
+                }
+                break;
+            case 'ABANDONED': // Cardholder has not finished the payment procedure
+            case 'DENIED': // Payment has been rejected by the processor
+                // TODO: create DENIED and ABANDONED status
+                $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment has been abandoned or denied.'));
+                break;
+            case 'CANCELLED': // Error in the payment gateway
+                $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment was rejected.'));
+                break;
+            case 'ERROR': // Nimble internal error
+                if ($isFront) { $pageToLoad = "KO"; } else {
+                    // TODO: create ERROR status
+                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment had an unexpected error.'));
+                }
+                break;
+            case 'NOT_FOUND': // Transaction not found, not Nimble state
+            case 'PENDING': // Transaction has not been processed yet
+            default: // PAGE_NOT_LOADED: Checkout page has not been loaded
+                     // AND OTHER PAYMENT STATUS
+                if ($isFront) { $pageToLoad = $orderStatus; }
+                break;
+        }
+        $order->save();
+        return $pageToLoad;
+    }
     
     public function getParams(){
         
