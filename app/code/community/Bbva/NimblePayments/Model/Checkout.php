@@ -228,7 +228,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
     public function getOrderPlaceRedirectUrl()
     {
-        return $url = Mage::getUrl('nimblepayments/' . $this->_paymentMethod . '/redirect');        
+        $this->getInfoInstance()->setOrder($this->getLastOrder());
+        return $url = $this->getGatewayRedirectUrl();
     }
     
     public function isTestMode()
