@@ -1,6 +1,12 @@
 <?php
 abstract class Bbva_NimblePayments_Controller_Abstract extends Mage_Core_Controller_Front_Action
 {   
+    /**
+     * Redirect Block
+     * need to be redeclared
+     */
+    protected $_redirectBlockType;
+
     protected function _expireAjax()
     {
         if (!$this->getCheckout()->getQuote()->hasItems()) {
@@ -10,12 +16,6 @@ abstract class Bbva_NimblePayments_Controller_Abstract extends Mage_Core_Control
     }
 
     /**
-     * Redirect Block
-     * need to be redeclared
-     */
-    protected $_redirectBlockType;
-
-    /**
      * Get singleton of Checkout Session Model
      *
      * @return Mage_Checkout_Model_Session
@@ -23,34 +23,6 @@ abstract class Bbva_NimblePayments_Controller_Abstract extends Mage_Core_Control
     public function getCheckout()
     {
         return Mage::getSingleton('checkout/session');
-    }
-
-    /**
-     * when customer select nimble payment method
-     */
-    public function redirectAction()
-    {
-        $status_new= 'pending_nimble';
-        $session = $this->getCheckout();
-        $session->setNimbleQuoteId($session->getQuoteId());
-        $session->setNimbleRealOrderId($session->getLastRealOrderId());
-
-        $order = Mage::getModel('sales/order');
-        $order->loadByIncrementId($session->getLastRealOrderId());
-        if ($order->getStatus() == 'pending'){
-            $order->addStatusToHistory($status_new, Mage::helper('core')->__('Customer was redirected to Nimble Payments.'));
-            $order->save();
-
-            $this->getResponse()->setBody(
-                $this->getLayout()
-                    ->createBlock($this->_redirectBlockType)
-                    ->setOrder($order)
-                    ->toHtml()
-            );
-        } else {
-            Mage::app()->getResponse()->setRedirect(Mage::getBaseUrl());
-        }
-        $session->unsQuoteId();
     }
 
     /**
@@ -77,11 +49,4 @@ abstract class Bbva_NimblePayments_Controller_Abstract extends Mage_Core_Control
             $this->_redirect('*/*/failure');
         }
     }
-
-    /**
-     * Display failure page if error
-     *
-     */
-   
-
 }
