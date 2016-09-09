@@ -241,7 +241,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $session->unsQuoteId();
 
         if ($order->getStatus() == 'pending'){
-            $order->addStatusToHistory('pending_nimble', Mage::helper('core')->__('Payment pending to Nimble validate.'));
+            $order->addStatusToHistory('pending_nimble', Mage::helper('core')->__('Order pending to Nimble Payments validation.'));
             $order->save();
         }
 
