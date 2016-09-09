@@ -226,9 +226,27 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $currency_code;
     }
 
+    /**
+     * Similar Bbva_NimblePayments_Controller_Abstract redirectAction
+     * to avoid redirect page
+     */
     public function getOrderPlaceRedirectUrl()
     {
-        return $url = Mage::getUrl('nimblepayments/' . $this->_paymentMethod . '/redirect');        
+        //return $url = Mage::getUrl('nimblepayments/' . $this->_paymentMethod . '/redirect');
+        $order = $this->getLastOrder();
+
+        $session = Mage::getSingleton('checkout/session');
+        $session->setNimbleQuoteId($session->getQuoteId());
+        $session->setNimbleRealOrderId($order->getIncrementId());
+        $session->unsQuoteId();
+
+        if ($order->getStatus() == 'pending'){
+            $order->addStatusToHistory('pending_nimble', Mage::helper('core')->__('Payment pending to Nimble validate.'));
+            $order->save();
+        }
+
+        $this->getInfoInstance()->setOrder($order);
+        return $url = $this->getGatewayRedirectUrl();
     }
     
     public function isTestMode()

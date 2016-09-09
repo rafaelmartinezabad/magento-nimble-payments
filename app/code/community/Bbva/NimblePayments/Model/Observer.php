@@ -88,6 +88,25 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 $Switch->deleteConfig('payment/nimblepayments_checkout/token')
                    ->deleteConfig('payment/nimblepayments_checkout/refreshToken');
             }
+
+            $this->checkPendingNimbleOrders();
+        }
+    }
+
+    private function checkPendingNimbleOrders() {
+        $orders = Mage::getModel('sales/order')->getCollection()->join(
+                array('payment' => 'sales/order_payment'),
+                'main_table.entity_id=payment.parent_id',
+                array('payment_method' => 'payment.method'))
+            ->addFieldToFilter('payment.method', 'nimblepayments_checkout')
+            ->addFieldToFilter('state', 'pending_nimble')
+            ->addAttributeToSort('created_at', 'DESC');
+
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        foreach ($orders as $order) {
+            $order_id = $order->getIncrementId();
+            $statusNimble = $checkout->getNimbleStatus($order_id, 1);
+            $checkout->doActionBeforeStatus($order_id, $statusNimble, false);
         }
     }
     
