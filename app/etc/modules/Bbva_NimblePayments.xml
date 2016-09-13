@@ -7,13 +7,16 @@
 		<Bbva_NimblePayments>
 
 			<!-- Indica si nuestro modulo está activo: true o false -->
-			<active>true</active>
+			<active>false</active>
+
+			<!-- para saber si esta desactivado desde la configuración -->
+			<!-- Mage::helper('core')->isModuleOutputEnabled('Bbva_NimblePayments') -->
 
 			<!-- Indica en qué directorio encontrará el módulo: core, community o local -->
 			<codePool>community</codePool>
-                        <depends>
-                            <Mage_Payment/>
-                        </depends>
+            <depends>
+                <Mage_Payment/>
+            </depends>
 		</Bbva_NimblePayments>
 
 	</modules>
