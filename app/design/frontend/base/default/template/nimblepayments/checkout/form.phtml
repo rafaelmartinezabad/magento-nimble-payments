@@ -2,7 +2,6 @@
 <p style="vertical-align: middle;"><img class="credit-card-logo" src="<?php echo $this->getSkinUrl('images/nimblepayments/BBVA.png')?>" alt="<?php echo $this->__('tarjetas de credito') ?>"  style="display: inline-block; margin: 5px; vertical-align: middle;" /><strong style="display: inline-block; vertical-align: middle;"><?php echo $this->__('Pay safely with your credit card through the BBVA.') ?></strong></p>
 <?php $storedCards = $this->storedcards; ?>
 <?php if ( ! empty($storedCards) ):  ?>
-<?php /* asanchez: Si el metodo de pago esta seleccionado mostrar select de tarjetas */ ?>
 <?php $display = ""; if ($this->getSelectedMethodCode()==$_code): $display = "display:none;"; endif; ?>
 <div class="form-list" id="payment_form_<?php echo $_code ?>" style="<?php echo $display ?>">
     <ul>
