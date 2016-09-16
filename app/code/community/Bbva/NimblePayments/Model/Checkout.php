@@ -418,7 +418,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      * Get hash location customer
      */
     private function toHash($address = null) {
-        if (is_null($address) || empty($address->getFirstname())) { return null; }
+        if (empty($address) || empty($address->getFirstname())) { return null; }
         $location = $address->getFirstname()." ".$address->getLastname().", ".$address->getStreet(-1).", ".$address->getCity().", ".$address->getRegion()." ".$address->getPostcode().", ".$address->getCountryModel()->getIso3Code();
         return substr( md5( $location ), 0, 12 );
     }
