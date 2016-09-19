@@ -15,7 +15,7 @@
         array(
             array(
                 'status' => 'pending_nimble', 
-                'label' => 'Pending Nimble'
+                'label' => 'Pending Card Payment' // tr019
             ),
             array(
                 'status' => 'denied_nimble',

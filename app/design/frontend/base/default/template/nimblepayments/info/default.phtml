@@ -33,7 +33,7 @@
 
 <?php
     $card = $this->getSpecificInformation()['maskedPan']['value'];
-    if ($card == "") { $card = Mage::helper('core')->__('New Card'); }
+    if ($card == "") { $card = Mage::helper('core')->__('New Card'); /* tr012 */ }
     $brand = strtolower($this->getSpecificInformation()['cardBrand']['value']);
 ?>
 

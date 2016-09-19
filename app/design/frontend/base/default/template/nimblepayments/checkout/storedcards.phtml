@@ -1,12 +1,12 @@
 <div class="page-title">
-	<h1><?php echo $this->__("We're sorry.") ?></h1>
+	<h1><?php echo $this->__("We're sorry") // tr015 ?></h1>
 </div>
-<p><?php echo $this->__('An unexpected error has ocurred.') ?></p>
-<?php $contactus_link = 'contact us'; ?>
+<p><?php echo $this->__('An unexpected error has ocurred.') // tr016 ?></p>
+<?php $contactus_link = $this->__('contact us'); ?>
 <?php if (Mage::getStoreConfig('contacts/contacts/enabled')):?>
 	<?php $contactus_link = '<a href="'.Mage::getUrl('contacts').'" onclick="this.target=\'_blank\'">'.$contactus_link.'</a>'; ?>
 <?php endif;?>
-<p><?php echo $this->__('For more information, please '.$contactus_link.'.', Mage::getUrl('contacts')); ?></p>
+<p><?php echo $this->__('For more information, please')." ".$contactus_link."."; // tr017 ?></p>
 <?php if ($this->getOrderId()):?>
 	</br>
 	<?php if ($this->getCanViewOrder()) :?>
@@ -16,8 +16,7 @@
 	<?php endif;?>
 	<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
 	    <p>
-	        <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
-	        <?php echo $this->getChildHtml() ?>
+	    	<?php echo $this->__('Click').' <a href="'.$this->getPrintUrl().'" onclick="this.target=\'_blank\'">'.$this->__('here to print').'</a> '.$this->__('a copy of your order confirmation.'); // tr018 ?>
 	    </p>
 	<?php endif;?>
 <?php endif;?>

@@ -34,10 +34,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         
         if (!$this->canRefund()) {
-            Mage::throwException(Mage::helper('payment')->__('Refund action is not available.'));
+            Mage::throwException(Mage::helper('payment')->__('Refund action is not available.')); // tr000
         }
         if (!$this->getToken()) {
-            Mage::throwException(Mage::helper('payment')->__('Refund Failed: You must authorize the advanced options Nimble Payments.'));
+            Mage::throwException(Mage::helper('payment')->__('Refund Failed').": ".Mage::helper('payment')->__('You must authorize the advanced options Nimble Payments.')); // tr001 tr002
         }
         
         $transaction_id = $payment->getAdditionalInformation('np_transaction_id');
@@ -63,7 +63,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $response = NimbleAPIPayments::sendPaymentRefund($nimble_api, $transaction_id, $refund);
             error_log(print_r($response, true));
         } catch (Exception $e) {
-            $message = Mage::helper('payment')->__('Refund Failed: ');
+            $message = Mage::helper('payment')->__('Refund Failed').': '; // tr001
             Mage::throwException($message);
         }
         
@@ -92,7 +92,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             header('Location: ' . $url_otp);
             die();
         } else if (!isset($response['data']) || !isset($response['data']['refundId'])){
-            $message = Mage::helper('payment')->__('Refund Failed: ');
+            $message = Mage::helper('payment')->__('Refund Failed').': '; // tr001
             
             if ( isset($response['result']) && isset($response['result']['info']) ){
                 $message .= $response['result']['info'];
@@ -116,7 +116,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             if ($ticket == $otp_info['ticket'] && 'OK' == $result ){
                 return $otp_info['token'];
             } else {
-                $message = Mage::helper('payment')->__('Refund Failed');
+                $message = Mage::helper('payment')->__('Refund Failed'); // tr001
                 Mage::throwException($message);
             }
         }
@@ -240,7 +240,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $session->unsQuoteId();
 
         if ($order->getStatus() == 'pending'){
-            $order->addStatusToHistory('pending_nimble', Mage::helper('core')->__('Order pending to Nimble Payments validation.'));
+            $order->addStatusToHistory('pending_nimble', Mage::helper('core')->__('Order pending to Nimble Payments validation.')); // tr003
             $order->save();
         }
 
@@ -477,21 +477,21 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             case 'SETTLED': // funds have been settled in the banking account
             case 'ON_HOLD': // Transaction has been processed and settlement is pending
                 if ($isFront) { $pageToLoad = "OK"; } else {
-                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Card payment has been processed.'));
+                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Card payment has been processed.')); // tr004
                 }
                 break;
             case 'ABANDONED': // Cardholder has not finished the payment procedure
             case 'DENIED': // Payment has been rejected by the processor
                 // TODO: create DENIED and ABANDONED status
-                $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment has been abandoned or denied.'));
+                $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment has been abandoned or denied.')); // tr005
                 break;
             case 'CANCELLED': // Error in the payment gateway
-                $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment was rejected.'));
+                $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment was rejected.')); // tr006
                 break;
             case 'ERROR': // Nimble internal error
                 if ($isFront) { $pageToLoad = "KO"; } else {
                     // TODO: create ERROR status
-                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment had an unexpected error.'));
+                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_CANCELED, Mage::helper('core')->__('Card payment had an unexpected error.')); //tr007
                 }
                 break;
             case 'NOT_FOUND': // Transaction not found, not Nimble state
@@ -622,7 +622,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      */
     public function getTitle()
     {
-        return Mage::helper('core')->__('Card payment');
+        return Mage::helper('core')->__('Card payment'); // tr011
     }
     
 }

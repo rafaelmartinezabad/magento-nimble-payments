@@ -12,7 +12,7 @@ class Bbva_NimblePaymentsCheckout_Block_Link extends Mage_Checkout_Block_Onepage
 
         $parentBlock = $this->getParentBlock();
         if ($parentBlock && Mage::helper('core')->isModuleOutputEnabled('Bbva_NimblePaymentsCheckout')) {
-            $text = $this->__('Faster Checkout');
+            $text = $this->__('Faster Checkout'); // tr008
             $parentBlock->addLink(
                 $text,
                 'checkout/fasterpage',

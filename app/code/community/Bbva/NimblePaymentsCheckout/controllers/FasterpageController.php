@@ -33,7 +33,7 @@ class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_One
         if (!$quote->validateMinimumAmount()) {
             $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
                 Mage::getStoreConfig('sales/minimum_order/error_message') :
-                Mage::helper('checkout')->__('Subtotal must exceed minimum order amount');
+                Mage::helper('checkout')->__('Subtotal must exceed minimum order amount'); // tr009
 
             Mage::getSingleton('checkout/session')->addError($error);
             $this->_redirect('checkout/cart');
@@ -56,7 +56,7 @@ class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_One
         }
         
         $this->_initLayoutMessages('customer/session');
-        $this->getLayout()->getBlock('head')->setTitle($this->__('Checkout'));
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Checkout')); // tr010
         $this->renderLayout();
     }
 

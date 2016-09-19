@@ -28,6 +28,9 @@
         )
     );
 
+    // Modif pending_nimble label
+    $installer->run("update sales_order_status set label = 'Pending Card Payment' where status = 'pending_nimble'");
+
     // Insert states and mapping of statuses to states
     $installer->getConnection()->insertArray(
         $statusStateTable,
