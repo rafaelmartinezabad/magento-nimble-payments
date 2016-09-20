@@ -12,7 +12,9 @@ class Bbva_NimblePaymentsCheckout_Model_Type_Fasterpage extends Mage_Checkout_Mo
                 break;
             case 'billing':
                 $billing = array();
-                $customerBillingAddressId = $this->getCustomerSession()->getCustomer()->getDefaultBillingAddress()->getId();
+                $DefaultBillingAddress = $this->getCustomerSession()->getCustomer()->getDefaultBillingAddress();
+                if (empty($DefaultBillingAddress)) { return false; }
+                $customerBillingAddressId = $DefaultBillingAddress->getId();
                 $billing['use_for_shipping'] = false;
                 $result = parent::saveBilling($billing, $customerBillingAddressId);
                 break;

@@ -1,13 +1,11 @@
-<?php if ($message = $this->getMessage()) : ?>
-    <?php if (!empty($message)){ ?>
-    <?php  ?>
-        <div class="notification-global">
-            <strong class="label"><?php echo $this->__('NimblePayments Message: ') ?></strong><?php echo $message['message'] ?>
-            <?php if ($message['type']=='plugins'){  ?>
-                <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") . "#payment_nimblepayments_checkout-head" ?>"><?php echo $this->__('Aquí.') ?></a>
-            <?php } else{ ?> 
-                <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Summary::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
-            <?php } ?> 
-        </div>   
-    <?php } ?>
+<?php $message = $this->getMessage(); ?>
+<?php if (!empty($message)) : ?>
+    <div class="notification-global">
+        <strong class="label"><?php echo $this->__('Nimble Payments Message').': '; ?></strong><?php echo $message['message'] ?>
+        <?php if ($message['type']=='plugins') :  ?>
+            <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment") . "#payment_nimblepayments_checkout-head" ?>"><?php echo $this->__('Activar') ?></a>
+        <?php else : ?> 
+            <a href="<?php echo Bbva_NimblePayments_Block_Dashboard_Summary::getOauth3Url(); ?>"><?php echo $this->__('Authorize Magento') ?></a>
+        <?php endif; ?> 
+    </div>   
 <?php endif; ?>

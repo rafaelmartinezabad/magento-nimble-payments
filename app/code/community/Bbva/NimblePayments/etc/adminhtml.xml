@@ -7,7 +7,7 @@
             <action>adminhtml/nimblepayments/anchorGetaway</action>
         </nimble>
     </menu>
-    <acl>
+    <!--<acl>
         <resources>
             <admin>
                 <children>
@@ -18,15 +18,15 @@
                             <index translate="title">
                                 <title>Balance</title>
                                 <sort_order>1</sort_order>
-                            </index>
+                            </index>-->
                             <!--<list translate="title">
                                 <title>List Action</title>
                                 <sort_order>2</sort_order>
                             </list>-->
-                        </children>
+                        <!--</children>
                     </nimblepayments>
                 </children>
             </admin>
         </resources>
-    </acl>
+    </acl>-->
 </config>

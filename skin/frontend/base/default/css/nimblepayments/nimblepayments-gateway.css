@@ -1,9 +1,12 @@
 #payment_form_nimblepayments_checkout ul li, #payment_method_info ul li {
     list-style: outside none none;
-    padding-right: 42px;
+    /* padding-right: 42px; */
+}
+#payment_form_nimblepayments_checkout ul li.valid-cards, #payment_method_info ul li.valid-cards {
+    margin-left: 35px;
 }
 #payment_form_nimblepayments_checkout label.stored_card, #payment_method_info label.stored_card {
-    background: url("/skin/frontend/base/default/images/nimblepayments/credit-card.png") no-repeat scroll center right #fff;
+    /*background: url("../../images/nimblepayments/credit-card.png") no-repeat scroll center right #fff;*/
     background-color: transparent;
     display: inline-block;
     min-width: 135px;
@@ -14,8 +17,10 @@
 	margin-left: 29px;
 }
 #payment_form_nimblepayments_checkout label.stored_card.visa, #payment_method_info label.stored_card.visa {
-    background-image: url("/skin/frontend/base/default/images/nimblepayments/visa-logo.png");
+    background: url("../../images/nimblepayments/visa-logo.png") no-repeat scroll center right #fff;
+    min-height: 23px;
 }
 #payment_form_nimblepayments_checkout label.stored_card.mastercard, #payment_method_info label.stored_card.mastercard {
-    background-image: url("/skin/frontend/base/default/images/nimblepayments/mastercard-logo.png");
+    background: url("../../images/nimblepayments/mastercard-logo.png") no-repeat scroll center right #fff;;
+    min-height: 23px;
 }

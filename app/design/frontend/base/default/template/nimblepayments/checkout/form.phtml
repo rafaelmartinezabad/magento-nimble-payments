@@ -1,14 +1,24 @@
-<?php $_code=$this->getMethodCode(); ?>
 <p style="vertical-align: middle;"><img class="credit-card-logo" src="<?php echo $this->getSkinUrl('images/nimblepayments/BBVA.png')?>" alt="<?php echo $this->__('tarjetas de credito') ?>"  style="display: inline-block; margin: 5px; vertical-align: middle;" /><strong style="display: inline-block; vertical-align: middle;"><?php echo $this->__('Pay safely with your credit card through the BBVA.') ?></strong></p>
 <?php $storedCards = $this->storedcards; ?>
-<?php if ( ! empty($storedCards) ):  ?>
-<?php $display = ""; if ($this->getSelectedMethodCode()==$_code): $display = "display:none;"; endif; ?>
-<div class="form-list" id="payment_form_<?php echo $_code ?>" style="<?php echo $display ?>">
+<?php if( ! empty($storedCards) ):  ?>
+<div class="form-list" id="payment_form_<?php echo $this->getMethodCode(); ?>" style="display:block">
     <ul>
         <?php foreach ( $storedCards as $numberCard => $card ): ?>
-		<li><input id="card-<?php echo $numberCard ?>" type="radio" name="payment[storedcard]" value="<?php echo base64_encode(json_encode($card)); ?>" <?php if ($card['default']) echo 'checked="checked"';  ?>/><label for="card-<?php echo $numberCard ?>" class="stored_card <?php echo strtolower($card['cardBrand']) ?>"><?php echo $card['maskedPan'] ?></label></li>
+		<li class ="valid-cards"><input id="card-<?php echo $numberCard ?>" type="radio" name="payment[storedcard]" value="<?php echo base64_encode(json_encode($card)); ?>" <?php if ($card['default']) echo 'checked="checked"';  ?>/><label for="card-<?php echo $numberCard ?>" class="stored_card <?php echo strtolower($card['cardBrand']) ?>"><?php echo $card['maskedPan'] ?></label></li>
         <?php endforeach; ?>
         <li><input id="new-card" type="radio" name="payment[storedcard]" value=""/><label for="new-card" class="stored_card"><?php echo Mage::helper('core')->__('New Card'); // tr012 ?></label></li>
 	</ul>
 </div>
+<script type="text/javascript">
+//<![CDATA[
+	var name = '<?php echo $this->getMethodCode(); ?>';
+	if (typeof payment.currentMethod != "undefined") {
+		if (payment.currentMethod == name) {
+			jQuery('#payment_form_'+name).show();
+		} else {
+			jQuery('#payment_form_'+name).hide();
+		}
+	}
+//]]>
+</script>
 <?php endif; ?>

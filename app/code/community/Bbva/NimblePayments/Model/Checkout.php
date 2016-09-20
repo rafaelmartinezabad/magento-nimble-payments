@@ -388,7 +388,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $hashCurrentAddress = $this->toHash($currentAddress);
         $lastAddress = $this->getLastOrder()->getShippingAddress();
         $hashLastAddress = $this->toHash($lastAddress);
-        if (is_null($hashLastAddress)) { return false; }
+        if (empty($hashLastAddress)) { return true; }
         return ($hashCurrentAddress != $hashLastAddress);
     }
 
