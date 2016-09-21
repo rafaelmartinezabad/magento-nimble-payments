@@ -123,13 +123,14 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $this->getToken();
     }
     
-    public function getOrder()
-    {
+    public function getOrder() {
         if (!$this->_order) {
-            $paymentInfo = $this->getInfoInstance();
-            $this->_order = Mage::getModel('sales/order')
-                            ->loadByIncrementId($paymentInfo->getOrder()->getRealOrderId()); 
-
+            $realOrderId = $this->getInfoInstance()->getOrder()->getRealOrderId();
+            if (empty($realOrderId)) {
+                $this->_order = $this->getInfoInstance()->getQuote();
+            } else {
+                $this->_order = Mage::getModel('sales/order')->loadByIncrementId($realOrderId);
+            }
         }
         return $this->_order;
     }
@@ -265,10 +266,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $url;
     }
     
-    public function getProdID(){
-        $paymentInfo = $this->getInfoInstance();
-        $order_number = $paymentInfo->getOrder()->getRealOrderId();
-        
+    public function getProdID() {
+        $_order = $this->getOrder();
+        $order_number = $_order->getRealOrderId();
+        if (empty($order_number)) {
+            $order_number = $_order->getReservedOrderId();
+        }
         return $order_number;
     }
     

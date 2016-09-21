@@ -17,7 +17,7 @@ class Bbva_NimblePayments_Block_Adminhtml_System_Config_Fieldset_Payment
         $text_button2 = Mage::helper('core')->__('Already registered.');
         $url_nimble = $this->get_gateway_url();
         return "<div><img style='height:4.9rem;' src='{$url_logo}' alt='Nimble logo'/></div><p>{$message} <a class='button button-primary' href='https://www.nimblepayments.com/private/registration?utm_source=Magento_Settings&utm_medium=Referral%20Partners&utm_campaign=Creacion-Cuenta&partner=magento' target='_blank'>{$text_button}</a> "
-        . "&nbsp;&nbsp;<a onclick=\"window.open('{$url_nimble}', '', 'width=800, height=578')\">{$text_button2}</a></p><hr />";
+        . "&nbsp;&nbsp;<a style='cursor:pointer;' onclick=\"window.open('{$url_nimble}', '', 'width=800, height=578')\">{$text_button2}</a></p><hr />";
     }
         
     static function get_gateway_url(){

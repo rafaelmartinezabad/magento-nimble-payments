@@ -1,6 +1,7 @@
 "Nimble Payments by BBVA","Nimble Payments by BBVA"
 "Card payment was rejected. Please try again.","Se ha rechazado el pago. Por favor, inténtalo de nuevo."
 "Enabled/Disabled","Habilitar/Deshabilitar"
+"Enable Faster Checkout", "Habilitar Compra Inmediata"
 "Title","Nombre"
 "Could not connect to the bank. Code ERR_PAG.","Error al conectar a Nimbe Payments. Código ERR_CONEX."
 "An error has occurred. Code ERR_PAG.","Error en el pago. Código ERR_PAG."
