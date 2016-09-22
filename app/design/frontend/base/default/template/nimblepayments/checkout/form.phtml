@@ -6,7 +6,7 @@
         <?php foreach ( $storedCards as $numberCard => $card ): ?>
 		<li class ="valid-cards"><input id="card-<?php echo $numberCard ?>" type="radio" name="payment[storedcard]" value="<?php echo base64_encode(json_encode($card)); ?>" <?php if ($card['default']) echo 'checked="checked"';  ?>/><label for="card-<?php echo $numberCard ?>" class="stored_card <?php echo strtolower($card['cardBrand']) ?>"><?php echo $card['maskedPan'] ?></label></li>
         <?php endforeach; ?>
-        <li><input id="new-card" type="radio" name="payment[storedcard]" value=""/><label for="new-card" class="stored_card"><?php echo Mage::helper('core')->__('New Card'); // tr012 ?></label></li>
+        <li><input id="new-card" type="radio" name="payment[storedcard]" value=""/><label for="new-card" class="stored_card"><?php echo Mage::helper('core')->__('Other Card'); // tr012 ?></label></li>
 	</ul>
 </div>
 <script type="text/javascript">
