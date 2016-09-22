@@ -26,7 +26,7 @@
 "Subtotal must exceed minimum order amount", "El subtotal debe exceder la cantidad minima."
 "Checkout", "Realizar pedido"
 "Card payment", "Tarjetas de credito"
-"New Card", "Nueva tarjeta"
+"Other Card", "Otra tarjeta"
 "Error occured", "Ha ocurrido un error."
 "Please <a href="%s">continue shopping</a>.", "Puede <a href="%s">continuar comprando</a>."
 "We're sorry", "Lo sentimos"
