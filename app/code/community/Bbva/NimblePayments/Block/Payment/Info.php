@@ -30,4 +30,9 @@ class Bbva_NimblePayments_Block_Payment_Info extends Mage_Payment_Block_Info
         }
         return $transport->addData($info);
     }
+
+    protected function haveMoreCards() {
+        $storedCards = Mage::getSingleton('Bbva_NimblePayments_Model_StoredCard')->getListStoredCards();
+        return count($storedCards) > 0;
+    }
 }
