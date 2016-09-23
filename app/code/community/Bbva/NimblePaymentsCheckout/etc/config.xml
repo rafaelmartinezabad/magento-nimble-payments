@@ -24,6 +24,9 @@
         </models>
     </global>
     <frontend>
+        <secure_url>
+            <checkout_fasterpage>/checkout/fasterpage</checkout_fasterpage>
+        </secure_url>
         <layout>
             <updates>
                 <nimblepaymentscheckout module="Bbva_NimblePaymentsCheckout">

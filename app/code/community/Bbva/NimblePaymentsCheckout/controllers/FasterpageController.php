@@ -8,11 +8,6 @@ class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_One
     {
         return Mage::getSingleton('nimblepaymentscheckout/type_fasterpage');
     }
-
-    public function getOnepage()
-    {
-        return $this->getFasterpage();
-    }
     
     /**
      * Checkout page
@@ -54,7 +49,7 @@ class Bbva_NimblePaymentsCheckout_FasterpageController extends Mage_Checkout_One
                 }
             }
         }
-        
+
         $this->_initLayoutMessages('customer/session');
         $this->getLayout()->getBlock('head')->setTitle($this->__('Checkout')); // tr010
         $this->renderLayout();

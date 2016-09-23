@@ -38,7 +38,7 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
         Mage::getSingleton('checkout/session')->getQuote()->setIsActive(false)->save();
         $url_params = $this->getRequest()->getParams();
         $checkout = Mage::getModel('nimblepayments/checkout');
-        $statusNimble = $checkout->getNimbleStatus($url_params['order'], 1);
+        $statusNimble = $checkout->getNimbleStatus($url_params['order']);
         switch ($checkout->doActionBeforeStatus($url_params['order'], $statusNimble)) {
             case "OK":
                 $this->_redirect('checkout/onepage/success', $url_params);

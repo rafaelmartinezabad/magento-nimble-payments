@@ -99,13 +99,13 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 'main_table.entity_id=payment.parent_id',
                 array('payment_method' => 'payment.method'))
             ->addFieldToFilter('payment.method', 'nimblepayments_checkout')
-            ->addFieldToFilter('state', 'pending_nimble')
+            ->addFieldToFilter('status', 'pending_nimble')
             ->addAttributeToSort('created_at', 'DESC');
 
         $checkout = Mage::getModel('nimblepayments/checkout');
         foreach ($orders as $order) {
             $order_id = $order->getIncrementId();
-            $statusNimble = $checkout->getNimbleStatus($order_id, 1);
+            $statusNimble = $checkout->getNimbleStatus($order_id);
             $checkout->doActionBeforeStatus($order_id, $statusNimble, false);
         }
     }
