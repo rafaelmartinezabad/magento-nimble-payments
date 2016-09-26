@@ -21,7 +21,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);
-            $summary = $summary = NimbleAPIAccount::balanceSummary($nimble_api);
+            $summary = NimbleAPIAccount::balanceSummary($nimble_api);
             
             if ( !isset($summary['result']) || ! isset($summary['result']['code']) || 200 != $summary['result']['code'] || !isset($summary['data'])){
                 $invalid_token = true;
@@ -41,7 +41,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
     }
    
     
-    function getOauth3Url(){
+    public function getOauth3Url(){
         
         $url = '';
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
@@ -59,7 +59,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
         return $url;
     }
     
-    function getToken(){
+    private function getToken(){
         
         $token=false;
         
