@@ -428,7 +428,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      * Ask nimble of status transaction
      * @param order_id, _max_attemps_to_request_status = 1
      */
-    public function getNimbleStatus($merchantOrderId, $_max_attemps_to_request_status = 1) {
+    public function getNimbleStatus($transaction_id, $_max_attemps_to_request_status = 1) {
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         $lastOrderStatusNimble = "PENDING";
@@ -439,7 +439,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             ));
             $i = 0; $finish = false;
             do {
-                $response = NimbleAPIPayments::getPaymentStatus($NimbleApi, null, $merchantOrderId);
+                $response = NimbleAPIPayments::getPaymentStatus($NimbleApi, $transaction_id);
                 if ( isset($response['data']) && isset($response['data']['details']) && count($response['data']['details']) ){
                     $lastOrderStatusNimble = $response['data']['details'][0]['state'];
                 } elseif ( isset($response['result']) && isset($response['result']['code']) && 404 == $response['result']['code'] ) {
@@ -448,7 +448,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 $i++;
             } while ($lastOrderStatusNimble == "PENDING" && $i < $_max_attemps_to_request_status);
         }  catch (Exception $e){
-            Mage::throwException($e->getMessage());
+            //Mage::throwException($e->getMessage());
         }
         return $lastOrderStatusNimble;
     }
