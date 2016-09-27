@@ -135,36 +135,6 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         return $this->_order;
     }
     
-    public function isValidCredentials() {
-        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
-        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIEnvironment.php';
-
-        $params = array(
-            'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-            'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
-            'mode' => NimbleAPIConfig::MODE
-        );
-
-        $validCredentials = false;
-        try {
-            $nimble_api = new NimbleAPI($params);
-            $response = NimbleAPIEnvironment::verification($nimble_api);
-
-            if (isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code']) {
-                $validCredentials = true;
-            }
-        } catch (Exception $e) {
-            $validCredentials = false;
-        }
-
-        if (! $validCredentials ) {
-            $config = new Mage_Core_Model_Config();
-            $config->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
-        }
-
-        return $validCredentials;
-    }
-    
     public function getMerchantId()
     {
         if ($this->_merchantId === null) {
