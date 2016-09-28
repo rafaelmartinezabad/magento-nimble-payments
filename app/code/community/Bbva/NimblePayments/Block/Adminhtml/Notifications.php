@@ -2,18 +2,22 @@
  
 class Bbva_NimblePayments_Block_Adminhtml_Notifications extends Mage_Adminhtml_Block_Template
 {
-    public function getMessage()
+    public function _toHtml($className = "notification-global")
     {
-        $message= array();
-        
-        if(Mage::getStoreConfig('payment/nimblepayments_checkout/active')==0){
-            $message['message'] = $this->__('Activate plugin Nimble Payments by BBVA.');
-            $message['type'] = 'plugins';
+        Mage::dispatchEvent('nimblepayments_notifications_before');
+        $message = Mage::getSingleton('nimblepayments/notification')->getMessage();
+        $html = "";
+        if (!empty($message)) {
+            $html = "<div class=\"notification-global\"><strong class=\"label\">".$this->__('Nimble Payments Message').":</strong> ".$message['message']." ";
+            if ($message['type']=='plugins') {
+                $html .= "<a href=\"".Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/payment")."#payment_nimblepayments_checkout-head\">".$this->__('Activar')."</a>";
+            } else {
+                $html .= "<a href=\"".Bbva_NimblePayments_Block_Dashboard_Summary::getOauth3Url()."\">".$this->__('Authorize Magento')."</a>";
+            }
+            $html .= "</div>";
         }
-        else if( empty(Mage::getStoreConfig('payment/nimblepayments_checkout/token'))){
-            $message['message'] = $this->__('You are not authorized in Nimble Payments.');
-            $message['type'] = 'token';
-        }
-        return $message;
+
+        return $html;
     }
+
 }
