@@ -61,7 +61,6 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             );
             
             $response = NimbleAPIPayments::sendPaymentRefund($nimble_api, $transaction_id, $refund);
-            error_log(print_r($response, true));
         } catch (Exception $e) {
             $message = Mage::helper('payment')->__('Refund Failed').': '; // tr001
             Mage::throwException($message);
