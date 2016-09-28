@@ -230,11 +230,12 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      */
     public function getOrderPlaceRedirectUrl()
     {
-        $order = $this->getLastOrder();
+        $realOrderId = Mage::getSingleton('checkout/session')->getQuote()->getReservedOrderId();
+        $order = Mage::getModel('sales/order')->loadByIncrementId($realOrderId);
 
         $session = Mage::getSingleton('checkout/session');
         $session->setNimbleQuoteId($session->getQuoteId());
-        $session->setNimbleRealOrderId($order->getIncrementId());
+        $session->setNimbleRealOrderId($realOrderId);
         $session->unsQuoteId();
 
         if ($order->getStatus() == 'pending'){
