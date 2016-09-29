@@ -86,7 +86,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $Switch = new Mage_Core_Model_Config();
             $Switch->saveConfig('payment/nimblepayments_checkout/ticket', $serialized_ticket, 'default', 0);
             
-            $back_url = Mage::app()->getWebsite(true)->getDefaultStore()->getUrl('', array('_direct'=>'nimblepayments/oauth3'));
+            $back_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'nimblepayments/oauth3';
+
             $url_otp = NimbleAPI::getOTPUrl($ticket, $back_url);
             header('Location: ' . $url_otp);
             die();

@@ -28,8 +28,8 @@ class Bbva_NimblePayments_Block_Adminhtml_System_Config_Fieldset_Payment
         
         $platform = 'Magento'; //TODO write real name
         $storeName = Mage::app()->getWebsite(true)->getDefaultStore()->getFrontendName();
-        $storeURL = Mage::app()->getWebsite(true)->getDefaultStore()->getUrl();
-        $redirectURL = Mage::app()->getWebsite(true)->getDefaultStore()->getUrl('', array('_direct'=>'nimblepayments/oauth3'));
+        $storeURL = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+        $redirectURL = $storeURL.'nimblepayments/oauth3';
         
         return NimbleAPI::getGatewayUrl($platform, $storeName, $storeURL, $redirectURL);
     }
