@@ -1,5 +1,5 @@
 <_>
-   <form_key>l4TwnOFsbdBdMN1q</form_key>
+   <form_key>ob3top8GB2gj8NXn</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -10,8 +10,8 @@
    <license>OSL-3.0</license>
    <license_uri/>
    <version>2.0.0</version>
-   <stability>beta</stability>
-   <notes>Nimble Payments version 2.0.0 beta</notes>
+   <stability>stable</stability>
+   <notes>Nimble Payments version 2.0.0</notes>
    <authors>
       <name>
          <name>BBVA</name>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                            </files>
+            <files>                                </files>
          </files>
       </package>
       <extension>
@@ -152,4 +152,8 @@
          <ignore/>
       </ignore>
    </contents>
+   <page>1</page>
+   <limit>200</limit>
+   <folder/>
+   <package/>
 </_>
