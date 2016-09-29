@@ -17,7 +17,7 @@ The plugin can be downloaded from https://www.magentocommerce.com/magento-connec
 ###Composer
 To install the plugin via Composer, in a empty folder run the following commands:
 ```
-git clone git@github.com:nimblepayments/magento.git magento
+git clone https://github.com/nimblepayments/magento-nimble-payments.git magento
 cd magento
 composer.phar install
 cp -R app PATH_TO_MAGENTO/
@@ -28,7 +28,7 @@ and replace ```PATH_TO_MAGENTO``` with the Magento folder path. Example: ```/var
 ###Manual Installation
 To install the plugin without using the Composer,  just run the following commands:
 ```
-git clone git@github.com:nimblepayments/magento.git magento
+git clone https://github.com/nimblepayments/magento-nimble-payments.git magento
 cd magento
 cp -R app PATH_TO_MAGENTO/
 cp -R skin PATH_TO_MAGENTO/
