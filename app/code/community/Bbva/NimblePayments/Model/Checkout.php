@@ -138,7 +138,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function getMerchantId()
     {
         if ($this->_merchantId === null) {
-            $this->_merchantId = Mage::getStoreConfig('payment/' . $this->getCode() . '/merchant_id');
+            $this->_merchantId = trim(Mage::getStoreConfig('payment/' . $this->getCode() . '/merchant_id'));
         }
         return $this->_merchantId;
     }
@@ -146,7 +146,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function getSecretKey()
     {
         if ($this->_secretKey === null) {
-            $this->_secretKey = Mage::getStoreConfig('payment/' . $this->getCode() . '/secret_key');
+            $this->_secretKey = trim(Mage::getStoreConfig('payment/' . $this->getCode() . '/secret_key'));
         }
         return $this->_secretKey;
     }
@@ -435,8 +435,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $lastOrderStatusNimble = "PENDING";
         try{
             $NimbleApi = new NimbleAPI(array(
-                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key')
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' => $this->getSecretKey()
             ));
             $i = 0; $finish = false;
             do {

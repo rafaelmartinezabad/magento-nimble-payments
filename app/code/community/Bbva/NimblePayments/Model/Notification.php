@@ -19,16 +19,17 @@ class Bbva_NimblePayments_Model_Notification extends Varien_object
     }
 
     private function is3leggedToken() {
-        $valid_token = empty(Mage::getStoreConfig('payment/nimblepayments_checkout/token')) ? false : true;
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        $valid_token = empty($checkout->getToken()) ? false : true;
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
         
         try {
             $params = array(
-                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
-                'token' => Mage::getStoreConfig('payment/nimblepayments_checkout/token'),
+                'clientId' => $checkout->getMerchantId(),
+                'clientSecret' => $checkout->getSecretKey(),
+                'token' => $checkout->getToken(),
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);

@@ -26,25 +26,27 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
       
         return $this;
     }
-      public function configNimble($observer){
-
-          require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
-          require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
-          require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPICredentials.php';
 
 
-           $params = array(
-            'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-            'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
-            'mode' => NimbleAPIConfig::MODE
-            );
-             $Switch = new Mage_Core_Model_Config();
+    public function configNimble($observer){
+
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPICredentials.php';
+
+        $Switch = new Mage_Core_Model_Config();
         try {
+            $checkout = Mage::getModel('nimblepayments/checkout');
+            $params = array(
+                'clientId' => $checkout->getMerchantId(),
+                'clientSecret' => $checkout->getSecretKey(),
+                'mode' => NimbleAPIConfig::MODE
+            );
             $nimbleApi = new NimbleAPI($params);
-            $response = NimbleAPICredentials::check($nimbleApi);
+            $response = NimbleAPIEnvironment::verification($nimbleApi);
             if ( isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code'] ){
                 //correct
-            } else{
+            } else {
                 if (Mage::getStoreConfig('payment/nimblepayments_checkout/active')!= 0){
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
                     $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
@@ -52,22 +54,24 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
             }
         } catch (Exception $e) {
             if (Mage::getStoreConfig('payment/nimblepayments_checkout/active')!= 0){
-                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
                 $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
             }
         }
+
         return $this;
-                    
-      }
+    }
+
     public function saveUserLoginSession($observer){
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         
-        if( Mage::getStoreConfig('payment/nimblepayments_checkout/token') && Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken') ){
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        if( $checkout->getToken() && Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken') ){
             try {
                 $params = array(
-                    'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-                    'clientSecret' =>Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
-                    'token' =>Mage::getStoreConfig('payment/nimblepayments_checkout/token'),
+                    'clientId' => $checkout->getMerchantId(),
+                    'clientSecret' => $checkout->getSecretKey(),
+                    'token' => $checkout->getToken(),
                     'refreshToken' =>Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken'),
                     'mode' => NimbleAPIConfig::MODE
                 );
