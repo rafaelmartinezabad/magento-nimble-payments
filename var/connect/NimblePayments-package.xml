@@ -1,5 +1,5 @@
 <_>
-   <form_key>ob3top8GB2gj8NXn</form_key>
+   <form_key>k0AqMPCGFHoEvwUt</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -9,9 +9,9 @@
    <description>Nimble Payments es una solución financiera online de BBVA que te permite aceptar pagos en tu tienda con total seguridad. De fácil integración, te ofrece servicios de valor añadido para la gestión de tu negocio como soluciones financieras de forma integrada y atención cualificada en español. Este módulo está actualizado con el nuevo sistema de firma de Redsys (HMAC SHA-256)</description>
    <license>OSL-3.0</license>
    <license_uri/>
-   <version>2.0.0</version>
+   <version>2.0.1</version>
    <stability>stable</stability>
-   <notes>Nimble Payments version 2.0.0</notes>
+   <notes>Nimble Payments version 2.0.1</notes>
    <authors>
       <name>
          <name>BBVA</name>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                                </files>
+            <files>                                    </files>
          </files>
       </package>
       <extension>
