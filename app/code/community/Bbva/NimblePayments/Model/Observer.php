@@ -66,12 +66,13 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         
         $checkout = Mage::getModel('nimblepayments/checkout');
-        if( $checkout->getToken() && Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken') ){
+        $token = Mage::getStoreConfig('payment/nimblepayments_checkout/token');
+        if( $token && Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken') ){
             try {
                 $params = array(
                     'clientId' => $checkout->getMerchantId(),
                     'clientSecret' => $checkout->getSecretKey(),
-                    'token' => $checkout->getToken(),
+                    'token' => $token,
                     'refreshToken' =>Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken'),
                     'mode' => NimbleAPIConfig::MODE
                 );
@@ -85,7 +86,8 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 //guardar los tokens (OAUTH3)
                 $Switch = new Mage_Core_Model_Config();
                 $Switch->saveConfig('payment/nimblepayments_checkout/token', $options['token'], 'default', 0)
-                   ->saveConfig('payment/nimblepayments_checkout/refreshToken', $options['refreshToken'], 'default', 0);
+                   ->saveConfig('payment/nimblepayments_checkout/refreshToken', $options['refreshToken'], 'default', 0)
+                    ->removeCache();
             } catch (Exception $e) {
                 //Borramos los tokens (OAUTH3)
                 $Switch = new Mage_Core_Model_Config();
