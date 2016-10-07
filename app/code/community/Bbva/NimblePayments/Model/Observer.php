@@ -49,13 +49,15 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
             } else {
                 if (Mage::getStoreConfig('payment/nimblepayments_checkout/active')!= 0){
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
-                    $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
+                    $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0)
+                        ->removeCache();
                 }  
             }
         } catch (Exception $e) {
             if (Mage::getStoreConfig('payment/nimblepayments_checkout/active')!= 0){
                 Mage::getSingleton('adminhtml/session')->addError(Mage::helper('core')->__('Data invalid gateway to accept payments.'));
-                $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0);
+                $Switch->saveConfig('payment/nimblepayments_checkout/active', 0, 'default', 0)
+                    ->removeCache();
             }
         }
 

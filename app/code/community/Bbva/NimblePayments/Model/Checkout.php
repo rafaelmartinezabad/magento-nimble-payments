@@ -84,7 +84,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             //guardar los tokens (OAUTH3)
             $serialized_ticket = serialize($otp_info);
             $Switch = new Mage_Core_Model_Config();
-            $Switch->saveConfig('payment/nimblepayments_checkout/ticket', $serialized_ticket, 'default', 0);
+            $Switch->saveConfig('payment/nimblepayments_checkout/ticket', $serialized_ticket, 'default', 0)
+                    ->removeCache();
             
             $back_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'nimblepayments/oauth3';
 
