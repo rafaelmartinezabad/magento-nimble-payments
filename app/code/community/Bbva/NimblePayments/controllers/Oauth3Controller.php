@@ -46,7 +46,8 @@ class Bbva_NimblePayments_Oauth3Controller extends Mage_Core_Controller_Front_Ac
             $Switch = new Mage_Core_Model_Config();
             Mage::getSingleton('core/session')->addSuccess(Mage::helper('core')->__('correct 3 steps authentication')); // tr023
             $Switch->saveConfig('payment/nimblepayments_checkout/token', $options['token'], 'default', 0)
-                   ->saveConfig('payment/nimblepayments_checkout/refreshToken', $options['refreshToken'], 'default', 0);
+                   ->saveConfig('payment/nimblepayments_checkout/refreshToken', $options['refreshToken'], 'default', 0)
+                    ->removeCache();
         } catch (Exception $e) {
                     Mage::getSingleton('core/session')->addError(Mage::helper('core')->__('incorrect 3 steps authentication')); // tr024
           }

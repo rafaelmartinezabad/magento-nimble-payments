@@ -39,6 +39,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
             $this->setTemplate('nimblepayments/authorization.phtml');
             $this->url = $this->getOauth3Url();
         }
+        return parent::_prepareLayout();
     }
    
     
