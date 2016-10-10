@@ -1,6 +1,5 @@
 <_>
-   <form_key>vVikMI4pYO111TY9</form_key>
-   <_create/>
+   <form_key>dE41LQA53bY638eo</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -41,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                                       </files>
+            <files>                                        </files>
          </files>
       </package>
       <extension>
@@ -158,8 +157,4 @@
          <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>
