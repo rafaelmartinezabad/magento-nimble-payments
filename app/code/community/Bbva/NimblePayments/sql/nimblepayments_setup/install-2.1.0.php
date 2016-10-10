@@ -1,6 +1,6 @@
 <?php
 
-    $installer = $this;
+    $installer = $this
 
     $installer->startSetup();
 

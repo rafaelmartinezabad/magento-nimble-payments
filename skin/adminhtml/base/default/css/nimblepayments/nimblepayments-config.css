@@ -1,0 +1,19 @@
+#payment_nimblepayments_checkout .form-list {
+    margin-bottom: 2px;
+}
+
+.nimble-config-footer-block {
+    margin-top: 15px;
+    text-align: center;
+}
+
+p#nimble-authorize-footer-block-part-1 {
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+hr#inner-authorize {
+    margin: 0% 45% -1% 45%;
+    width: 10%;
+}

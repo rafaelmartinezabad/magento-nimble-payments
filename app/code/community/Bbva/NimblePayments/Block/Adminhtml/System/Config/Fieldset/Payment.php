@@ -20,6 +20,54 @@ class Bbva_NimblePayments_Block_Adminhtml_System_Config_Fieldset_Payment
         return "<div><img style='height:4.9rem;' src='{$url_logo}' alt='Nimble logo'/></div><p>{$message} <a class='button button-primary' href='https://$env.nimblepayments.com/private/registration?utm_source=Magento_Settings&utm_medium=Referral%20Partners&utm_campaign=Creacion-Cuenta&partner=magento' target='_blank'>{$text_button}</a> "
         . "&nbsp;&nbsp;<a style='cursor:pointer;' onclick=\"window.open('{$url_nimble}', '', 'width=800, height=578')\">{$text_button2}</a></p><hr />";
     }
+
+    /**
+     * Return footer html for fieldset
+     * Add extra tooltip comments to elements
+     *
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getFooterHtml($element)
+    {
+        $tooltipsExist = false;
+        $html .= '</tbody></table>';
+        if (!empty(Mage::getModel('nimblepayments/checkout')->getToken())) {
+            $html .= $this->getUnlinkFooter();
+        } else {
+            $html .= $this->getAuthorizeFooter();
+        }
+        $html .= '</fieldset>' . $this->_getExtraJs($element, $tooltipsExist);
+        if ($element->getIsNested()) {
+            $html .= '</div></td></tr>';
+        } else {
+            $html .= '</div>';
+        }
+        return $html;
+    }
+
+    private function getUnlinkFooter() {
+        $footer = '<hr/>
+            <p id="nimble-unlink-footer-block" class="nimble-config-footer-block">'.
+                '<label>'.$this->__('Store linked to Nimble Payments'). /* tr022 */ '</label></br>'.
+                '<a class="button button-primary" href='.Mage::getUrl('nimblepayments/oauth3/unlink', array('key' => Mage::app()->getRequest()->getParam('key'))).'>'.$this->__('Disassociate').'</a>
+            </p>';
+        return $footer;
+    }
+
+    private function getAuthorizeFooter() {
+        $footer = '<hr/>
+            <p id="nimble-authorize-footer-block-part-1" class="nimble-config-footer-block">'.
+                '<label>'.$this->__('You can do everything in Magento site'). /* tr024 */ ':</label></br>'.
+                '<label>'.$this->__('manage your purchases, check your account transactions, request a refund...'). /* tr025 */'</label></br>'.
+            '</p>'.
+            '<hr id="inner-authorize">'.
+            '<p id="nimble-authorize-footer-block-part-2" class="nimble-config-footer-block">'.
+                '<label>'.$this->__('log in and allow us to access your information'). /* tr026 */'</label></br></br>'.
+                '<a class="button button-primary" href='.$this->getOauth3Url().'>'.$this->__('Allow Magento').'</a>'.
+            '</p>';
+        return $footer;
+    }
         
     static function get_gateway_url(){
         
@@ -32,5 +80,9 @@ class Bbva_NimblePayments_Block_Adminhtml_System_Config_Fieldset_Payment
         $redirectURL = $storeURL.'nimblepayments/oauth3';
         
         return NimbleAPI::getGatewayUrl($platform, $storeName, $storeURL, $redirectURL);
+    }
+
+    private function getOauth3Url(){
+        return Mage::getSingleton('Bbva_NimblePayments_Block_Dashboard_Summary')->getOauth3Url();
     }
 }

@@ -90,4 +90,16 @@ class Bbva_NimblePayments_Oauth3Controller extends Mage_Core_Controller_Front_Ac
         }
         
     }
+
+    public function unlinkAction() {
+        try {
+            $mageConfig = new Mage_Core_Model_Config();
+            $mageConfig->deleteConfig('payment/nimblepayments_checkout/token')
+                ->deleteConfig('payment/nimblepayments_checkout/refreshToken');
+        } catch (Mage_Core_Exception $e) {
+            Mage::throwException($e->getMessage());
+        }
+        $this->_redirectUrl(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)."admin/system_config/edit/section/payment/key/".Mage::app()->getRequest()->getParam('key')."/#payment_nimblepayments_checkout-head");
+        return;
+    }
 }

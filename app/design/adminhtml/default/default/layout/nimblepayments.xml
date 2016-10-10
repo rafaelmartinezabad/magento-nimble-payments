@@ -4,5 +4,12 @@
         <reference name="notifications">
             <block type="nimblepayments/adminhtml_notifications" name="bbva-nimblepayments_notifications" />
         </reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/nimblepayments/nimblepayments-config.css</name>
+                <params/>
+            </action>
+        </reference>
     </default>
 </layout>
