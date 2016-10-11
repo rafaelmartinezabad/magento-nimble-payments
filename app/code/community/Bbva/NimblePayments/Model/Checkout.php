@@ -28,10 +28,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_secretKey = null;
     protected $_token = null;
 
-    public function getExtensionVersion() {
-        return (string) Mage::getConfig()->getNode()->modules->Bbva_NimblePayments->version;
-    }
-      
+    
     public function refund(Varien_Object $payment, $amount)
     {
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
@@ -40,7 +37,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         if (!$this->canRefund()) {
             Mage::throwException(Mage::helper('payment')->__('Refund action is not available.')); // tr000
         }
-        if (!$this->getToken()) {
+        if (!$this->is3leggedToken()) {
             Mage::throwException(Mage::helper('payment')->__('Refund Failed').": ".Mage::helper('payment')->__('You must authorize the advanced options Nimble Payments.')); // tr001 tr002
         }
         
@@ -138,6 +135,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             }
         }
         return $this->_order;
+    }
+
+    public function getExtensionVersion() {
+        return (string) Mage::getConfig()->getNode()->modules->Bbva_NimblePayments->version;
     }
     
     public function getMerchantId()
@@ -392,7 +393,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     /*
      * show Authorize block in backend
      */
-    public function showAuthorize() {
+    public function validCredentials() {
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIEnvironment.php';
         try {
@@ -409,17 +410,16 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      * check if token is 3 legged token
      */
     public function is3leggedToken() {
-        $checkout = Mage::getModel('nimblepayments/checkout');
-        $valid_token = empty($checkout->getToken()) ? false : true;
+        $valid_token = empty($this->getToken()) ? false : true;
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
         
         try {
             $params = array(
-                'clientId' => $checkout->getMerchantId(),
-                'clientSecret' => $checkout->getSecretKey(),
-                'token' => $checkout->getToken(),
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' => $this->getSecretKey(),
+                'token' => $this->getToken(),
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);

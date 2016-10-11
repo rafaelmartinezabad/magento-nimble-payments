@@ -32,10 +32,11 @@ class Bbva_NimblePayments_Block_Adminhtml_System_Config_Fieldset_Payment
     {
         $tooltipsExist = false;
         $html .= '</tbody></table>';
-        if(Mage::getModel('nimblepayments/checkout')->showAuthorize()) {
-            if (Mage::getModel('nimblepayments/checkout')->is3leggedToken()) {
-                $html .= $this->getUnlinkFooter();
-            } else {
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        if ($checkout->is3leggedToken()) {
+            $html .= $this->getUnlinkFooter();
+        } else {
+            if($checkout->validCredentials()) {
                 $html .= $this->getAuthorizeFooter();
             }
         }
