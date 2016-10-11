@@ -27,6 +27,10 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_merchantId = null;
     protected $_secretKey = null;
     protected $_token = null;
+
+    public function getExtensionVersion() {
+        return (string) Mage::getConfig()->getNode()->modules->Bbva_NimblePayments->version;
+    }
       
     public function refund(Varien_Object $payment, $amount)
     {
@@ -288,6 +292,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'cardHolderId' => $customerId
             );
             
+            $NimbleApi->authorization->addHeader('source-caller', 'MAGENTO_'.$this->getExtensionVersion());
             $preorder = NimbleAPIStoredCards::preorderPayment($NimbleApi, $storedCardPaymentInfo);
             //Save transaction_id to this order
             if ( isset($preorder["data"]) && isset($preorder["data"]["id"])){
@@ -359,6 +364,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             //throw new Exception('División por cero.');
             $NimbleApi = new NimbleAPI($params);
             $p = new NimbleAPIPayments();
+            $NimbleApi->authorization->addHeader('source-caller', 'MAGENTO_'.$this->getExtensionVersion());
             $response = $p->SendPaymentClient($NimbleApi, $payment);
             if(isset($response["data"]) && isset($response["data"]["paymentUrl"])){
                 $url = $response["data"]["paymentUrl"];
@@ -381,6 +387,53 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         return $url;    
+    }
+
+    /*
+     * show Authorize block in backend
+     */
+    public function showAuthorize() {
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIEnvironment.php';
+        try {
+            $response = NimbleAPIEnvironment::verification($this->getNimble());
+            if ( isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code'] ){
+                return true;
+            } else { return false; }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /*
+     * check if token is 3 legged token
+     */
+    public function is3leggedToken() {
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        $valid_token = empty($checkout->getToken()) ? false : true;
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
+        
+        try {
+            $params = array(
+                'clientId' => $checkout->getMerchantId(),
+                'clientSecret' => $checkout->getSecretKey(),
+                'token' => $checkout->getToken(),
+                'mode' => NimbleAPIConfig::MODE
+            );
+            $nimble_api = new NimbleAPI($params);
+            $summary = NimbleAPIAccount::balanceSummary($nimble_api);
+            
+            if ( !isset($summary['result']) || ! isset($summary['result']['code']) || 200 != $summary['result']['code'] || !isset($summary['data'])){
+                $valid_token = false;
+            }
+
+        } catch (Exception $e) {
+            $valid_token = false;
+        }
+
+        return $valid_token;
     }
 
     /*
