@@ -69,7 +69,8 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
         
         $checkout = Mage::getModel('nimblepayments/checkout');
         $token = Mage::getStoreConfig('payment/nimblepayments_checkout/token');
-        if( $token && Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken') ){
+        $refreshToken = Mage::getStoreConfig('payment/nimblepayments_checkout/refreshToken');
+        if( $token && $refreshToken ){
             try {
                 $params = array(
                     'clientId' => $checkout->getMerchantId(),
@@ -94,7 +95,8 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 //Borramos los tokens (OAUTH3)
                 $Switch = new Mage_Core_Model_Config();
                 $Switch->deleteConfig('payment/nimblepayments_checkout/token')
-                   ->deleteConfig('payment/nimblepayments_checkout/refreshToken');
+                   ->deleteConfig('payment/nimblepayments_checkout/refreshToken')
+                   ->removeCache();
             }
         }
         //Check orders with pending status

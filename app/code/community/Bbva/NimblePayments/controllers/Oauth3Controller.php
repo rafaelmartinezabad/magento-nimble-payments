@@ -96,7 +96,8 @@ class Bbva_NimblePayments_Oauth3Controller extends Mage_Core_Controller_Front_Ac
         try {
             $mageConfig = new Mage_Core_Model_Config();
             $mageConfig->deleteConfig('payment/nimblepayments_checkout/token')
-                ->deleteConfig('payment/nimblepayments_checkout/refreshToken');
+                ->deleteConfig('payment/nimblepayments_checkout/refreshToken')
+                ->removeCache();
         } catch (Mage_Core_Exception $e) {
             Mage::throwException($e->getMessage());
         }
