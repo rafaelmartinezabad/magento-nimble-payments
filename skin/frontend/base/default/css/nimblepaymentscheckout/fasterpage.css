@@ -7,19 +7,19 @@
 }
 
 .checkout-fasterpage-index .col-main {
-  width: auto;
+  /*width: auto;*/
   float: none;
 }
 
 @media only screen and (min-width: 980px) {
   .checkout-fasterpage-index .col-main {
     float: left;
-    width: 68.75%;
+    /*width: 68.75%;*/
     padding-right: 20px;
   }
   .checkout-fasterpage-index .col-right,
   .checkout-fasterpage-index .col-left {
-    width: 31.25%;
+    /*width: 31.25%;*/
     display: block;
   }
   .checkout-fasterpage-index .col-right {

@@ -8,16 +8,17 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
 
     protected function _prepareLayout()
     {
-        $invalid_token = $this->getToken() ? false : true;
+        $checkout = Mage::getModel('nimblepayments/checkout');
+        $invalid_token = $checkout->getToken() ? false : true;
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
         
         try {
             $params = array(
-                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key'),
-                'token' => Mage::getStoreConfig('payment/nimblepayments_checkout/token'),
+                'clientId' => $checkout->getMerchantId(),
+                'clientSecret' => $checkout->getSecretKey(),
+                'token' => $checkout->getToken(),
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);
@@ -38,6 +39,7 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
             $this->setTemplate('nimblepayments/authorization.phtml');
             $this->url = $this->getOauth3Url();
         }
+        return parent::_prepareLayout();
     }
    
     
@@ -59,13 +61,4 @@ class Bbva_NimblePayments_Block_Dashboard_Summary extends Mage_Adminhtml_Block_D
         return $url;
     }
     
-    private function getToken(){
-        
-        $token=false;
-        
-        if(Mage::getStoreConfig('payment/nimblepayments_checkout/token'))
-            $token=true;
-        
-        return $token;
-    }
 }

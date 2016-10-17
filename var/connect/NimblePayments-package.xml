@@ -1,5 +1,5 @@
 <_>
-   <form_key>ob3top8GB2gj8NXn</form_key>
+   <form_key>dE41LQA53bY638eo</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -9,9 +9,9 @@
    <description>Nimble Payments es una solución financiera online de BBVA que te permite aceptar pagos en tu tienda con total seguridad. De fácil integración, te ofrece servicios de valor añadido para la gestión de tu negocio como soluciones financieras de forma integrada y atención cualificada en español. Este módulo está actualizado con el nuevo sistema de firma de Redsys (HMAC SHA-256)</description>
    <license>OSL-3.0</license>
    <license_uri/>
-   <version>2.0.0</version>
+   <version>2.1.0</version>
    <stability>stable</stability>
-   <notes>Nimble Payments version 2.0.0</notes>
+   <notes>Nimble Payments version 2.1.0</notes>
    <authors>
       <name>
          <name>BBVA</name>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                                </files>
+            <files>                                        </files>
          </files>
       </package>
       <extension>
@@ -74,6 +74,7 @@
          <target>mageetc</target>
          <target>magedesign</target>
          <target>magedesign</target>
+         <target>mageskin</target>
       </target>
       <path>
          <path/>
@@ -93,6 +94,7 @@
          <path>modules/Bbva_NimblePaymentsCheckout.xml</path>
          <path>adminhtml/default/default/layout/nimblepayments.xml</path>
          <path>frontend/base/default/layout/nimblepaymentscheckout.xml</path>
+         <path>adminhtml/base/default/css/nimblepayments/nimblepayments-config.css</path>
       </path>
       <type>
          <type>file</type>
@@ -112,8 +114,10 @@
          <type>file</type>
          <type>file</type>
          <type>file</type>
+         <type>file</type>
       </type>
       <include>
+         <include/>
          <include/>
          <include/>
          <include/>
@@ -150,10 +154,7 @@
          <ignore/>
          <ignore/>
          <ignore/>
+         <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>

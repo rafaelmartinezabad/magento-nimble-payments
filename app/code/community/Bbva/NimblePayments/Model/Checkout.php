@@ -27,7 +27,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     protected $_merchantId = null;
     protected $_secretKey = null;
     protected $_token = null;
-      
+
+    
     public function refund(Varien_Object $payment, $amount)
     {
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
@@ -36,7 +37,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         if (!$this->canRefund()) {
             Mage::throwException(Mage::helper('payment')->__('Refund action is not available.')); // tr000
         }
-        if (!$this->getToken()) {
+        if (!$this->is3leggedToken()) {
             Mage::throwException(Mage::helper('payment')->__('Refund Failed').": ".Mage::helper('payment')->__('You must authorize the advanced options Nimble Payments.')); // tr001 tr002
         }
         
@@ -84,7 +85,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             //guardar los tokens (OAUTH3)
             $serialized_ticket = serialize($otp_info);
             $Switch = new Mage_Core_Model_Config();
-            $Switch->saveConfig('payment/nimblepayments_checkout/ticket', $serialized_ticket, 'default', 0);
+            $Switch->saveConfig('payment/nimblepayments_checkout/ticket', $serialized_ticket, 'default', 0)
+                    ->removeCache();
             
             $back_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'nimblepayments/oauth3';
 
@@ -134,11 +136,15 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         return $this->_order;
     }
+
+    public function getExtensionVersion() {
+        return (string) Mage::getConfig()->getNode()->modules->Bbva_NimblePayments->version;
+    }
     
     public function getMerchantId()
     {
         if ($this->_merchantId === null) {
-            $this->_merchantId = Mage::getStoreConfig('payment/' . $this->getCode() . '/merchant_id');
+            $this->_merchantId = trim(Mage::getStoreConfig('payment/' . $this->getCode() . '/merchant_id'));
         }
         return $this->_merchantId;
     }
@@ -146,7 +152,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
     public function getSecretKey()
     {
         if ($this->_secretKey === null) {
-            $this->_secretKey = Mage::getStoreConfig('payment/' . $this->getCode() . '/secret_key');
+            $this->_secretKey = trim(Mage::getStoreConfig('payment/' . $this->getCode() . '/secret_key'));
         }
         return $this->_secretKey;
     }
@@ -287,6 +293,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
                 'cardHolderId' => $customerId
             );
             
+            $NimbleApi->authorization->addHeader('source-caller', 'MAGENTO_'.$this->getExtensionVersion());
             $preorder = NimbleAPIStoredCards::preorderPayment($NimbleApi, $storedCardPaymentInfo);
             //Save transaction_id to this order
             if ( isset($preorder["data"]) && isset($preorder["data"]["id"])){
@@ -358,6 +365,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             //throw new Exception('División por cero.');
             $NimbleApi = new NimbleAPI($params);
             $p = new NimbleAPIPayments();
+            $NimbleApi->authorization->addHeader('source-caller', 'MAGENTO_'.$this->getExtensionVersion());
             $response = $p->SendPaymentClient($NimbleApi, $payment);
             if(isset($response["data"]) && isset($response["data"]["paymentUrl"])){
                 $url = $response["data"]["paymentUrl"];
@@ -380,6 +388,52 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         return $url;    
+    }
+
+    /*
+     * show Authorize block in backend
+     */
+    public function validCredentials() {
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIEnvironment.php';
+        try {
+            $response = NimbleAPIEnvironment::verification($this->getNimble());
+            if ( isset($response) && isset($response['result']) && isset($response['result']['code']) && 200 == $response['result']['code'] ){
+                return true;
+            } else { return false; }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /*
+     * check if token is 3 legged token
+     */
+    public function is3leggedToken() {
+        $valid_token = empty($this->getToken()) ? false : true;
+        require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
+        require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
+        
+        try {
+            $params = array(
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' => $this->getSecretKey(),
+                'token' => $this->getToken(),
+                'mode' => NimbleAPIConfig::MODE
+            );
+            $nimble_api = new NimbleAPI($params);
+            $summary = NimbleAPIAccount::balanceSummary($nimble_api);
+            
+            if ( !isset($summary['result']) || ! isset($summary['result']['code']) || 200 != $summary['result']['code'] || !isset($summary['data'])){
+                $valid_token = false;
+            }
+
+        } catch (Exception $e) {
+            $valid_token = false;
+        }
+
+        return $valid_token;
     }
 
     /*
@@ -435,8 +489,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         $lastOrderStatusNimble = "PENDING";
         try{
             $NimbleApi = new NimbleAPI(array(
-                'clientId' => Mage::getStoreConfig('payment/nimblepayments_checkout/merchant_id'),
-                'clientSecret' => Mage::getStoreConfig('payment/nimblepayments_checkout/secret_key')
+                'clientId' => $this->getMerchantId(),
+                'clientSecret' => $this->getSecretKey()
             ));
             $i = 0; $finish = false;
             do {
@@ -480,6 +534,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             case 'ON_HOLD': // Transaction has been processed and settlement is pending
                 if ($isFront) { $pageToLoad = "OK"; } else {
                     $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Card payment has been processed.')); // tr004
+                    $this->createInvoice($order);
                 }
                 break;
             case 'ABANDONED': // Cardholder has not finished the payment procedure
@@ -505,6 +560,30 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         $order->save();
         return $pageToLoad;
+    }
+
+    private function createInvoice($order) {
+        try {
+            if(!$order->canInvoice()) {
+                Mage::throwException(Mage::helper('core')->__('Cannot create an invoice.'));
+            }
+
+            $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
+
+            if (!$invoice->getTotalQty()) {
+                Mage::throwException(Mage::helper('core')->__('Cannot create an invoice without products.'));
+            }
+
+            $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+            $invoice->register();
+            $transactionSave = Mage::getModel('core/resource_transaction')
+                ->addObject($invoice)
+                ->addObject($invoice->getOrder());
+
+            $transactionSave->save();
+        } catch (Mage_Core_Exception $e) {
+            Mage::throwException($e->getMessage());
+        }
     }
     
     public function getParams(){
