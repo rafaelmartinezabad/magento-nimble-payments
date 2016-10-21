@@ -308,6 +308,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
 
                 $response = NimbleAPIStoredCards::confirmPayment($NimbleApi, $preorder["data"]);
                 //TIMEOUT CONTROL ON checkout/onepage/success PAGE
+            } else if (isset($preorder['result']) && isset($preorder['result']['code']) && $preorder['result']['code'] == 200 && isset($preorder['result']['internal_code']) && $preorder['result']['internal_code'] == "NIM001") {
+                $url = '';
             }else{
                 $url = Mage::getUrl('nimblepayments/checkout/failure');
             }
@@ -333,7 +335,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $info = $vpcInfo->getPublicPaymentInfo($payment, false);
             
             if( isset($info['maskedPan']) && !empty($info['maskedPan']) ){
-                return $this->paymentStoredCard();
+                $url = $this->paymentStoredCard();
+                if (!empty($url)) { return $url; }
             }
         }
         
