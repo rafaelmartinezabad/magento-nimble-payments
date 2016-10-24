@@ -1,5 +1,5 @@
 <_>
-   <form_key>dE41LQA53bY638eo</form_key>
+   <form_key>CHcGnCeFL20w9bmV</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -11,7 +11,8 @@
    <license_uri/>
    <version>2.1.1</version>
    <stability>stable</stability>
-   <notes>Nimble Payments version 2.1.1</notes>
+   <notes>Nimble Payments version 2.1.1
+Fix: Send new order email</notes>
    <authors>
       <name>
          <name>BBVA</name>
@@ -40,7 +41,7 @@
             <max/>
          </max>
          <files>
-            <files>                                        </files>
+            <files>                                           </files>
          </files>
       </package>
       <extension>
