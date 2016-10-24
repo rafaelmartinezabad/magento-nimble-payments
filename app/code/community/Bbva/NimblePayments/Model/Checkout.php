@@ -536,8 +536,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             case 'SETTLED': // funds have been settled in the banking account
             case 'ON_HOLD': // Transaction has been processed and settlement is pending
                 if ($isFront) { $pageToLoad = "OK"; } else {
-                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Card payment has been processed.')); // tr004
+                    $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Payment accepted.'), true); // tr004
                     $this->createInvoice($order);
+                    $order->sendNewOrderEmail();
                 }
                 break;
             case 'ABANDONED': // Cardholder has not finished the payment procedure
