@@ -23,6 +23,7 @@ composer.phar install
 cp -R app PATH_TO_MAGENTO/
 cp -R skin PATH_TO_MAGENTO/
 cp -R lib PATH_TO_MAGENTO/
+cp -R var PATH_TO_MAGENTO/
 ```
 and replace ```PATH_TO_MAGENTO``` with the Magento folder path. Example: ```/var/www/magento```
 ###Manual Installation
@@ -32,6 +33,7 @@ git clone https://github.com/nimblepayments/magento-nimble-payments.git magento
 cd magento
 cp -R app PATH_TO_MAGENTO/
 cp -R skin PATH_TO_MAGENTO/
+cp -R var PATH_TO_MAGENTO/
 cd ..
 git clone https://github.com/nimblepayments/sdk-php.git
 cd sdk-php
