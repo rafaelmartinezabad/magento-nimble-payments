@@ -18,7 +18,7 @@
 "Refund Failed", "Devolución fallida"
 "You must authorize the advanced options Nimble Payments.", "Debes estar autorizado en las opciones avanzadas de Nimble Payments."
 "Order pending to Nimble Payments validation.", "Pedido pendiente de validación por Nimble Payments."
-"Card payment has been processed.", "El pago esta siendo procesado."
+"Payment accepted.", "Pago aceptado."
 "Card payment has been abandoned or denied.", "El pago ha sido abandonado o denegado."
 "Card payment was rejected.", "Se ha rechazado el pago."
 "Card payment had an unexpected error.", "Se ha producido un error en el pago."
