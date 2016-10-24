@@ -22,6 +22,7 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 ->addObject($invoice)
                 ->addObject($invoice->getOrder())
                 ->save();
+            $order->sendNewOrderEmail();
         }
       
         return $this;
