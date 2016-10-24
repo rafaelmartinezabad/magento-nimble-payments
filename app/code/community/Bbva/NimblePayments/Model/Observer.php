@@ -22,6 +22,10 @@ class Bbva_NimblePayments_Model_Observer extends Mage_Payment_Model_Method_Abstr
                 ->addObject($invoice)
                 ->addObject($invoice->getOrder())
                 ->save();
+            /*Send New Order Email*/
+            $order->sendNewOrderEmail();
+            $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::helper('core')->__('Payment accepted.'), true); // tr004
+            $order->save();
         }
       
         return $this;
