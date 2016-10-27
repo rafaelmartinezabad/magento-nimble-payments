@@ -410,7 +410,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      * check if token is 3 legged token
      */
     public function is3leggedToken() {
-        $valid_token = empty($this->getToken()) ? false : true;
+        $token = $this->getToken();
+        $valid_token = empty($token) ? false : true;
         require_once Mage::getBaseDir() . '/lib/Nimble/base/NimbleAPI.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIPayments.php';
         require_once Mage::getBaseDir() . '/lib/Nimble/api/NimbleAPIAccount.php';
@@ -419,7 +420,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
             $params = array(
                 'clientId' => $this->getMerchantId(),
                 'clientSecret' => $this->getSecretKey(),
-                'token' => $this->getToken(),
+                'token' => $token,
                 'mode' => NimbleAPIConfig::MODE
             );
             $nimble_api = new NimbleAPI($params);
@@ -474,7 +475,9 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
      * Get hash location customer
      */
     private function toHash($address = null) {
-        if (empty($address) || empty($address->getFirstname())) { return null; }
+        if (empty($address)) { return null; }
+        $name = $address->getFirstname();
+        if (empty($name)) { return null; }
         $location = $address->getFirstname()." ".$address->getLastname().", ".$address->getStreet(-1).", ".$address->getCity().", ".$address->getRegion()." ".$address->getPostcode().", ".$address->getCountryModel()->getIso3Code();
         return substr( md5( $location ), 0, 12 );
     }
