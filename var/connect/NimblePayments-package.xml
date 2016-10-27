@@ -1,5 +1,5 @@
 <_>
-   <form_key>IlSWyUtxrzFYw8Nm</form_key>
+   <form_key>Wmjg0ADRcszffL7g</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -10,9 +10,9 @@
    <license>OSL-3.0</license>
    <license_uri/>
    <version>2.1.2</version>
-   <stability>beta</stability>
+   <stability>stable</stability>
    <notes>Nimble Payments version 2.1.2
-Fix: version PHP 5.3 - 5.4</notes>
+Fix: Compatibility with PHP 5.4</notes>
    <authors>
       <name>
          <name>BBVA</name>
@@ -24,7 +24,7 @@ Fix: version PHP 5.3 - 5.4</notes>
          <email>carmen.cuesta@bbva.com</email>
       </email>
    </authors>
-   <depends_php_min>5.2.0</depends_php_min>
+   <depends_php_min>5.4.0</depends_php_min>
    <depends_php_max>5.6.18</depends_php_max>
    <depends>
       <package>
@@ -41,7 +41,7 @@ Fix: version PHP 5.3 - 5.4</notes>
             <max/>
          </max>
          <files>
-            <files>                                             </files>
+            <files>                                                 </files>
          </files>
       </package>
       <extension>
@@ -158,4 +158,8 @@ Fix: version PHP 5.3 - 5.4</notes>
          <ignore/>
       </ignore>
    </contents>
+   <page>1</page>
+   <limit>200</limit>
+   <folder/>
+   <package/>
 </_>
