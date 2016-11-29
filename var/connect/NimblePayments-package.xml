@@ -1,5 +1,5 @@
 <_>
-   <form_key>CHcGnCeFL20w9bmV</form_key>
+   <form_key>Wmjg0ADRcszffL7g</form_key>
    <name>NimblePayments</name>
    <channel>community</channel>
    <version_ids>
@@ -9,10 +9,10 @@
    <description>Nimble Payments es una solución financiera online de BBVA que te permite aceptar pagos en tu tienda con total seguridad. De fácil integración, te ofrece servicios de valor añadido para la gestión de tu negocio como soluciones financieras de forma integrada y atención cualificada en español. Este módulo está actualizado con el nuevo sistema de firma de Redsys (HMAC SHA-256)</description>
    <license>OSL-3.0</license>
    <license_uri/>
-   <version>2.1.1</version>
+   <version>2.1.2</version>
    <stability>stable</stability>
-   <notes>Nimble Payments version 2.1.1
-Fix: Send new order email</notes>
+   <notes>Nimble Payments version 2.1.2
+Fix: Compatibility with PHP 5.4</notes>
    <authors>
       <name>
          <name>BBVA</name>
@@ -24,7 +24,7 @@ Fix: Send new order email</notes>
          <email>carmen.cuesta@bbva.com</email>
       </email>
    </authors>
-   <depends_php_min>5.2.0</depends_php_min>
+   <depends_php_min>5.4.0</depends_php_min>
    <depends_php_max>5.6.18</depends_php_max>
    <depends>
       <package>
@@ -41,7 +41,7 @@ Fix: Send new order email</notes>
             <max/>
          </max>
          <files>
-            <files>                                           </files>
+            <files>                                                 </files>
          </files>
       </package>
       <extension>
@@ -158,4 +158,8 @@ Fix: Send new order email</notes>
          <ignore/>
       </ignore>
    </contents>
+   <page>1</page>
+   <limit>200</limit>
+   <folder/>
+   <package/>
 </_>
