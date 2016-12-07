@@ -285,7 +285,7 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         try{
             $customerData = Mage::getSingleton('customer/session')->getCustomer();
             $customerId = $customerData->getId();
-            $NimbleApi = Mage::getSingleton('Bbva_NimblePayments_Model_Checkout')->getNimble();
+            $NimbleApi = $this->getNimble();
             $storedCardPaymentInfo = array(
                 'amount'       => $this->getAmount(),
                 'currency'     => $this->getCoin(),
@@ -367,6 +367,8 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         try{
             //throw new Exception('División por cero.');
             $NimbleApi = new NimbleAPI($params);
+            $lang = $this->getLang();
+            $NimbleApi->changeDefaultLanguage($lang);
             $p = new NimbleAPIPayments();
             $NimbleApi->authorization->addHeader('source-caller', 'MAGENTO_'.$this->getExtensionVersion());
             $response = $p->SendPaymentClient($NimbleApi, $payment);
@@ -391,6 +393,17 @@ class Bbva_NimblePayments_Model_Checkout extends Mage_Payment_Model_Method_Abstr
         }
         
         return $url;    
+    }
+
+    private function getLang() {
+        $lang = 'es';
+        try{
+            $locale = Mage::app()->getLocale()->getLocaleCode();
+            $lang = substr($locale, 0, 2);
+        } catch (Exception $e) {
+            // do nothing
+        }
+        return $lang;
     }
 
     /*
