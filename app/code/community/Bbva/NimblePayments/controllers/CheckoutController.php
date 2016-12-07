@@ -44,7 +44,8 @@ class Bbva_NimblePayments_CheckoutController extends Bbva_NimblePayments_Control
         $payment = $order->getPayment();
         $transaction_id = $payment->getAdditionalInformation('np_transaction_id');
         $statusNimble = $checkout->getNimbleStatus($transaction_id);
-        switch ($checkout->doActionBeforeStatus($orderID, $statusNimble)) {
+        $response = $checkout->doActionBeforeStatus($orderID, $statusNimble);
+        switch ($response) {
             case "OK":
                 $this->_redirect('checkout/onepage/success', $url_params);
                 break;
