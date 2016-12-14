@@ -1,6 +1,19 @@
 # Nimble Payments Plugin for Magento
 The NimblePayments Plugin for Magneto is an addons that makes it easy to add payment services to your e-commerce.
 ##Release notes
+
+###2.1.3
+- Compatible with PHP 5.6.2.8
+- New languages included in the checkout page
+
+###2.1.0
+- Disassociation and guest refund is allowed
+
+###2.0.0
+- Perform refunds directly from Magento's dashboard 
+- Be informed about Nimble Payments' account balance from Magento's dashboard
+- Faster checkout using the stored card payments functionality
+
 ###1.0.0
 - First live release
 - Added the single payment service
@@ -37,7 +50,7 @@ cp -R var PATH_TO_MAGENTO/
 cd ..
 git clone https://github.com/nimblepayments/sdk-php.git
 cd sdk-php
-git checkout tags/1.0.0.1
+git checkout tags/2.0.3
 cp -R lib PATH_TO_MAGENTO/
 ```
 ##Environment
@@ -51,4 +64,4 @@ The sandbox environment is disabled by default. To activate it, the variable mod
 - Change the value ```real``` to ```sandbox```
 
 ##Documentation
-Please see [Apiary](http://docs.nimblepublicapi.apiary.io/#) for up-to-date documentation.
+Please see [Api Console](http://developers.nimblepayments.com/api/api.html) for up-to-date documentation.
